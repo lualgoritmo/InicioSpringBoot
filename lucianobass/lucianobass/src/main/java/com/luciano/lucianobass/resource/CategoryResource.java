@@ -17,6 +17,11 @@ public class CategoryResource {
         List<Category> list = new ArrayList<>();
         list.add(new Category(1L, "Engenharia de Dados"));
         list.add(new Category(2L, "Lógica em Java"));
+        list.add(new Category(3L, "Kotlin"));
+        list.add(new Category(4L, "Spring Boot"));
+        list.add(new Category(5L, "PHP"));
+        list.add(new Category(6L, "Node JS"));
+        list.add(new Category(7L, "Angular"));
         return ResponseEntity.ok().body(list);
     }
 
