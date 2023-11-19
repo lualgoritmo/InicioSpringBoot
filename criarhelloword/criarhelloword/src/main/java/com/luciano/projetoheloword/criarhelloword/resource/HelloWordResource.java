@@ -14,8 +14,8 @@ public class HelloWordResource implements Serializable {
 
     @GetMapping
     public ResponseEntity<HelloWord> getMessage() {
-        HelloWord hello = new HelloWord("Hello Word!");
-        //return ResponseEntity.ok(hello);
-        return ResponseEntity.ok().body(hello);
+        HelloWord hello = new HelloWord("Hello Word! Executando Testando");
+        return ResponseEntity.ok(hello);
+        //return ResponseEntity.ok().body(hello);
     }
 }

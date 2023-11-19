@@ -8,7 +8,7 @@ public class CriarhellowordApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CriarhellowordApplication.class, args);
-		System.out.println("Hello Word, executando");
+		//System.out.println("Hello Word, executando");
 	}
 
 }
