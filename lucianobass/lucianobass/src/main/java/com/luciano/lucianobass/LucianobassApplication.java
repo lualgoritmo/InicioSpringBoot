@@ -10,6 +10,7 @@ public class LucianobassApplication {
 
 		SpringApplication.run(LucianobassApplication.class, args);
 		//System.out.println("Hello Word! Executando");
+
 	}
 
 }
