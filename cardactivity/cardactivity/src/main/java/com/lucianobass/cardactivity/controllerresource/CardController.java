@@ -1,6 +1,7 @@
 package com.lucianobass.cardactivity.controllerresource;
 
 import com.lucianobass.cardactivity.modelsentitys.Card;
+import com.lucianobass.cardactivity.modelsentitys.dto.CardDTO;
 import com.lucianobass.cardactivity.services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +25,21 @@ public class CardController {
     }
 
     @PostMapping
-    //FAZER O DTO DEPIOS
-    public ResponseEntity<Card> createCard(@RequestBody Card card) {
-        card = service.createCard(card);
+    public ResponseEntity<Card> createCard(@RequestBody CardDTO cardDTO) {
+        Card createdCard = service.createCard(cardDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(card.getId()).toUri();
-        return ResponseEntity.created(uri).body(card);
+                .buildAndExpand(createdCard.getId()).toUri();
+        return ResponseEntity.created(uri).body(createdCard);
     }
+//
+//    @PostMapping
+//    //FAZER O DTO DEPIOS
+//    public ResponseEntity<Card> createCard(@RequestBody Card card) {
+//        card = service.createCard(card);
+//        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+//                .buildAndExpand(card.getId()).toUri();
+//        return ResponseEntity.created(uri).body(card);
+//    }
 
 //    @GetMapping
 //    public ResponseEntity<List<Card>> createCard() {
