@@ -1,7 +1,6 @@
 package com.luciano.lucianobass.resourceController;
 
 import com.luciano.lucianobass.dto.CategoryDTO;
-import com.luciano.lucianobass.entites.Category;
 import com.luciano.lucianobass.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
