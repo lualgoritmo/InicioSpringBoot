@@ -1,5 +1,6 @@
 package com.luciano.lucianobass.resourceController;
 
+import com.luciano.lucianobass.dto.CategoryDTO;
 import com.luciano.lucianobass.entites.Category;
 import com.luciano.lucianobass.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,8 @@ public class CategoryResource {
     private CategoryService service;
 
     @GetMapping
-    public ResponseEntity<List<Category>> finAll() {
-        List<Category> list = service.findAll();
+    public ResponseEntity<List<CategoryDTO>> finAll() {
+        List<CategoryDTO> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 //    @GetMapping
