@@ -29,7 +29,7 @@ public class CardController {
         card = service.createCard(card);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(card.getId()).toUri();
-        return ResponseEntity.ok().body(card);
+        return ResponseEntity.created(uri).body(card);
     }
 
 //    @GetMapping
