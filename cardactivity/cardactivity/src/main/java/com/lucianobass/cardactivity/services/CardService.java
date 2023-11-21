@@ -18,4 +18,16 @@ public class CardService {
         List<Card> list = new ArrayList<>();
         return repository.findAll();
     }
+
+    //FAZER O DTO DEPOIS
+    public Card createCard(Card card) {
+        Card car = new Card();
+        card.setName(car.getName());
+        card.setNumberCard(car.getNumberCard());
+        card.setDateFinal(car.getDateFinal());
+        card.setCodSegurance(car.getCodSegurance());
+        car = repository.save(car);
+        return car;
+        //return new CardDTO(car)
+    }
 }
