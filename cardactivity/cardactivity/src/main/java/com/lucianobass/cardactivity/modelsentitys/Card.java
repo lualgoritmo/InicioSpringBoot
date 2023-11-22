@@ -1,6 +1,6 @@
 package com.lucianobass.cardactivity.modelsentitys;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;

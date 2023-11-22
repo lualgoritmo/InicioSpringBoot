@@ -5,9 +5,11 @@ import com.lucianobass.cardactivity.modelsentitys.dto.CardDTO;
 import com.lucianobass.cardactivity.repositories.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CardService {
@@ -20,6 +22,12 @@ public class CardService {
         return repository.findAll();
     }
 
+    @Transactional(readOnly = true)
+    public Optional<Card> finByIdCard(Long id) {
+        return repository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
     public Card createCard(CardDTO card) {
         Card cardCredit = new Card();
         cardCredit.setName(card.getName());

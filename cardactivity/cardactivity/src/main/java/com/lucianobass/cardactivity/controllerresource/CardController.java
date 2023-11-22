@@ -10,6 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/cards")
@@ -22,6 +23,16 @@ public class CardController {
     public ResponseEntity<List<Card>> findAllCard() {
         List<Card> list = service.findAll();
         return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Card> findCardById(@PathVariable Long id) {
+        Optional<Card> card = service.finByIdCard(id);
+        if (card.isPresent()) {
+            return ResponseEntity.ok(card.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
