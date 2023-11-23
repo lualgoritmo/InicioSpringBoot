@@ -1,11 +1,10 @@
-package com.lucianobass.cardactivity.controllerresource;
+package com.lucianobass.cardactivity.controllerresources;
 
-import com.lucianobass.cardactivity.modelsentitys.Card;
-import com.lucianobass.cardactivity.modelsentitys.dto.CardDTO;
+import com.lucianobass.cardactivity.models.Card;
+import com.lucianobass.cardactivity.controllerresources.dtos.CardDTO;
 import com.lucianobass.cardactivity.services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 

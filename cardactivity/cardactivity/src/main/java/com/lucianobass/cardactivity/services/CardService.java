@@ -1,7 +1,7 @@
 package com.lucianobass.cardactivity.services;
 
-import com.lucianobass.cardactivity.modelsentitys.Card;
-import com.lucianobass.cardactivity.modelsentitys.dto.CardDTO;
+import com.lucianobass.cardactivity.models.Card;
+import com.lucianobass.cardactivity.controllerresources.dtos.CardDTO;
 import com.lucianobass.cardactivity.repositories.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,14 +27,9 @@ public class CardService {
     }
 
     @Transactional(readOnly = true)
-    public Card createCard(CardDTO card) {
-        validateCardDTO(card);
-        Card cardCredit = new Card();
-        cardCredit.setName(card.getName());
-        cardCredit.setNumberCard(card.getNumberCard());
-        cardCredit.setDateFinal(card.getDateFinal());
-        cardCredit.setCodSegurance(card.getCodSegurance());
-        return repository.save(cardCredit);
+    public Card createCard(CardDTO cardDTO) {
+        validateCardDTO(cardDTO);
+        return repository.save(setCardDTO(cardDTO));
     }
 
     //Uma validação, no meu entender, para ver se o cartão existe ou não, afinal o dado da segundo
@@ -43,6 +38,15 @@ public class CardService {
         if (cardDTO.getName().isEmpty()) {
             throw new IllegalArgumentException(" Cartão não existe! ");
         }
+    }
+
+    private Card setCardDTO(CardDTO cardDTO) {
+        Card cardCredit = new Card();
+        cardCredit.setName(cardDTO.getName());
+        cardCredit.setNumberCard(cardDTO.getNumberCard());
+        cardCredit.setDateFinal(cardDTO.getDateFinal());
+        cardCredit.setCodSegurance(cardDTO.getCodSegurance());
+        return cardCredit;
     }
     //FAZER O DTO DEPOIS
 //    public Card createCard(Card card) {

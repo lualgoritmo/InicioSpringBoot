@@ -1,21 +1,29 @@
-package com.lucianobass.cardactivity.modelsentitys.dto;
+package com.lucianobass.cardactivity.models;
 
-import com.lucianobass.cardactivity.modelsentitys.Card;
-
+import javax.persistence.*;
+import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
-public class CardDTO implements Serializable {
-    private static final long serialVersionUIO = 1L;
+@Entity
+@Table(name = "tb_card")
+public class Card implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String name;
+    @Column(length = 16, nullable = false)
     private String numberCard;
     private String dateFinal;
+    @Column(length = 3, nullable = false)
     private String codSegurance;
 
-    public CardDTO(Long id, String name, String numberCard, String dateFinal, String codSegurance) {
+    public Card(Long id, String name, String numberCard, String dateFinal, String codSegurance) {
         this.id = id;
         this.name = name;
         this.numberCard = numberCard;
@@ -23,15 +31,7 @@ public class CardDTO implements Serializable {
         this.codSegurance = codSegurance;
     }
 
-    public CardDTO(Card card) {
-        this.id = card.getId();
-        this.name = card.getName();
-        this.numberCard = card.getNumberCard();
-        this.dateFinal = card.getDateFinal();
-        this.codSegurance = card.getCodSegurance();
-    }
-
-    public CardDTO() {
+    public Card() {
     }
 
     public Long getId() {
@@ -62,11 +62,22 @@ public class CardDTO implements Serializable {
         this.dateFinal = dateFinal;
     }
 
-    public String getCodSegurance() {
-        return codSegurance;
-    }
+    public String getCodSegurance() { return codSegurance; }
 
     public void setCodSegurance(String codSegurance) {
         this.codSegurance = codSegurance;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Card card = (Card) o;
+        return Objects.equals(id, card.id);
     }
 }
