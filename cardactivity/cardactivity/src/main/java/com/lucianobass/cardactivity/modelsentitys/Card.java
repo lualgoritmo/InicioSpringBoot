@@ -16,22 +16,13 @@ public class Card implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private Long id;
     @Column(nullable = false)
-    @NotNull
-    @NotBlank
     private String name;
     @Column(length = 16, nullable = false)
-    @NotNull
-    @NotBlank
     private String numberCard;
-    @NotNull
-    @NotBlank
     private String dateFinal;
     @Column(length = 3, nullable = false)
-    @NotNull
-    @NotBlank
     private String codSegurance;
 
     public Card(Long id, String name, String numberCard, String dateFinal, String codSegurance) {

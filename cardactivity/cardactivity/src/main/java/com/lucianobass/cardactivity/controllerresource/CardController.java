@@ -15,7 +15,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/cards")
-@Validated
 public class CardController {
 
     @Autowired

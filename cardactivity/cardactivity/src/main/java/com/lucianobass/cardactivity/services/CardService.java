@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +36,7 @@ public class CardService {
         cardCredit.setCodSegurance(card.getCodSegurance());
         return repository.save(cardCredit);
     }
+
     //Uma validação, no meu entender, para ver se o cartão existe ou não, afinal o dado da segundo
     //Requisitado no bd
     private void validateCardDTO(CardDTO cardDTO) {
