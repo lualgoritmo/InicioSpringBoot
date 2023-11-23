@@ -18,23 +18,33 @@ public class CardService {
     private CardRepository repository;
 
     public List<Card> findAll() {
-        List<Card> list = new ArrayList<>();
+        //List<Card> list = new ArrayList<>();
         return repository.findAll();
     }
 
     @Transactional(readOnly = true)
-    public Optional<Card> finByIdCard(Long id) {
+    public Optional<Card> findByIdCard(Long id) {
         return repository.findById(id);
     }
 
     @Transactional(readOnly = true)
     public Card createCard(CardDTO card) {
+        validateCardDTO(card);
         Card cardCredit = new Card();
         cardCredit.setName(card.getName());
         cardCredit.setNumberCard(card.getNumberCard());
         cardCredit.setDateFinal(card.getDateFinal());
         cardCredit.setCodSegurance(card.getCodSegurance());
         return repository.save(cardCredit);
+    }
+    //Uma validação, no meu entender, para ver se o cartão existe ou não, afinal o dado da segundo
+    //Requisitado no bd
+    private void validateCardDTO(CardDTO cardDTO) {
+        if (cardDTO.getName().isEmpty() &&
+                cardDTO.getNumberCard().isEmpty() && cardDTO.getDateFinal().isEmpty()
+                && cardDTO.getCodSegurance() == null) {
+            throw new IllegalArgumentException(" Cartão nõ existe! ");
+        }
     }
     //FAZER O DTO DEPOIS
 //    public Card createCard(Card card) {

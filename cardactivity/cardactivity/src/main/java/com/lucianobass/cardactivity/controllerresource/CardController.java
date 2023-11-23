@@ -5,6 +5,7 @@ import com.lucianobass.cardactivity.modelsentitys.dto.CardDTO;
 import com.lucianobass.cardactivity.services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/cards")
+@Validated
 public class CardController {
 
     @Autowired
@@ -27,7 +29,7 @@ public class CardController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Card> findCardById(@PathVariable Long id) {
-        Optional<Card> card = service.finByIdCard(id);
+        Optional<Card> card = service.findByIdCard(id);
         if (card.isPresent()) {
             return ResponseEntity.ok(card.get());
         } else {
