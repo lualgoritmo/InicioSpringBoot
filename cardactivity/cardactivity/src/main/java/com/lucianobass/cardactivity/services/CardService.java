@@ -40,10 +40,8 @@ public class CardService {
     //Uma validação, no meu entender, para ver se o cartão existe ou não, afinal o dado da segundo
     //Requisitado no bd
     private void validateCardDTO(CardDTO cardDTO) {
-        if (cardDTO.getName().isEmpty() &&
-                cardDTO.getNumberCard().isEmpty() && cardDTO.getDateFinal().isEmpty()
-                && cardDTO.getCodSegurance() == null) {
-            throw new IllegalArgumentException(" Cartão nõ existe! ");
+        if (cardDTO.getName().isEmpty()) {
+            throw new IllegalArgumentException(" Cartão não existe! ");
         }
     }
     //FAZER O DTO DEPOIS
