@@ -1,7 +1,7 @@
 package com.lucianobass.cardactivity.controllerresources;
 
-import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.controllerresources.dtos.CardDTO;
+import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

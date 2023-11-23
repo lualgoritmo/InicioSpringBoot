@@ -7,7 +7,6 @@ import java.io.Serializable;
 public class CardDTO implements Serializable {
     private static final long serialVersionUIO = 1L;
 
-    private static final long serialVersionUID = 1L;
 
     private Long id;
     private String name;
@@ -69,4 +68,9 @@ public class CardDTO implements Serializable {
     public void setCodSegurance(String codSegurance) {
         this.codSegurance = codSegurance;
     }
+
+    public String getFormattedNumberCard() {
+        return this.getNumberCard().replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x");
+    }
 }
+

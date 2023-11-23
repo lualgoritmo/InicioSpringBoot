@@ -15,7 +15,6 @@ public class Card implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
     private String name;
     @Column(length = 16, nullable = false)
     private String numberCard;
@@ -54,6 +53,7 @@ public class Card implements Serializable {
         this.numberCard = numberCard;
     }
 
+
     public String getDateFinal() {
         return dateFinal;
     }
@@ -62,7 +62,9 @@ public class Card implements Serializable {
         this.dateFinal = dateFinal;
     }
 
-    public String getCodSegurance() { return codSegurance; }
+    public String getCodSegurance() {
+        return codSegurance;
+    }
 
     public void setCodSegurance(String codSegurance) {
         this.codSegurance = codSegurance;
