@@ -1,4 +1,4 @@
-package com.lucianobass.cardactivity.models;
+package com.lucianobass.cardactivity.model;
 
 import javax.persistence.*;
 import java.io.Serial;

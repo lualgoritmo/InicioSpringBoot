@@ -1,16 +1,13 @@
 package com.lucianobass.cardactivity.controllerresources;
 
-import com.lucianobass.cardactivity.models.Card;
-import com.lucianobass.cardactivity.controllerresources.dtos.CardDTO;
-import com.lucianobass.cardactivity.services.CardService;
+import com.lucianobass.cardactivity.controllerresources.dto.CardDTO;
+import com.lucianobass.cardactivity.model.Card;
+import com.lucianobass.cardactivity.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/cards")
@@ -20,28 +17,44 @@ public class CardController {
     private CardService service;
 
     @GetMapping
-    public ResponseEntity<List<Card>> findAllCard() {
-        List<Card> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+    @ResponseStatus(code = HttpStatus.OK)
+    public List<Card> findAllCard() {
+        return service.findAll();
     }
+//    @GetMapping
+//    public ResponseEntity<List<Card>> findAllCard() {
+//        List<Card> list = service.findAll();
+//        return ResponseEntity.ok().body(list);
+//    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Card> findCardById(@PathVariable Long id) {
-        Optional<Card> card = service.findByIdCard(id);
-        if (card.isPresent()) {
-            return ResponseEntity.ok(card.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @ResponseStatus(code = HttpStatus.OK)
+    public Card findCardById(@PathVariable Long id) {
+        return service.findByIdCard(id);
     }
 
+    //    @GetMapping("/{id}")
+//    public ResponseEntity<Card> findCardById(@PathVariable Long id) {
+//        Optional<Card> card = service.findByIdCard(id);
+//        if (card.isPresent()) {
+//            return ResponseEntity.ok(card.get());
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
     @PostMapping
-    public ResponseEntity<Card> createCard(@RequestBody CardDTO cardDTO) {
-        Card createdCard = service.createCard(cardDTO);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(createdCard.getId()).toUri();
-        return ResponseEntity.created(uri).body(createdCard);
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public Card createCard(@RequestBody CardDTO cardDTO) {
+        return service.createCard(cardDTO);
     }
+
+//    @PostMapping
+//    public ResponseEntity<Card> createCard(@RequestBody CardDTO cardDTO) {
+//        Card createdCard = service.createCard(cardDTO);
+//        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+//                .buildAndExpand(createdCard.getId()).toUri();
+//        return ResponseEntity.created(uri).body(createdCard);
+//    }
 //
 //    @PostMapping
 //    //FAZER O DTO DEPIOS

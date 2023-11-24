@@ -1,6 +1,6 @@
 package com.lucianobass.cardactivity;
 
-import com.lucianobass.cardactivity.controllerresources.dtos.CardDTO;
+import com.lucianobass.cardactivity.controllerresources.dto.CardDTO;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

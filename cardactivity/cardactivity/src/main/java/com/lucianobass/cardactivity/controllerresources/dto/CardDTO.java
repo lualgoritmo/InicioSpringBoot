@@ -1,7 +1,7 @@
-package com.lucianobass.cardactivity.controllerresources.dtos;
+package com.lucianobass.cardactivity.controllerresources.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lucianobass.cardactivity.models.Card;
+import com.lucianobass.cardactivity.model.Card;
 
 import java.io.Serializable;
 
