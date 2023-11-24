@@ -1,9 +1,12 @@
 package com.lucianobass.cardactivity.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Random;
 
 @Entity
 @Table(name = "tb_card")
@@ -16,9 +19,12 @@ public class Card implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
+    @NotBlank(message = "Forneça um nome de usuário")
     private String name;
     @Column(length = 16, nullable = false)
+    @Size(min = 16, max = 16, message = "O Cartão deve ter 16 digitos")
     private String numberCard;
+    @Size(min = 5, max = 5, message = "A data deve ser xx/xx")
     private String dateFinal;
     @Column(length = 3, nullable = false)
     private String codSegurance;
@@ -62,11 +68,14 @@ public class Card implements Serializable {
         this.dateFinal = dateFinal;
     }
 
-    public String getCodSegurance() { return codSegurance; }
+    public String getCodSegurance() {
+        return codSegurance;
+    }
 
     public void setCodSegurance(String codSegurance) {
         this.codSegurance = codSegurance;
     }
+
 
     @Override
     public int hashCode() {
@@ -79,5 +88,14 @@ public class Card implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
         return Objects.equals(id, card.id);
+    }
+
+    public static String genereteNumberCard(int number) {
+        StringBuilder stringBuilder = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < number; i++) {
+            stringBuilder.append(random.nextInt(10));
+        }
+        return stringBuilder.toString();
     }
 }

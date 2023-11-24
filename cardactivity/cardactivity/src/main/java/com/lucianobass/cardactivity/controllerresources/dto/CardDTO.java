@@ -1,9 +1,9 @@
 package com.lucianobass.cardactivity.controllerresources.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lucianobass.cardactivity.model.Card;
 
 import java.io.Serializable;
+import java.util.Random;
 
 public class CardDTO implements Serializable {
     private static final long serialVersionUIO = 1L;
@@ -50,7 +50,7 @@ public class CardDTO implements Serializable {
     }
 
     public void setNumberCard(String numberCard) {
-        this.numberCard = numberCard;
+        this.numberCard = Card.genereteNumberCard(16).replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x");
     }
 
     public String getDateFinal() {
@@ -66,11 +66,12 @@ public class CardDTO implements Serializable {
     }
 
     public void setCodSegurance(String codSegurance) {
-        this.codSegurance = codSegurance;
+        this.codSegurance = Card.genereteNumberCard(3).replaceAll("(\\d)", "x");
     }
 
-    @JsonProperty("formattedNumberCard")
-    public String getFormattedNumberCard() {
-        return this.getNumberCard().replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x");
-    }
+
+//    @JsonProperty("formattedNumberCard")
+//    public String getFormattedNumberCard() {
+//        return this.getNumberCard().replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x");
+//    }
 }
