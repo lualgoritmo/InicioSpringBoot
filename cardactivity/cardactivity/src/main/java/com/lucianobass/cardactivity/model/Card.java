@@ -21,8 +21,8 @@ public class Card implements Serializable {
     @Column(nullable = false)
     @NotBlank(message = "Forneça um nome de usuário")
     private String name;
-    @Column(length = 19, nullable = false)
-    @Size(min = 1, max = 19, message = "O Cartão deve ter 16 digitos")
+    @Column(length = 16, nullable = false)
+    @Size(min = 16, max = 16, message = "O Cartão deve ter 16 digitos")
     private String numberCard;
     @Size(min = 5, max = 5, message = "A data deve ser xx/xx")
     private String dateFinal;
