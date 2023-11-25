@@ -49,7 +49,7 @@ public class CardDTO implements Serializable {
     }
 
     public void setNumberCard(String numberCard) {
-        this.numberCard = Card.generateNumberCard(16).replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x");
+        this.numberCard = Card.generateNumberCard(19).replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x");
     }
 
     public String getDateFinal() {
