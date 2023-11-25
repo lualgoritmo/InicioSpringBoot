@@ -15,34 +15,47 @@ public class Card implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
     @Column(length = 16, nullable = false)
     private String numberCard;
-    private String dateFinal;
+    private String expiration;
+    private String availableLimit;
+    private String card_limit;
     @Column(length = 3, nullable = false)
-    private String codSegurance;
+    private String cvv;
+    private boolean active = false;
+    @OneToOne()
+    @JoinColumn(name = "card_holder_id")
+    private CardHolder cardHolder;
 
-    public Card(Long id, String name, String numberCard, String dateFinal, String codSegurance) {
+    public Card(Long id, String numberCard, String expiration, String availableLimit, String card_limit, String cvv, boolean active, CardHolder cardHolder) {
         this.id = id;
-        this.name = name;
         this.numberCard = numberCard;
-        this.dateFinal = dateFinal;
-        this.codSegurance = codSegurance;
+        this.expiration = expiration;
+        this.availableLimit = availableLimit;
+        this.card_limit = card_limit;
+        this.cvv = cvv;
+        this.active = active;
+        this.cardHolder = cardHolder;
+
     }
 
     public Card() {
+    }
+
+    public String getCard_limit() {
+        return card_limit;
+    }
+
+    public void setCard_limit(String card_limit) {
+        this.card_limit = card_limit;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNumberCard() {
@@ -53,21 +66,44 @@ public class Card implements Serializable {
         this.numberCard = numberCard;
     }
 
-
-    public String getDateFinal() {
-        return dateFinal;
+    public String getExpiration() {
+        return expiration;
     }
 
-    public void setDateFinal(String dateFinal) {
-        this.dateFinal = dateFinal;
+    public void setExpiration(String expiration) {
+        this.expiration = expiration;
     }
 
-    public String getCodSegurance() {
-        return codSegurance;
+    public String getAvailableLimit() {
+        return availableLimit;
     }
 
-    public void setCodSegurance(String codSegurance) {
-        this.codSegurance = codSegurance;
+    public void setAvailableLimit(String availableLimit) {
+        this.availableLimit = availableLimit;
+    }
+
+    public String getCvv() {
+        return cvv;
+    }
+
+    public void setCvv(String cvv) {
+        this.cvv = cvv;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public CardHolder getCardHolder() {
+        return cardHolder;
+    }
+
+    public void setCardHolder(CardHolder cardHolder) {
+        this.cardHolder = cardHolder;
     }
 
     @Override
