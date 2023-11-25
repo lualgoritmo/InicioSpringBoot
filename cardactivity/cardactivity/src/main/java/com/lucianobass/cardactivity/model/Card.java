@@ -90,7 +90,7 @@ public class Card implements Serializable {
         return Objects.equals(id, card.id);
     }
 
-    public static String genereteNumberCard(int number) {
+    public static String generateNumberCard(int number) {
         StringBuilder stringBuilder = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < number; i++) {
