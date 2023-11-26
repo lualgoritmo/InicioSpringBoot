@@ -17,12 +17,12 @@ public class Card implements Serializable {
     private Long id;
     @Column(length = 16, nullable = false)
     private String numberCard;
-    private String expiration;
+    private String cardExpiration;
     private String availableLimit;
-    private String card_limit;
+    private String cardLimit;
     @Column(length = 3, nullable = false)
-    private String cvv;
-    private boolean active = false;
+    private String cardCVV;
+    private boolean cardActive = false;
     @OneToOne()
     @JoinColumn(name = "card_holder_id")
     private CardHolder cardHolder;
@@ -30,11 +30,11 @@ public class Card implements Serializable {
     public Card(Long id, String numberCard, String expiration, String availableLimit, String card_limit, String cvv, boolean active, CardHolder cardHolder) {
         this.id = id;
         this.numberCard = numberCard;
-        this.expiration = expiration;
+        this.cardExpiration = expiration;
         this.availableLimit = availableLimit;
-        this.card_limit = card_limit;
-        this.cvv = cvv;
-        this.active = active;
+        this.cardLimit = card_limit;
+        this.cardCVV = cvv;
+        this.cardActive = active;
         this.cardHolder = cardHolder;
 
     }
@@ -42,12 +42,12 @@ public class Card implements Serializable {
     public Card() {
     }
 
-    public String getCard_limit() {
-        return card_limit;
+    public String getCardLimit() {
+        return cardLimit;
     }
 
-    public void setCard_limit(String card_limit) {
-        this.card_limit = card_limit;
+    public void setCardLimit(String cardLimit) {
+        this.cardLimit = cardLimit;
     }
 
     public Long getId() {
@@ -66,12 +66,12 @@ public class Card implements Serializable {
         this.numberCard = numberCard;
     }
 
-    public String getExpiration() {
-        return expiration;
+    public String getCardExpiration() {
+        return cardExpiration;
     }
 
-    public void setExpiration(String expiration) {
-        this.expiration = expiration;
+    public void setCardExpiration(String cardExpiration) {
+        this.cardExpiration = cardExpiration;
     }
 
     public String getAvailableLimit() {
@@ -82,20 +82,20 @@ public class Card implements Serializable {
         this.availableLimit = availableLimit;
     }
 
-    public String getCvv() {
-        return cvv;
+    public String getCardCVV() {
+        return cardCVV;
     }
 
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
+    public void setCardCVV(String cardCVV) {
+        this.cardCVV = cardCVV;
     }
 
-    public boolean isActive() {
-        return active;
+    public boolean isCardActive() {
+        return cardActive;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setCardActive(boolean cardActive) {
+        this.cardActive = cardActive;
     }
 
     public CardHolder getCardHolder() {

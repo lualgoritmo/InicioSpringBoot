@@ -1,6 +1,7 @@
 package com.lucianobass.cardactivity.models;
 
 import javax.persistence.*;
+import java.util.Random;
 
 @Entity
 @Table(name = "tb_cardholder")
@@ -48,13 +49,22 @@ public class CardHolder {
         this.birthDate = birthDate;
     }
 
+    public String generateNumberCard(int number) {
+        StringBuilder stringBuilder = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < number; i++) {
+            stringBuilder.append(random.nextInt(10));
+        }
+        return stringBuilder.toString();
+    }
+
     @PrePersist
     public void prePersist() {
         if (this.card == null) {
             this.card = new Card();
-            this.card.setNumberCard(generateCardNumber());  // Lógica para gerar o número do cartão
-            this.card.setExpiration("2023-12");  // Lógica para definir a data de vencimento
-            this.card.setActive(true);  // Definindo o cartão como ativo
+            this.card.setNumberCard(generateNumberCard(16));  // Lógica para gerar o número do cartão
+            this.card.setCardExpiration("2023-12");  // Lógica para definir a data de vencimento
+            this.card.setCardActive(true);  // Definindo o cartão como ativo
             this.card.setCardHolder(this);
         }
     }
