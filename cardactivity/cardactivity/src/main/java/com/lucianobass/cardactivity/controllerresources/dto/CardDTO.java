@@ -1,6 +1,9 @@
-import com.lucianobass.cardactivity.models.Card;
+package com.lucianobass.cardactivity.controllerresources.dto;
 
-public class CardDTO {
+import java.io.Serializable;
+
+public class CardDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private Long id;
     private String numberCard;
@@ -9,33 +12,28 @@ public class CardDTO {
     private String cardLimit;
     private String cardCVV;
     private boolean cardActive;
+    private Long cardHolderId;
 
     public CardDTO() {
     }
 
-    public CardDTO(Card entity) {
-        this.id = entity.getId();
-        this.numberCard = entity.getNumberCard();
-        this.cardExpiration = entity.getCardExpiration();
-        this.availableLimit = entity.getAvailableLimit();
-        this.cardLimit = entity.getCardLimit();
-        this.cardCVV = entity.getCardCVV();
-        this.cardActive = entity.isCardActive();
-    }
-
-    public CardDTO(Long id, String numberCard, String expiration, String availableLimit,
-                   String limit, String cvv, boolean active) {
+    public CardDTO(Long id, String numberCard, String cardExpiration, String availableLimit, String cardLimit, String cardCVV, boolean cardActive, Long cardHolderId) {
         this.id = id;
         this.numberCard = numberCard;
-        this.cardExpiration = expiration;
+        this.cardExpiration = cardExpiration;
         this.availableLimit = availableLimit;
-        this.cardLimit = limit;
-        this.cardCVV = cvv;
-        this.cardActive = active;
+        this.cardLimit = cardLimit;
+        this.cardCVV = cardCVV;
+        this.cardActive = cardActive;
+        this.cardHolderId = cardHolderId;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNumberCard() {
@@ -86,8 +84,12 @@ public class CardDTO {
         this.cardActive = cardActive;
     }
 
-    public String getFormattedNumberCard() {
-        return this.getNumberCard().replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x");
+    public Long getCardHolderId() {
+        return cardHolderId;
+    }
+
+    public void setCardHolderId(Long cardHolderId) {
+        this.cardHolderId = cardHolderId;
     }
 }
 

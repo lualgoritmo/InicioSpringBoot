@@ -62,9 +62,9 @@ public class CardHolder {
     public void prePersist() {
         if (this.card == null) {
             this.card = new Card();
-            this.card.setNumberCard(generateNumberCard(16));  // Lógica para gerar o número do cartão
-            this.card.setCardExpiration("2023-12");  // Lógica para definir a data de vencimento
-            this.card.setCardActive(true);  // Definindo o cartão como ativo
+            this.card.setNumberCard(generateNumberCard(16));
+            this.card.setCardExpiration("2023-12");
+            this.card.setCardActive(true);
             this.card.setCardHolder(this);
         }
     }
