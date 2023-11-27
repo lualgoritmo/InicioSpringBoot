@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Random;
 
 @Entity
 @Table(name = "tb_card")
@@ -117,5 +118,14 @@ public class Card implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
         return Objects.equals(id, card.id);
+    }
+
+    public static String generateNumberCard(int number) {
+        StringBuilder stringBuilder = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < number; i++) {
+            stringBuilder.append(random.nextInt(10));
+        }
+        return stringBuilder.toString();
     }
 }

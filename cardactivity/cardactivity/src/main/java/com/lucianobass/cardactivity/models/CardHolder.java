@@ -1,7 +1,6 @@
 package com.lucianobass.cardactivity.models;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.Random;
 
 @Entity
@@ -12,13 +11,13 @@ public class CardHolder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Escreva o seu nome")
+    //@NotBlank(message = "Escreva o seu nome")
     private String name;
 
-    @NotBlank(message = "Digite o seu documento")
+    //@NotBlank(message = "Digite o seu documento")
     private String documentNumber;
 
-    @NotBlank(message = "Data de nascimento")
+    //@NotBlank(message = "Data de nascimento")
     private String birthDate;
 
     @OneToOne(mappedBy = "cardHolder", cascade = CascadeType.ALL)
@@ -71,7 +70,7 @@ public class CardHolder {
         if (this.card == null) {
             this.card = new Card();
             this.card.setNumberCard(generateNumberCard(16));
-            this.card.setCardExpiration("2023-12");
+            this.card.setCardExpiration("2023-12-01");
             this.card.setCardActive(true);
             this.card.setCardHolder(this);
         }

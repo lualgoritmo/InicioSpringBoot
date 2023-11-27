@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/cardholder")
+@RequestMapping(value = "/cards")
 public class CardHolderController {
     @Autowired
     private CardHolderService cardHolderService;
@@ -25,5 +25,11 @@ public class CardHolderController {
     @ResponseStatus(code = HttpStatus.OK)
     public List<CardHolder> getAllCardHolder() {
         return cardHolderService.getAllCardsHolders();
+    }
+
+    @GetMapping("/id")
+    @ResponseStatus(code = HttpStatus.OK)
+    public CardHolder findAllById(@PathVariable Long id) {
+        return cardHolderService.getByIdCardHolder(id);
     }
 }

@@ -1,5 +1,7 @@
 package com.lucianobass.cardactivity.controllerresources.dto;
 
+import com.lucianobass.cardactivity.models.Card;
+
 import java.io.Serializable;
 
 public class CardDTO implements Serializable {
@@ -41,7 +43,7 @@ public class CardDTO implements Serializable {
     }
 
     public void setNumberCard(String numberCard) {
-        this.numberCard = numberCard;
+        this.numberCard =  Card.generateNumberCard(16).replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x");
     }
 
     public String getCardExpiration() {
@@ -73,7 +75,7 @@ public class CardDTO implements Serializable {
     }
 
     public void setCardCVV(String cardCVV) {
-        this.cardCVV = cardCVV;
+        this.cardCVV = Card.generateNumberCard(3).replaceAll("(\\d)", "x");;
     }
 
     public boolean getCardActive() {
@@ -86,10 +88,6 @@ public class CardDTO implements Serializable {
 
     public Long getCardHolderId() {
         return cardHolderId;
-    }
-
-    public void setCardHolderId(Long cardHolderId) {
-        this.cardHolderId = cardHolderId;
     }
 }
 
