@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
@@ -23,6 +24,7 @@ public class Card implements Serializable {
     private Long id;
     @Column(length = 16, nullable = false)
     private String numberCard;
+    @Size(min = 5, max = 5, message = " A data deve ser xx/xx")
     private String cardExpiration;
     private String availableLimit;
     private String cardLimit;

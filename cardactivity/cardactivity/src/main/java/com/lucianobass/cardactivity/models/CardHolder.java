@@ -79,7 +79,7 @@ public class CardHolder {
                 this.card.getId();
                 this.card.setNumberCard(generateNumberCard(16));
                 this.card.setAvailableLimit("150.00");
-                this.card.setCardExpiration("2023-12-01");
+                this.card.setCardExpiration("30/02");
                 this.card.setCardLimit("100.00");
                 this.card.setCardCVV("123");
                 this.card.setCardActive(false);
