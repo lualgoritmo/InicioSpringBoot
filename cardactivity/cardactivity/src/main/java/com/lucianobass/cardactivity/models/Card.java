@@ -1,5 +1,9 @@
 package com.lucianobass.cardactivity.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
@@ -8,6 +12,7 @@ import java.util.Random;
 
 @Entity
 @Table(name = "tb_card")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Card implements Serializable {
 
     @Serial
@@ -21,11 +26,13 @@ public class Card implements Serializable {
     private String cardExpiration;
     private String availableLimit;
     private String cardLimit;
-    @Column(length = 3, nullable = false)
+    @Column(name = "cardcvv", length = 3, nullable = false)
     private String cardCVV;
     private boolean cardActive = false;
     @OneToOne()
     @JoinColumn(name = "card_holder_id")
+    @JsonIgnoreProperties("card")
+    @JsonIgnore
     private CardHolder cardHolder;
 
     public Card(Long id, String numberCard, String expiration, String availableLimit, String card_limit, String cvv, boolean active, CardHolder cardHolder) {
@@ -64,7 +71,7 @@ public class Card implements Serializable {
     }
 
     public void setNumberCard(String numberCard) {
-        this.numberCard = numberCard;
+        this.numberCard =Card.generateNumberCard(16).replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x");
     }
 
     public String getCardExpiration() {
@@ -88,7 +95,7 @@ public class Card implements Serializable {
     }
 
     public void setCardCVV(String cardCVV) {
-        this.cardCVV = cardCVV;
+        this.cardCVV =  Card.generateNumberCard(3).replaceAll("(\\d)", "x");
     }
 
     public boolean isCardActive() {

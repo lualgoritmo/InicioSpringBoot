@@ -1,10 +1,15 @@
 package com.lucianobass.cardactivity.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Random;
 
 @Entity
 @Table(name = "tb_cardholder")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CardHolder {
 
     @Id
@@ -21,6 +26,7 @@ public class CardHolder {
     private String birthDate;
 
     @OneToOne(mappedBy = "cardHolder", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Card card;
 
     public CardHolder(String name, String documentNumber, String birthDate) {
@@ -67,12 +73,22 @@ public class CardHolder {
 
     @PrePersist
     public void prePersist() {
-        if (this.card == null) {
-            this.card = new Card();
-            this.card.setNumberCard(generateNumberCard(16));
-            this.card.setCardExpiration("2023-12-01");
-            this.card.setCardActive(true);
-            this.card.setCardHolder(this);
+        try {
+            if (this.card == null) {
+                this.card = new Card();
+                this.card.getId();
+                this.card.setNumberCard(generateNumberCard(16));
+                this.card.setAvailableLimit("150.00");
+                this.card.setCardExpiration("2023-12-01");
+                this.card.setCardLimit("100.00");
+                this.card.setCardCVV("123");
+                this.card.setCardActive(false);
+                this.card.setCardHolder(this);
+            }
+        } catch (Exception ex) {
+            System.out.println(" Erro no PREPERSIST" + ex.getMessage());
         }
+
     }
+
 }

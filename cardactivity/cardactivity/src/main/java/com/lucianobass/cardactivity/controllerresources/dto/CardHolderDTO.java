@@ -1,7 +1,5 @@
 package com.lucianobass.cardactivity.controllerresources.dto;
 
-import com.lucianobass.cardactivity.models.Card;
-
 import java.io.Serializable;
 
 public class CardHolderDTO implements Serializable {
