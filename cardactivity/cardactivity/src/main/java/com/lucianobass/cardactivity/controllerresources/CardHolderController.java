@@ -1,21 +1,16 @@
 package com.lucianobass.cardactivity.controllerresources;
 
-import com.lucianobass.cardactivity.controllerresources.dto.CardDTO;
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
-import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.services.CardHolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/cards")
+@RequestMapping(value = "/cardholder")
 public class CardHolderController {
     @Autowired
     private CardHolderService cardHolderService;
@@ -32,9 +27,10 @@ public class CardHolderController {
         return cardHolderService.getAllCardsHolders();
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     @ResponseStatus(code = HttpStatus.OK)
     public CardHolder findAllById(@PathVariable Long id) {
         return cardHolderService.getByIdCardHolder(id);
     }
+
 }
