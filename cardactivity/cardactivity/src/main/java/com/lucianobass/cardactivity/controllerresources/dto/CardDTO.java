@@ -76,7 +76,7 @@ public class CardDTO implements Serializable {
         this.cardCVV = cardCVV;
     }
 
-    public boolean isCardActive() {
+    public boolean getCardActive() {
         return cardActive;
     }
 
