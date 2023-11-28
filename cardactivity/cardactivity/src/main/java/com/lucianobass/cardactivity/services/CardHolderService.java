@@ -5,6 +5,7 @@ import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.repositories.CardHolderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -29,22 +30,6 @@ public class CardHolderService {
 
     }
 
-//    @Transactional
-//    public CardHolder createCard(CardHolderDTO cardHolderDTO) {
-//        try {
-//            validateCardHolder(cardHolderDTO);
-//            CardHolder cardHolder = setCardHolder(cardHolderDTO);
-//            CardHolder savedCardHolder = cardHolderRepository.save(cardHolder);
-//            ;
-//            System.out.println("createCard: TESTANDO UM  " + savedCardHolder.generateNumberCard(16));
-//            System.out.println("CARDHOLDER RETORNADO: " + savedCardHolder);
-//            return savedCardHolder;
-//        } catch (Exception e) {
-//            System.out.println("ERRO AO CRIAR");
-//            throw e;
-//        }
-//    }
-
     @Transactional()
     public List<CardHolder> getAllCardsHolders() {
         return cardHolderRepository.findAll();
@@ -55,6 +40,14 @@ public class CardHolderService {
         return cardHolderRepository.findById(id).orElseThrow(
                 () -> new CardNotFoundExceptions(id)
         );
+    }
+
+    public void deleteId(Long id) {
+        try {
+            cardHolderRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new CardNotFoundExceptions(id);
+        }
     }
 
     private CardHolder setCardHolder(CardHolderDTO cardHolderDTO) {
