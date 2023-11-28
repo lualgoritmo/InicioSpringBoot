@@ -17,16 +17,29 @@ public class CardHolderService {
     @Autowired
     private CardHolderRepository cardHolderRepository;
 
-    @Transactional()
-    public CardHolder createCard(CardHolderDTO cardHolderDTO) {
+//    @Transactional()
+//    public CardHolder createCard(CardHolderDTO cardHolderDTO) {
+//        validateCardHolder(cardHolderDTO);
+//        try {
+//            return cardHolderRepository.save(setCardHolder(cardHolderDTO));
+//        } catch (Exception ex) {
+//            System.out.println("ERRO AO CRIAR");
+//            throw ex;
+//        }
+//
+//    }
+
+    @Transactional
+    public CardHolderDTO createCard(CardHolderDTO cardHolderDTO) {
         validateCardHolder(cardHolderDTO);
         try {
-            return cardHolderRepository.save(setCardHolder(cardHolderDTO));
+            CardHolder savedCardHolderDTO = cardHolderRepository.save(setCardHolder(cardHolderDTO));
+            CardHolderDTO responseDTO = convertToResponseDTO(savedCardHolderDTO);
+            return responseDTO;
         } catch (Exception ex) {
             System.out.println("ERRO AO CRIAR");
             throw ex;
         }
-
     }
 
 //    @Transactional
@@ -55,6 +68,14 @@ public class CardHolderService {
         return cardHolderRepository.findById(id).orElseThrow(
                 () -> new CardNotFoundExceptions(id)
         );
+    }
+
+    private CardHolderDTO convertToResponseDTO(CardHolder cardHolder) {
+        CardHolderDTO responseDTO = new CardHolderDTO();
+        responseDTO.setName(cardHolder.getName());
+        responseDTO.setDocumentNumber(cardHolder.getDocumentNumber());
+        responseDTO.setBirthDate(cardHolder.getBirthDate());
+        return responseDTO;
     }
 
     private CardHolder setCardHolder(CardHolderDTO cardHolderDTO) {

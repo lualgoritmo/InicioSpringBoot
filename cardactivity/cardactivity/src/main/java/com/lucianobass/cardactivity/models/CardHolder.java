@@ -1,6 +1,5 @@
 package com.lucianobass.cardactivity.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -76,7 +75,6 @@ public class CardHolder {
         try {
             if (this.card == null) {
                 this.card = new Card();
-                this.card.getId();
                 this.card.setNumberCard(generateNumberCard(16));
                 this.card.setAvailableLimit("150.00");
                 this.card.setCardExpiration("30/02");

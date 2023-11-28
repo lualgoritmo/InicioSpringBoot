@@ -17,7 +17,7 @@ public class CardHolderController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public CardHolder createCardHolder(@RequestBody CardHolderDTO cardHolderDTO) {
+    public CardHolderDTO createCardHolder(@RequestBody CardHolderDTO cardHolderDTO) {
         return cardHolderService.createCard(cardHolderDTO);
     }
 
