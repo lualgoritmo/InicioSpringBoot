@@ -1,5 +1,7 @@
 package com.lucianobass.cardactivity.controllerresources.dto;
 
+import com.lucianobass.cardactivity.models.CardHolder;
+
 import java.io.Serializable;
 
 public class CardHolderDTO implements Serializable {
@@ -19,6 +21,12 @@ public class CardHolderDTO implements Serializable {
 
     public CardHolderDTO() {
 
+    }
+
+    public CardHolderDTO(CardHolder entity) {
+        this.name = entity.getName();
+        this.documentNumber = entity.getDocumentNumber();
+        this.birthDate = entity.getBirthDate();
     }
 
     public Long getId() {

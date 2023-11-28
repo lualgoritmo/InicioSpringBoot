@@ -17,8 +17,8 @@ public class CardHolderController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public CardHolder createCardHolder(@RequestBody CardHolderDTO cardHolderDTO) {
-        return cardHolderService.createCard(cardHolderDTO);
+    public CardHolderDTO createCardHolder(@RequestBody CardHolderDTO cardHolderDTO) {
+        return cardHolderService.createCardHolder(cardHolderDTO);
     }
 
     @GetMapping
@@ -29,7 +29,8 @@ public class CardHolderController {
 
     @GetMapping("/{id}")
     @ResponseStatus(code = HttpStatus.OK)
-    public CardHolder findAllById(@PathVariable Long id) {
+    public CardHolder
+    findAllById(@PathVariable Long id) {
         return cardHolderService.getByIdCardHolder(id);
     }
 
