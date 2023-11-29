@@ -33,6 +33,12 @@ public class CardHolderController {
         return cardHolderService.getByIdCardHolder(id);
     }
 
+    @PutMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.OK)
+    public CardHolderDTO updateCard(@PathVariable Long id, @RequestBody CardHolderDTO cardHolderDTO) {
+        return cardHolderService.updateCardHolder(id, cardHolderDTO);
+    }
+
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteIdCard(@PathVariable Long id) {

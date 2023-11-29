@@ -4,6 +4,7 @@ import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.repositories.CardHolderRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -18,18 +19,6 @@ public class CardHolderService {
     @Autowired
     private CardHolderRepository cardHolderRepository;
 
-//    @Transactional()
-//    public CardHolder createCard(CardHolderDTO cardHolderDTO) {
-//        validateCardHolder(cardHolderDTO);
-//        try {
-//            return cardHolderRepository.save(setCardHolder(cardHolderDTO));
-//        } catch (Exception ex) {
-//            System.out.println("ERRO AO CRIAR");
-//            throw ex;
-//        }
-//
-//    }
-
     @Transactional
     public CardHolderDTO createCard(CardHolderDTO cardHolderDTO) {
         validateCardHolder(cardHolderDTO);
@@ -43,21 +32,17 @@ public class CardHolderService {
         }
     }
 
-//    @Transactional
-//    public CardHolder createCard(CardHolderDTO cardHolderDTO) {
-//        try {
-//            validateCardHolder(cardHolderDTO);
-//            CardHolder cardHolder = setCardHolder(cardHolderDTO);
-//            CardHolder savedCardHolder = cardHolderRepository.save(cardHolder);
-//            ;
-//            System.out.println("createCard: TESTANDO UM  " + savedCardHolder.generateNumberCard(16));
-//            System.out.println("CARDHOLDER RETORNADO: " + savedCardHolder);
-//            return savedCardHolder;
-//        } catch (Exception e) {
-//            System.out.println("ERRO AO CRIAR");
-//            throw e;
-//        }
-//    }
+    @Transactional()
+    public CardHolderDTO updateCardHolder(@PathVariable Long id, CardHolderDTO cardHolderDTO) {
+        CardHolder cardHolder = cardHolderRepository.findById(id).orElseThrow(
+                () -> new CardNotFoundExceptions(id)
+        );
+
+        BeanUtils.copyProperties(setCardHolder(cardHolderDTO), cardHolder, "id");
+        CardHolder updateCardHolder = cardHolderRepository.save(cardHolder);
+
+        return convertToResponseDTO(updateCardHolder);
+    }
 
     @Transactional()
     public List<CardHolder> getAllCardsHolders() {
@@ -101,4 +86,5 @@ public class CardHolderService {
             throw new CardNotFoundExceptions(id);
         }
     }
+
 }
