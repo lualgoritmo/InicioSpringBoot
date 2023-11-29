@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -30,18 +31,6 @@ public class CardHolderService {
             System.out.println("ERRO AO CRIAR");
             throw ex;
         }
-    }
-
-    @Transactional()
-    public CardHolderDTO updateCardHolder(@PathVariable Long id, CardHolderDTO cardHolderDTO) {
-        CardHolder cardHolder = cardHolderRepository.findById(id).orElseThrow(
-                () -> new CardNotFoundExceptions(id)
-        );
-
-        BeanUtils.copyProperties(setCardHolder(cardHolderDTO), cardHolder, "id");
-        CardHolder updateCardHolder = cardHolderRepository.save(cardHolder);
-
-        return convertToResponseDTO(updateCardHolder);
     }
 
     @Transactional()
@@ -87,4 +76,12 @@ public class CardHolderService {
         }
     }
 
+    public CardHolderDTO updateCardHolder(Long id, @RequestBody CardHolderDTO cardHolderDTO) {
+        CardHolder cardHolder = cardHolderRepository.findById(id).orElseThrow(
+                () -> new CardNotFoundExceptions(id)
+        );
+
+        BeanUtils.copyProperties(setCardHolder(cardHolderDTO), cardHolder, "id");
+        return convertToResponseDTO(cardHolderRepository.save(cardHolder));
+    }
 }

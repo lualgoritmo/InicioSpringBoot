@@ -34,8 +34,8 @@ public class CardHolderController {
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(code = HttpStatus.OK)
-    public CardHolderDTO updateCard(@PathVariable Long id, @RequestBody CardHolderDTO cardHolderDTO) {
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public CardHolderDTO updateId(@PathVariable Long id, @RequestBody CardHolderDTO cardHolderDTO) {
         return cardHolderService.updateCardHolder(id, cardHolderDTO);
     }
 
