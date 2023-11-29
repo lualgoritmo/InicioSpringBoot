@@ -33,4 +33,9 @@ public class CardHolderController {
         return cardHolderService.getByIdCardHolder(id);
     }
 
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void deleteIdCard(@PathVariable Long id) {
+        cardHolderService.deleteIdCard(id);
+    }
 }

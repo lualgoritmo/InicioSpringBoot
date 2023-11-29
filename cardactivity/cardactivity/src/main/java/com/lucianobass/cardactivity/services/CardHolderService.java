@@ -5,6 +5,7 @@ import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.repositories.CardHolderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -63,7 +64,7 @@ public class CardHolderService {
         return cardHolderRepository.findAll();
     }
 
-    @Transactional
+    @Transactional()
     public CardHolder getByIdCardHolder(@PathVariable Long id) {
         return cardHolderRepository.findById(id).orElseThrow(
                 () -> new CardNotFoundExceptions(id)
@@ -89,6 +90,15 @@ public class CardHolderService {
     private void validateCardHolder(CardHolderDTO cardHolderDTO) {
         if (cardHolderDTO.getName().isEmpty()) {
             throw new IllegalArgumentException(" O usuário não existe! ");
+        }
+    }
+
+    @Transactional()
+    public void deleteIdCard(@PathVariable Long id) {
+        try {
+            cardHolderRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new CardNotFoundExceptions(id);
         }
     }
 }
