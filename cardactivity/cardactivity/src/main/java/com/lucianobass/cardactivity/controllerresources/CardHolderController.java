@@ -29,19 +29,19 @@ public class CardHolderController {
 
     @GetMapping("/{id}")
     @ResponseStatus(code = HttpStatus.OK)
-    public CardHolder findAllById(@PathVariable Long id) {
+    public CardHolder findByIdCardHolder(@PathVariable Long id) {
         return cardHolderService.getByIdCardHolder(id);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public CardHolderDTO updateId(@PathVariable Long id, @RequestBody CardHolderDTO cardHolderDTO) {
+    public CardHolderDTO updateCardHolder(@PathVariable Long id, @RequestBody CardHolderDTO cardHolderDTO) {
         return cardHolderService.updateCardHolder(id, cardHolderDTO);
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteIdCard(@PathVariable Long id) {
+    public void deleteIdCardHolder(@PathVariable Long id) {
         cardHolderService.deleteIdCard(id);
     }
 }
