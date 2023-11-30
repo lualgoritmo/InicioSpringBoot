@@ -101,7 +101,7 @@ public class Card implements Serializable {
         this.cardCVV =  Card.generateNumberCard(3).replaceAll("(\\d)", "x");
     }
 
-    public boolean isCardActive() {
+    public boolean getCardActive() {
         return cardActive;
     }
 

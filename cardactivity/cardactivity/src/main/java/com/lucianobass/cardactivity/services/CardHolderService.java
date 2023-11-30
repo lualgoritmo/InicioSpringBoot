@@ -1,5 +1,6 @@
 package com.lucianobass.cardactivity.services;
 
+import com.lucianobass.cardactivity.controllerresources.dto.CardDTO;
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
 import com.lucianobass.cardactivity.models.CardHolder;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CardHolderService {
@@ -33,9 +35,16 @@ public class CardHolderService {
         }
     }
 
+//        @Transactional()
+//    public List<CardHolderDTO> getAllCardsHolders() {
+//        return cardHolderRepository.findAll();
+//    }
+
     @Transactional()
-    public List<CardHolder> getAllCardsHolders() {
-        return cardHolderRepository.findAll();
+    public List<CardHolderDTO> getAllCardsHolders() {
+        List<CardHolder> cardHolder = cardHolderRepository.findAll();
+        return cardHolder.stream().map(this::convertToResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Transactional()
@@ -44,14 +53,29 @@ public class CardHolderService {
                 () -> new CardNotFoundExceptions(id)
         );
     }
-
     private CardHolderDTO convertToResponseDTO(CardHolder cardHolder) {
         CardHolderDTO responseDTO = new CardHolderDTO();
+        //responseDTO.setId(cardHolder.getId());
         responseDTO.setName(cardHolder.getName());
         responseDTO.setDocumentNumber(cardHolder.getDocumentNumber());
         responseDTO.setBirthDate(cardHolder.getBirthDate());
+        if (cardHolder.getCard() != null) {
+            CardDTO cardDTO = new CardDTO();
+            cardDTO.setNumberCard(cardHolder.getCard().getNumberCard());
+            cardDTO.setCardExpiration(cardHolder.getCard().getCardExpiration());
+            cardDTO.setAvailableLimit(cardHolder.getCard().getAvailableLimit());
+            responseDTO.setCard(cardDTO);
+        }
         return responseDTO;
     }
+
+//    private CardHolderDTO convertToResponseDTO(CardHolder cardHolder) {
+//        CardHolderDTO responseDTO = new CardHolderDTO();
+//        responseDTO.setName(cardHolder.getName());
+//        responseDTO.setDocumentNumber(cardHolder.getDocumentNumber());
+//        responseDTO.setBirthDate(cardHolder.getBirthDate());
+//        return responseDTO;
+//    }
 
     private CardHolder setCardHolder(CardHolderDTO cardHolderDTO) {
         CardHolder cardHolder = new CardHolder();

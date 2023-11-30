@@ -37,6 +37,10 @@ public class CardHolder {
     public CardHolder() {
     }
 
+    public Card getCard() {
+        return card;
+    }
+
     public String getName() {
         return name;
     }

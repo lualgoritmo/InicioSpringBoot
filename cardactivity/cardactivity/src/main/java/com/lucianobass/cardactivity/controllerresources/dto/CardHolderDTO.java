@@ -3,12 +3,13 @@ package com.lucianobass.cardactivity.controllerresources.dto;
 import java.io.Serializable;
 
 public class CardHolderDTO implements Serializable {
-    private static final long serialVersionUIO = 1L;
+    private static final long serialVersionUID = 1L;
 
     private Long id;
     private String name;
     private String documentNumber;
     private String birthDate;
+    private CardDTO card;
 
     public CardHolderDTO(Long id, String name, String documentNumber, String birthDate) {
         this.id = id;
@@ -53,4 +54,11 @@ public class CardHolderDTO implements Serializable {
         this.birthDate = birthDate;
     }
 
+    public CardDTO getCard() {
+        return card;
+    }
+
+    public void setCard(CardDTO card) {
+        this.card = card;
+    }
 }

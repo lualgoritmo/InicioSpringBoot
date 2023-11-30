@@ -23,7 +23,7 @@ public class CardHolderController {
 
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
-    public List<CardHolder> getAllCardHolder() {
+    public List<CardHolderDTO> getAllCardHolder() {
         return cardHolderService.getAllCardsHolders();
     }
 
