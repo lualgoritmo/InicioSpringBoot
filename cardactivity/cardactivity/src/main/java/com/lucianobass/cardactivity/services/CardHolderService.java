@@ -19,21 +19,35 @@ import java.util.stream.Collectors;
 @Service
 public class CardHolderService {
 
-    @Autowired
+    //    @Autowired
+//    private CardHolderRepository cardHolderRepository;
+
     private CardHolderRepository cardHolderRepository;
+
+    @Autowired
+    public void setCardHolderRepository(CardHolderRepository cardHolderRepository) {
+        this.cardHolderRepository = cardHolderRepository;
+    }
 
     @Transactional
     public CardHolderDTO createCard(CardHolderDTO cardHolderDTO) {
-        validateCardHolder(cardHolderDTO);
-        try {
-            CardHolder savedCardHolderDTO = cardHolderRepository.save(setCardHolder(cardHolderDTO));
-            CardHolderDTO responseDTO = convertToResponseDTO(savedCardHolderDTO);
-            return responseDTO;
-        } catch (Exception ex) {
-            System.out.println("ERRO AO CRIAR");
-            throw ex;
-        }
+        CardHolder cardHolder = setCardHolder(cardHolderDTO);
+        CardHolder savedCardHolder = cardHolderRepository.save(cardHolder);
+        return convertToResponseDTO(savedCardHolder);
     }
+
+//    @Transactional
+//    public CardHolderDTO createCard(CardHolderDTO cardHolderDTO) {
+//        validateCardHolder(cardHolderDTO);
+//        try {
+//            CardHolder savedCardHolderDTO = cardHolderRepository.save(setCardHolder(cardHolderDTO));
+//            CardHolderDTO responseDTO = convertToResponseDTO(savedCardHolderDTO);
+//            return responseDTO;
+//        } catch (Exception ex) {
+//            System.out.println("ERRO AO CRIAR");
+//            throw ex;
+//        }
+//    }
 
 //        @Transactional()
 //    public List<CardHolderDTO> getAllCardsHolders() {
@@ -48,21 +62,25 @@ public class CardHolderService {
     }
 
     @Transactional()
-    public CardHolder getByIdCardHolder(@PathVariable Long id) {
-        return cardHolderRepository.findById(id).orElseThrow(
+    public CardHolderDTO getByIdCardHolder(@PathVariable Long id) {
+        CardHolder cardHolder = cardHolderRepository.findById(id).orElseThrow(
                 () -> new CardNotFoundExceptions(id)
         );
+        return convertToResponseDTO(cardHolder);
     }
-    private CardHolderDTO convertToResponseDTO(CardHolder cardHolder) {
+
+    CardHolderDTO convertToResponseDTO(CardHolder cardHolder) {
         CardHolderDTO responseDTO = new CardHolderDTO();
-        //responseDTO.setId(cardHolder.getId());
         responseDTO.setName(cardHolder.getName());
         responseDTO.setDocumentNumber(cardHolder.getDocumentNumber());
         responseDTO.setBirthDate(cardHolder.getBirthDate());
+        //responseDTO.setId(cardHolder.getId());
         if (cardHolder.getCard() != null) {
             CardDTO cardDTO = new CardDTO();
             cardDTO.setNumberCard(cardHolder.getCard().getNumberCard());
             cardDTO.setCardExpiration(cardHolder.getCard().getCardExpiration());
+            cardDTO.setCardLimit(cardHolder.getCard().getCardLimit());
+            cardDTO.setCardCVV(cardHolder.getCard().getCardCVV());
             cardDTO.setAvailableLimit(cardHolder.getCard().getAvailableLimit());
             responseDTO.setCard(cardDTO);
         }
@@ -81,12 +99,17 @@ public class CardHolderService {
         CardHolder cardHolder = new CardHolder();
         cardHolder.setName(cardHolderDTO.getName());
         cardHolder.setDocumentNumber(cardHolderDTO.getDocumentNumber());
-        cardHolder.setBirthDate(cardHolderDTO.getBirthDate());
+        if (cardHolderDTO.getName() != null) {
+            cardHolder.setBirthDate(cardHolderDTO.getBirthDate());
+        } else {
+            System.out.println("DATA CHEGANDO NULL");
+        }
         return cardHolder;
     }
 
     private void validateCardHolder(CardHolderDTO cardHolderDTO) {
-        if (cardHolderDTO.getName().isEmpty()) {
+        if (cardHolderDTO.getName().isEmpty() || cardHolderDTO.getDocumentNumber().isEmpty() ||
+                cardHolderDTO.getBirthDate().isEmpty()) {
             throw new IllegalArgumentException(" O usuário não existe! ");
         }
     }
@@ -99,8 +122,21 @@ public class CardHolderService {
             throw new CardNotFoundExceptions(id);
         }
     }
+//
+//    public CardHolderDTO updateCardHolder(Long id, @RequestBody CardHolderDTO cardHolderDTO) {
+//        CardHolder cardHolder = cardHolderRepository.findById(id).orElseThrow(
+//                () -> new CardNotFoundExceptions(id)
+//        );
+//
+//        BeanUtils.copyProperties(setCardHolder(cardHolderDTO), cardHolder, "id");
+//        return convertToResponseDTO(cardHolderRepository.save(cardHolder));
+//    }
 
     public CardHolderDTO updateCardHolder(Long id, @RequestBody CardHolderDTO cardHolderDTO) {
+        if (id == null) {
+            throw new IllegalArgumentException("O ID não pode ser nulo para a atualização");
+        }
+
         CardHolder cardHolder = cardHolderRepository.findById(id).orElseThrow(
                 () -> new CardNotFoundExceptions(id)
         );
@@ -108,4 +144,5 @@ public class CardHolderService {
         BeanUtils.copyProperties(setCardHolder(cardHolderDTO), cardHolder, "id");
         return convertToResponseDTO(cardHolderRepository.save(cardHolder));
     }
+
 }

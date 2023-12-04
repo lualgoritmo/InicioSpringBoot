@@ -12,7 +12,7 @@ import java.util.Random;
 public class CardHolder {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     //@NotBlank(message = "Escreva o seu nome")
@@ -37,8 +37,20 @@ public class CardHolder {
     public CardHolder() {
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Card getCard() {
         return card;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
     }
 
     public String getName() {
@@ -77,20 +89,22 @@ public class CardHolder {
     @PrePersist
     public void prePersist() {
         try {
-            if (this.card == null) {
+            System.out.println("ID no prePersist: " + this.id);
+            System.out.println("Card no prePersist: " + this.card);
+            if (this.card == null && this.id == null) {
                 this.card = new Card();
-                this.card.setNumberCard(generateNumberCard(16));
+                this.card.setNumberCard(generateNumberCard(16)
+                        .replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x"));
                 this.card.setAvailableLimit("150.00");
                 this.card.setCardExpiration("30/02");
                 this.card.setCardLimit("100.00");
-                this.card.setCardCVV("123");
+                this.card.setCardCVV(generateNumberCard(3).replaceAll("(\\d)", "x"));
                 this.card.setCardActive(false);
                 this.card.setCardHolder(this);
             }
         } catch (Exception ex) {
             System.out.println(" Erro no PREPERSIST" + ex.getMessage());
         }
-
     }
 
 }

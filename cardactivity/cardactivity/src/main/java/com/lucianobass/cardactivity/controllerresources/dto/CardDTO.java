@@ -30,9 +30,9 @@ public class CardDTO implements Serializable {
         this.cardHolderId = cardHolderId;
     }
 
-    public Long getId() {
-        return id;
-    }
+//    public Long getId() {
+//        return id;
+//    }
 
     public void setId(Long id) {
         this.id = id;
@@ -43,7 +43,7 @@ public class CardDTO implements Serializable {
     }
 
     public void setNumberCard(String numberCard) {
-        this.numberCard =  Card.generateNumberCard(16).replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x");
+        this.numberCard =  numberCard;
     }
 
     public String getCardExpiration() {
@@ -75,7 +75,7 @@ public class CardDTO implements Serializable {
     }
 
     public void setCardCVV(String cardCVV) {
-        this.cardCVV = Card.generateNumberCard(3).replaceAll("(\\d)", "x");;
+        this.cardCVV = Card.generateNumberCard(3).replaceAll("(\\d)", "x");
     }
 
     public boolean getCardActive() {
@@ -86,8 +86,8 @@ public class CardDTO implements Serializable {
         this.cardActive = cardActive;
     }
 
-    public Long getCardHolderId() {
-        return cardHolderId;
-    }
+//    public Long getCardHolderId() {
+//        return cardHolderId;
+//    }
 }
 

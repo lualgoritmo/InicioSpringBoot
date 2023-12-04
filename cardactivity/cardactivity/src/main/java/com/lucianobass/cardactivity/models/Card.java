@@ -61,7 +61,7 @@ public class Card implements Serializable {
         this.cardLimit = cardLimit;
     }
 
-    public Long getId() {
+    public Long getId(Long aLong) {
         return id;
     }
 
@@ -73,8 +73,12 @@ public class Card implements Serializable {
         return numberCard;
     }
 
+    //    public void setNumberCard(String numberCard) {
+//        this.numberCard = Card.generateNumberCard(16).replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x");
+//    }
+
     public void setNumberCard(String numberCard) {
-        this.numberCard =Card.generateNumberCard(16).replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x");
+        this.numberCard = numberCard;
     }
 
     public String getCardExpiration() {
@@ -97,8 +101,12 @@ public class Card implements Serializable {
         return cardCVV;
     }
 
+    //    public void setCardCVV(String cardCVV) {
+//        this.cardCVV = Card.generateNumberCard(3).replaceAll("(\\d)", "x");
+//    }
+
     public void setCardCVV(String cardCVV) {
-        this.cardCVV =  Card.generateNumberCard(3).replaceAll("(\\d)", "x");
+        this.cardCVV = cardCVV;
     }
 
     public boolean getCardActive() {

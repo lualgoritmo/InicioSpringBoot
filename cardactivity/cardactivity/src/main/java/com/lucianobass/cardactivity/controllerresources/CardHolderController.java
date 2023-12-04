@@ -1,7 +1,6 @@
 package com.lucianobass.cardactivity.controllerresources;
 
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
-import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.services.CardHolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +28,7 @@ public class CardHolderController {
 
     @GetMapping("/{id}")
     @ResponseStatus(code = HttpStatus.OK)
-    public CardHolder findByIdCardHolder(@PathVariable Long id) {
+    public CardHolderDTO findByIdCardHolder(@PathVariable Long id) {
         return cardHolderService.getByIdCardHolder(id);
     }
 
