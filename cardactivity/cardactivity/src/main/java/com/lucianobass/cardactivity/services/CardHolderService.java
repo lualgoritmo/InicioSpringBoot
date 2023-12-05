@@ -21,9 +21,6 @@ import static com.lucianobass.cardactivity.util.CardHolderValidator.*;
 @Service
 public class CardHolderService {
 
-    //    @Autowired
-//    private CardHolderRepository cardHolderRepository;
-
     private CardHolderRepository cardHolderRepository;
 
     @Autowired
@@ -34,23 +31,15 @@ public class CardHolderService {
     @Transactional
     public CardHolderDTO createCard(CardHolderDTO cardHolderDTO) {
         validateCardHolder(cardHolderDTO);
-        CardHolder cardHolder = setCardHolder(cardHolderDTO);
-        CardHolder savedCardHolder = cardHolderRepository.save(cardHolder);
-        return convertToResponseDTO(savedCardHolder);
+        try {
+            CardHolder savedCardHolderDTO = cardHolderRepository.save(setCardHolder(cardHolderDTO));
+            CardHolderDTO responseDTO = convertToResponseDTO(savedCardHolderDTO);
+            return responseDTO;
+        } catch (Exception ex) {
+            System.out.println("ERRO AO CRIAR");
+            throw ex;
+        }
     }
-
-//    @Transactional
-//    public CardHolderDTO createCard(CardHolderDTO cardHolderDTO) {
-//        validateCardHolder(cardHolderDTO);
-//        try {
-//            CardHolder savedCardHolderDTO = cardHolderRepository.save(setCardHolder(cardHolderDTO));
-//            CardHolderDTO responseDTO = convertToResponseDTO(savedCardHolderDTO);
-//            return responseDTO;
-//        } catch (Exception ex) {
-//            System.out.println("ERRO AO CRIAR");
-//            throw ex;
-//        }
-//    }
 
     @Transactional()
     public List<CardHolderDTO> getAllCardsHolders() {
