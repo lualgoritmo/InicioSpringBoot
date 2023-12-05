@@ -15,6 +15,7 @@ public class CardHolderDTO implements Serializable {
 //    @NotBlank(message = "A data de nascimento não pode estar em branco")
     private String birthDate;
     private CardDTO card;
+    private TransactionDTO transaction;
 
     public CardHolderDTO(Long id, String name, String documentNumber, String birthDate) {
         this.id = id;
@@ -61,5 +62,13 @@ public class CardHolderDTO implements Serializable {
 
     public void setCard(CardDTO card) {
         this.card = card;
+    }
+
+    public TransactionDTO getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(TransactionDTO transaction) {
+        this.transaction = transaction;
     }
 }

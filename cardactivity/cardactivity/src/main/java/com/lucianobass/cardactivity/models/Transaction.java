@@ -11,6 +11,7 @@ import java.util.Objects;
 @Table(name = "tb_transation")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Transaction {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idTransacation;
