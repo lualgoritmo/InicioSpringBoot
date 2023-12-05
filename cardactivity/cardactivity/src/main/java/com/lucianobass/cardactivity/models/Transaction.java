@@ -1,5 +1,7 @@
 package com.lucianobass.cardactivity.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
@@ -15,9 +17,13 @@ public class Transaction {
     private String description;
     private Float priceValue;
     private String transactionTime;
+    @OneToOne
+    @JoinColumn(name = "card_holder_id")
+    @JsonIgnoreProperties("transaction")
+    @JsonIgnore
+    private CardHolder cardHolder;
 
     public Transaction() {
-
     }
 
     public Transaction(String description, Float priceValue, String transactionTime) {
@@ -48,6 +54,14 @@ public class Transaction {
 
     public void setTransactionTime(String transactionTime) {
         this.transactionTime = transactionTime;
+    }
+
+    public CardHolder getCardHolder() {
+        return cardHolder;
+    }
+
+    public void setCardHolder(CardHolder cardHolder) {
+        this.cardHolder = cardHolder;
     }
 
     @Override

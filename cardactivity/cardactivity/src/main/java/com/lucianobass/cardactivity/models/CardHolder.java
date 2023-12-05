@@ -28,6 +28,10 @@ public class CardHolder {
     @JsonManagedReference
     private Card card;
 
+    @OneToOne(mappedBy = "cardHolder", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Transaction transaction;
+
     public CardHolder(String name, String documentNumber, String birthDate) {
         this.name = name;
         this.documentNumber = documentNumber;
@@ -75,6 +79,14 @@ public class CardHolder {
 
     public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
     }
 
     @PrePersist
