@@ -75,7 +75,7 @@ public class CardDTO implements Serializable {
     }
 
     public void setCardCVV(String cardCVV) {
-        this.cardCVV = Card.generateNumberCard(3).replaceAll("(\\d)", "x");
+        this.cardCVV = cardCVV;
     }
 
     public boolean getCardActive() {

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/cardholder")
@@ -32,13 +33,27 @@ public class CardHolderController {
         return cardHolderService.getByIdCardHolder(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/update")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public CardHolderDTO updateCardHolder(@PathVariable Long id, @RequestBody CardHolderDTO cardHolderDTO) {
+    public CardHolderDTO updateCardHolder(@PathVariable Long id,
+                                          @RequestBody(required = false) CardHolderDTO cardHolderDTO) {
         return cardHolderService.updateCardHolder(id, cardHolderDTO);
     }
+    @PutMapping("/{id}/activate")
+    @ResponseStatus(code = HttpStatus.OK)
+    public CardHolderDTO activateCardHolder(@PathVariable Long id, @RequestBody Map<String, Object> request) {
+        //Boolean cardActive = (Boolean) request.get("cardActive");
+        return cardHolderService.activateCard(id);
+    }
 
-    @DeleteMapping(value = "/{id}")
+    @PutMapping("/{id}/deactivate")
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public CardHolderDTO deactivateCardHolder(@PathVariable Long cardHolderId) {
+        return cardHolderService.deactivateCard(cardHolderId);
+    }
+
+
+    @DeleteMapping(value = "/{id}/deletedcard")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteIdCardHolder(@PathVariable Long id) {
         cardHolderService.deleteIdCard(id);

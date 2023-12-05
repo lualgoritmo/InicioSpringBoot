@@ -137,13 +137,4 @@ public class Card implements Serializable {
         Card card = (Card) o;
         return Objects.equals(id, card.id);
     }
-
-    public static String generateNumberCard(int number) {
-        StringBuilder stringBuilder = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < number; i++) {
-            stringBuilder.append(random.nextInt(10));
-        }
-        return stringBuilder.toString();
-    }
 }

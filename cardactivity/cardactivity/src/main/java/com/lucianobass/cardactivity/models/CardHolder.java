@@ -77,15 +77,6 @@ public class CardHolder {
         this.birthDate = birthDate;
     }
 
-    public String generateNumberCard(int number) {
-        StringBuilder stringBuilder = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < number; i++) {
-            stringBuilder.append(random.nextInt(10));
-        }
-        return stringBuilder.toString();
-    }
-
     @PrePersist
     public void prePersist() {
         try {
@@ -102,9 +93,20 @@ public class CardHolder {
                 this.card.setCardActive(false);
                 this.card.setCardHolder(this);
             }
+            System.out.println("ID no prePersist: " + this.id);
+            System.out.println("Card no prePersist: " + this.card);
         } catch (Exception ex) {
             System.out.println(" Erro no PREPERSIST" + ex.getMessage());
         }
+    }
+
+    public static String generateNumberCard(int number) {
+        StringBuilder stringBuilder = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < number; i++) {
+            stringBuilder.append(random.nextInt(10));
+        }
+        return stringBuilder.toString();
     }
 
 }
