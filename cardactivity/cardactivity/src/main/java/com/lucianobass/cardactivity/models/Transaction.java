@@ -1,10 +1,13 @@
 package com.lucianobass.cardactivity.models;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "tb_transation")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
