@@ -14,4 +14,10 @@ public class ApplicationControllerAdvice {
     public String handleNotFoundExcetption(CardNotFoundExceptions ex) {
         return ex.getMessage();
     }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleExceptions(Exception ex) {
+        return ex.getMessage();
+    }
 }

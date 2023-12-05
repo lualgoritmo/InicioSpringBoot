@@ -47,11 +47,10 @@ public class CardHolderController {
     }
 
     @PutMapping("/{id}/deactivate")
-    @ResponseStatus(code = HttpStatus.CREATED)
-    public CardHolderDTO deactivateCardHolder(@PathVariable Long cardHolderId) {
-        return cardHolderService.deactivateCard(cardHolderId);
+    @ResponseStatus(code = HttpStatus.OK)
+    public CardHolderDTO deactivateCardHolder(@PathVariable Long id) {
+        return cardHolderService.deactivateCard(id);
     }
-
 
     @DeleteMapping(value = "/{id}/deletedcard")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
