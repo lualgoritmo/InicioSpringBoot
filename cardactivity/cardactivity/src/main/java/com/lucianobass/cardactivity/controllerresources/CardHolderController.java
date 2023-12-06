@@ -8,7 +8,6 @@ import com.lucianobass.cardactivity.util.MapperConvert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -79,57 +78,26 @@ public class CardHolderController {
     }
 
 
-
-//    @PutMapping("/{id}/activate")
-//    @ResponseStatus(code = HttpStatus.OK)
-//    public CardHolderDTO activateCardHolder(@PathVariable Long id, @RequestBody Map<String, Object> request) {
-//        //Boolean cardActive = (Boolean) request.get("cardActive");
-//        CardHolder cardHolder = cardHolderService.activateCard(id);
-//        return convertToResponseDTO(cardHolder);
-//    }
-
-//    @PutMapping("/{id}/activate")
-//    @ResponseStatus(code = HttpStatus.OK)
-//    public CardHolderDTO activateCardHolder(@PathVariable Long id) {
-//        if (id == null) {
-//            throw new IllegalArgumentException("O ID não pode ser nulo para a ativação");
-//        }
-//        try {
-//            CardHolder cardHolder = cardHolderService.getByIdCardHolder(id)
-//                    .orElseThrow(() -> new CardNotFoundExceptions(id));
-//
-//            if (cardHolder.getCard() != null && Boolean.FALSE.equals(cardHolder.getCard().getCardActive())) {
-//                cardHolder.getCard().setCardActive(true);
-//                cardHolderRepository.save(cardHolder);
-//                return cardHolder;
-//            } else if (cardHolder.getCard() != null && Boolean.TRUE.equals(cardHolder.getCard().getCardActive())) {
-//
-//                System.out.println("O cartão já está ativo para o CardHolder com ID: " + id);
-//                return null;
-//            } else {
-//
-//                System.out.println("Não possui um cartão associado para o CardHolder com ID: " + id);
-//                return null;
-//            }
-//        } catch (CardNotFoundExceptions e) {
-//
-//            System.out.println("CardHolder não encontrado: " + e.getMessage());
-//
-//            throw e;
-//        } catch (Exception e) {
-//
-//            System.out.println("Erro durante a ativação do CardHolder: " + e.getMessage());
-//
-//            throw new RuntimeException("Erro durante a ativação do CardHolder", e);
-//        }
-//        CardHolder cardHolder = cardHolderService.activateCard(id);
-//        return convertToResponseDTO(cardHolder);
-//    }
-
     @PutMapping("/{id}/deactivate")
     @ResponseStatus(code = HttpStatus.OK)
-    public CardHolder deactivateCardHolder(@PathVariable Long id) {
-        return cardHolderService.deactivateCard(id);
+    public CardHolderDTO deactivateCardHolder(@PathVariable Long id) {
+        try {
+            CardHolder updatedCardHolder = cardHolderService.deactivateCardHolder(id);
+
+            if (updatedCardHolder != null) {
+                return convertToResponseDTO(updatedCardHolder);
+            } else {
+                throw new IllegalStateException("O cartão já está desativado ou não há cartão associado");
+            }
+        } catch (CardNotFoundExceptions e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (IllegalStateException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro durante a desativação do CardHolder: " + e.getMessage());
+        }
     }
 
     @DeleteMapping(value = "/{id}/deletedcard")
