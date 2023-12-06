@@ -4,7 +4,6 @@ import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.repositories.CardHolderRepository;
-import com.lucianobass.cardactivity.util.CardHolderValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -14,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static com.lucianobass.cardactivity.util.CardHolderValidator.*;
+import static com.lucianobass.cardactivity.util.MapperConvert.convertToResponseDTO;
+import static com.lucianobass.cardactivity.util.MapperConvert.validateCardHolder;
 
 @Service
 public class CardHolderService {
@@ -29,12 +28,10 @@ public class CardHolderService {
     }
 
     @Transactional
-    public CardHolderDTO createCard(CardHolderDTO cardHolderDTO) {
-        validateCardHolder(cardHolderDTO);
+    public CardHolder createCard(CardHolder cardHolder) {
+        validateCardHolder(cardHolder);
         try {
-            CardHolder savedCardHolderDTO = cardHolderRepository.save(setCardHolder(cardHolderDTO));
-            CardHolderDTO responseDTO = convertToResponseDTO(savedCardHolderDTO);
-            return responseDTO;
+            return cardHolderRepository.save(cardHolder);
         } catch (Exception ex) {
             System.out.println("ERRO AO CRIAR");
             throw ex;
@@ -42,19 +39,23 @@ public class CardHolderService {
     }
 
     @Transactional()
-    public List<CardHolderDTO> getAllCardsHolders() {
-        List<CardHolder> cardHolder = cardHolderRepository.findAll();
-        return cardHolder.stream()
-                .map(CardHolderValidator::convertToResponseDTO)
-                .collect(Collectors.toList());
+    public List<CardHolder> getAllCardsHolders() {
+        return cardHolderRepository.findAll();
     }
+//    @Transactional()
+//    public List<CardHolder> getAllCardsHolders() {
+//        List<CardHolder> cardHolder = cardHolderRepository.findAll();
+//        return cardHolder.stream()
+//                .map(MapperConvert::convertToResponseDTO)
+//                .collect(Collectors.toList());
+//    }
 
     @Transactional()
-    public CardHolderDTO getByIdCardHolder(@PathVariable Long id) {
+    public CardHolder getByIdCardHolder(@PathVariable Long id) {
         CardHolder cardHolder = cardHolderRepository.findById(id).orElseThrow(
                 () -> new CardNotFoundExceptions(id)
         );
-        return convertToResponseDTO(cardHolder);
+        return cardHolder;
     }
 
     @Transactional()
@@ -66,22 +67,35 @@ public class CardHolderService {
         }
     }
 
-    @Transactional()
-    public CardHolderDTO updateCardHolder(Long id, @RequestBody CardHolderDTO cardHolderDTO) {
+    @Transactional
+    public CardHolder updateCardHolder(Long id, @RequestBody CardHolder cardHolder) {
         if (id == null) {
             throw new IllegalArgumentException("O ID não pode ser nulo para a atualização");
         }
 
-        CardHolder cardHolder = cardHolderRepository.findById(id).orElseThrow(
-                () -> new CardNotFoundExceptions(id)
-        );
+        CardHolder existingCardHolder = cardHolderRepository.findById(id)
+                .orElseThrow(() -> new CardNotFoundExceptions(id));
 
-        BeanUtils.copyProperties(setCardHolder(cardHolderDTO), cardHolder, "id");
-        return convertToResponseDTO(cardHolderRepository.save(cardHolder));
+             BeanUtils.copyProperties(cardHolder, existingCardHolder, "id");
+        return cardHolderRepository.save(existingCardHolder);
     }
 
+//    @Transactional()
+//    public CardHolderDTO updateCardHolder(Long id, @RequestBody CardHolderDTO cardHolderDTO) {
+//        if (id == null) {
+//            throw new IllegalArgumentException("O ID não pode ser nulo para a atualização");
+//        }
+//
+//        CardHolder cardHolder = cardHolderRepository.findById(id).orElseThrow(
+//                () -> new CardNotFoundExceptions(id)
+//        );
+//
+//        BeanUtils.copyProperties(convertDTOToCardHolder(cardHolderDTO), cardHolder, "id");
+//        return convertToResponseDTO(cardHolderRepository.save(cardHolder));
+//    }
+
     @Transactional
-    public CardHolderDTO activateCard(Long id) {
+    public CardHolder activateCard(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("O ID não pode ser nulo para a ativação");
         }
@@ -93,7 +107,7 @@ public class CardHolderService {
             if (cardHolder.getCard() != null && Boolean.FALSE.equals(cardHolder.getCard().getCardActive())) {
                 cardHolder.getCard().setCardActive(true);
                 cardHolderRepository.save(cardHolder);
-                return convertToResponseDTO(cardHolder);
+                return cardHolder;
             } else if (cardHolder.getCard() != null && Boolean.TRUE.equals(cardHolder.getCard().getCardActive())) {
 
                 System.out.println("O cartão já está ativo para o CardHolder com ID: " + id);

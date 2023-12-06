@@ -2,9 +2,11 @@ package com.lucianobass.cardactivity.util;
 
 import com.lucianobass.cardactivity.controllerresources.dto.CardDTO;
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
+import com.lucianobass.cardactivity.controllerresources.dto.TransactionDTO;
 import com.lucianobass.cardactivity.models.CardHolder;
+import com.lucianobass.cardactivity.models.Transaction;
 
-public class CardHolderValidator {
+public class MapperConvert {
 
     public static CardHolderDTO convertToResponseDTO(CardHolder cardHolder) {
         CardHolderDTO responseDTO = new CardHolderDTO();
@@ -29,7 +31,7 @@ public class CardHolderValidator {
         return responseDTO;
     }
 
-    public static CardHolder setCardHolder(CardHolderDTO cardHolderDTO) {
+    public static CardHolder convertDTOToCardHolder(CardHolderDTO cardHolderDTO) {
         CardHolder cardHolder = new CardHolder();
         cardHolder.setName(cardHolderDTO.getName());
         cardHolder.setDocumentNumber(cardHolderDTO.getDocumentNumber());
@@ -41,10 +43,27 @@ public class CardHolderValidator {
         return cardHolder;
     }
 
-    public static void validateCardHolder(CardHolderDTO cardHolderDTO) {
-        if (cardHolderDTO.getName().isEmpty() || cardHolderDTO.getDocumentNumber().isEmpty() ||
-                cardHolderDTO.getBirthDate().isEmpty()) {
+    public static void validateCardHolder(CardHolder cardHolder) {
+        if (cardHolder.getName().isEmpty() || cardHolder.getDocumentNumber().isEmpty() ||
+                cardHolder.getBirthDate().isEmpty()) {
             throw new IllegalArgumentException(" O usuário não existe! ");
         }
+    }
+
+    public static Transaction convertDTOToTransacation(TransactionDTO transactionDTO) {
+        Transaction transaction = new Transaction();
+        transaction.setDescription(transactionDTO.getDescription());
+        transaction.setPriceValue(transactionDTO.getPriceValue());
+        transaction.setTransactionTime(transactionDTO.getTransactionTime());
+
+        return transaction;
+    }
+    public static TransactionDTO convertTransacationToDTO(Transaction transaction) {
+        TransactionDTO transactionDTO = new TransactionDTO();
+        transactionDTO.setDescription(transaction.getDescription());
+        transactionDTO.setPriceValue(transaction.getPriceValue());
+        transactionDTO.setTransactionTime(transaction.getTransactionTime());
+
+        return transactionDTO;
     }
 }

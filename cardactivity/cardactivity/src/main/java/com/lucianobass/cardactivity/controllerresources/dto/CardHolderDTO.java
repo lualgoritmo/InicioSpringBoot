@@ -1,9 +1,12 @@
 package com.lucianobass.cardactivity.controllerresources.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serializable;
+import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CardHolderDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -11,11 +14,12 @@ public class CardHolderDTO implements Serializable {
     private Long id;
     private String name;
     private String documentNumber;
-//    @NotNull(message = "A data de nascimento não pode ser nula")
+    //    @NotNull(message = "A data de nascimento não pode ser nula")
 //    @NotBlank(message = "A data de nascimento não pode estar em branco")
     private String birthDate;
     private CardDTO card;
-    private TransactionDTO transaction;
+    @JsonIgnore
+    private List<TransactionDTO> transaction;
 
     public CardHolderDTO(Long id, String name, String documentNumber, String birthDate) {
         this.id = id;
@@ -64,11 +68,11 @@ public class CardHolderDTO implements Serializable {
         this.card = card;
     }
 
-    public TransactionDTO getTransaction() {
+    public List<TransactionDTO> getTransaction() {
         return transaction;
     }
 
-    public void setTransaction(TransactionDTO transaction) {
+    public void setTransaction(List<TransactionDTO> transaction) {
         this.transaction = transaction;
     }
 }

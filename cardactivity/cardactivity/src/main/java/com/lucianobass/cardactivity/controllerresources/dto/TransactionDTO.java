@@ -1,9 +1,11 @@
 package com.lucianobass.cardactivity.controllerresources.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serializable;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TransactionDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     
@@ -11,16 +13,16 @@ public class TransactionDTO implements Serializable {
     private Long idTransacation;
     private String description;
     private String transactionTime;
+    private Float priceValue;
     private Long cardHolderId;
 
     public TransactionDTO() {
     }
 
-    public TransactionDTO(Long idTransaction, String description, String transactionTime, Long cardHolderId) {
-        this.idTransacation = idTransaction;
+    public TransactionDTO(String description,Float priceValue, String transactionTime) {
         this.description = description;
+        this.priceValue = priceValue;
         this.transactionTime = transactionTime;
-        this.cardHolderId = cardHolderId;
     }
 
     public Long getIdTransacation() {
@@ -29,6 +31,14 @@ public class TransactionDTO implements Serializable {
 
     public String getDescription() {
         return description;
+    }
+
+    public Float getPriceValue() {
+        return priceValue;
+    }
+
+    public void setPriceValue(Float priceValue) {
+        this.priceValue = priceValue;
     }
 
     public void setDescription(String description) {
