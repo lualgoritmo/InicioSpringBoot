@@ -6,6 +6,7 @@ import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.services.CardHolderService;
 import com.lucianobass.cardactivity.util.MapperConvert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -51,8 +52,16 @@ public class CardHolderController {
     @ResponseStatus(code = HttpStatus.CREATED)
     public CardHolderDTO updateCardHolder(@PathVariable Long id,
                                           @RequestBody(required = false) CardHolder cardHolder) {
-        CardHolder updateCardHolder = cardHolderService.updateCardHolder(id, cardHolder);
-        return convertToResponseDTO(updateCardHolder);
+        if (id == null) {
+            throw new IllegalArgumentException("O ID não pode ser nulo para deletar");
+        }
+        try {
+            CardHolder updateCardHolder = cardHolderService.updateCardHolder(id, cardHolder);
+            return convertToResponseDTO(updateCardHolder);
+        } catch (EmptyResultDataAccessException e) {
+            throw new CardNotFoundExceptions(id);
+        }
+
     }
 
     @PutMapping("/{id}/activate")
@@ -76,7 +85,6 @@ public class CardHolderController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro durante a ativação do CardHolder: " + e.getMessage());
         }
     }
-
 
     @PutMapping("/{id}/deactivate")
     @ResponseStatus(code = HttpStatus.OK)
