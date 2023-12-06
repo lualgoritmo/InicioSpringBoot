@@ -1,6 +1,5 @@
 package com.lucianobass.cardactivity.services;
 
-import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.repositories.CardHolderRepository;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static com.lucianobass.cardactivity.util.MapperConvert.convertToResponseDTO;
 import static com.lucianobass.cardactivity.util.MapperConvert.validateCardHolder;
 
 @Service
@@ -76,7 +74,7 @@ public class CardHolderService {
         CardHolder existingCardHolder = cardHolderRepository.findById(id)
                 .orElseThrow(() -> new CardNotFoundExceptions(id));
 
-             BeanUtils.copyProperties(cardHolder, existingCardHolder, "id");
+        BeanUtils.copyProperties(cardHolder, existingCardHolder, "id");
         return cardHolderRepository.save(existingCardHolder);
     }
 
@@ -96,42 +94,61 @@ public class CardHolderService {
 
     @Transactional
     public CardHolder activateCard(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("O ID não pode ser nulo para a ativação");
-        }
-
-        try {
-            CardHolder cardHolder = cardHolderRepository.findById(id)
-                    .orElseThrow(() -> new CardNotFoundExceptions(id));
-
-            if (cardHolder.getCard() != null && Boolean.FALSE.equals(cardHolder.getCard().getCardActive())) {
-                cardHolder.getCard().setCardActive(true);
-                cardHolderRepository.save(cardHolder);
-                return cardHolder;
-            } else if (cardHolder.getCard() != null && Boolean.TRUE.equals(cardHolder.getCard().getCardActive())) {
-
-                System.out.println("O cartão já está ativo para o CardHolder com ID: " + id);
-                return null;
-            } else {
-
-                System.out.println("Não possui um cartão associado para o CardHolder com ID: " + id);
-                return null;
-            }
-        } catch (CardNotFoundExceptions e) {
-
-            System.out.println("CardHolder não encontrado: " + e.getMessage());
-
-            throw e;
-        } catch (Exception e) {
-
-            System.out.println("Erro durante a ativação do CardHolder: " + e.getMessage());
-
-            throw new RuntimeException("Erro durante a ativação do CardHolder", e);
-        }
+        return cardHolderRepository.findById(id)
+                .map(cardHolder -> {
+                    if (cardHolder.getCard() != null && Boolean.FALSE.equals(cardHolder.getCard().getCardActive())) {
+                        cardHolder.getCard().setCardActive(true);
+                        return cardHolderRepository.save(cardHolder);
+                    } else if (cardHolder.getCard() != null && Boolean.TRUE.equals(cardHolder.getCard().getCardActive())) {
+                        System.out.println("O cartão já está ativo para o CardHolder com ID: " + id);
+                        return null;
+                    } else {
+                        System.out.println("Não possui um cartão associado para o CardHolder com ID: " + id);
+                        return null;
+                    }
+                })
+                .orElseThrow(() -> new CardNotFoundExceptions(id));
     }
 
+
+//    @Transactional
+//    public CardHolder activateCard(Long id) {
+//        if (id == null) {
+//            throw new IllegalArgumentException("O ID não pode ser nulo para a ativação");
+//        }
+//
+//        try {
+//            CardHolder cardHolder = cardHolderRepository.findById(id)
+//                    .orElseThrow(() -> new CardNotFoundExceptions(id));
+//
+//            if (cardHolder.getCard() != null && Boolean.FALSE.equals(cardHolder.getCard().getCardActive())) {
+//                cardHolder.getCard().setCardActive(true);
+//                cardHolderRepository.save(cardHolder);
+//                return cardHolder;
+//            } else if (cardHolder.getCard() != null && Boolean.TRUE.equals(cardHolder.getCard().getCardActive())) {
+//
+//                System.out.println("O cartão já está ativo para o CardHolder com ID: " + id);
+//                return null;
+//            } else {
+//
+//                System.out.println("Não possui um cartão associado para o CardHolder com ID: " + id);
+//                return null;
+//            }
+//        } catch (CardNotFoundExceptions e) {
+//
+//            System.out.println("CardHolder não encontrado: " + e.getMessage());
+//
+//            throw e;
+//        } catch (Exception e) {
+//
+//            System.out.println("Erro durante a ativação do CardHolder: " + e.getMessage());
+//
+//            throw new RuntimeException("Erro durante a ativação do CardHolder", e);
+//        }
+//    }
+
     @Transactional
-    public CardHolderDTO deactivateCard(Long id) {
+    public CardHolder deactivateCard(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("O ID não pode ser nulo para a desativação");
         }
@@ -146,7 +163,7 @@ public class CardHolderService {
 
                 cardHolderRepository.save(cardHolder);
 
-                return convertToResponseDTO(cardHolder);
+                return cardHolder;
             } else {
 
                 System.out.println("O cartão já está inativo para o CardHolder com ID: " + id);
