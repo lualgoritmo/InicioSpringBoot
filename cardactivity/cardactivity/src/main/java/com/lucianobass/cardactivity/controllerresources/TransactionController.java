@@ -29,25 +29,6 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-//    @PostMapping("/{cardholderId}/create")
-//    @ResponseStatus(value = HttpStatus.CREATED)
-//    public TransactionDTO createTransaction(@PathVariable Long cardholderId, @RequestBody Transaction transaction) {
-//        if (cardholderId == null || transaction == null) {
-//            throw new IllegalArgumentException("ID do cardholder ou Transação inválido");
-//        }
-//
-//        try {
-//            TransactionDTO result = MapperConvert.convertTransacationToDTO(
-//                    transactionService.createTransaction(cardholderId, transaction));
-//            System.out.println("Transação criada com sucesso: " + result);
-//            return result;
-//        } catch (Exception e) {
-//            System.err.println("Erro ao criar transação: " + e.getMessage());
-//            e.printStackTrace();
-//            throw e;
-//        }
-//    }
-
     @PostMapping("/{cardholderId}")
     @ResponseStatus(value = HttpStatus.CREATED)
     public TransactionResponseDTO createTransaction(@PathVariable Long cardholderId,
@@ -77,50 +58,6 @@ public class TransactionController {
         }
     }
 
-//    @PostMapping("/{cardholderId}")
-//    @ResponseStatus(value = HttpStatus.CREATED)
-//    public TransactionDTO createTransaction(@PathVariable Long cardholderId,
-//                                            @RequestBody Transaction transaction) {
-//        if (cardholderId == null || transaction == null) {
-//            throw new IllegalArgumentException("ID do cardholder ou Transação inválido");
-//        }
-//
-//        try {
-//            Transaction transactionEntity = transactionService.createTransaction(cardholderId, transaction);
-//            TransactionDTO responseDTO = convertTransacationToDTO(transactionEntity);
-//            System.out.println("Transação criada com sucesso.");
-//            return responseDTO;
-//        } catch (Exception e) {
-//            System.err.println("Erro ao criar transação: " + e.getMessage());
-//            e.printStackTrace();
-//            throw e;
-//        }
-//    }
-
-//    @GetMapping("/{id}/invoices")
-//    @ResponseStatus(value = HttpStatus.OK)
-//    public TransactionDTO getByTransactionDocumentNumber(@PathVariable Long id) {
-//        Transaction transaction = transactionService.getByTransacationId(id);
-//        return MapperConvert.convertTransacationToDTO(transaction);
-//    }
-
-    //    @GetMapping("/{idCardHolder}")
-//    @ResponseStatus(value = HttpStatus.OK)
-//    public List<TransactionDTO> getTransactionToIdCardHolder(@PathVariable Long idCardHolder) {
-//        try {
-//            List<Transaction> listTransaction = transactionService.getTransactionToIdCardHolder(idCardHolder);
-//            ListTransactionDTO doisDepoisTroca = new ListTransactionDTO(new CardHolderTransactionDTO(),
-//                    new CardTransactionDTO());
-//            List<TransactionDTO> listTransactionDTO = listTransaction.stream()
-//                    .map(MapperConvert::convertTransacationToDTO)
-//                    .collect(Collectors.toList());
-//            return listTransactionDTO;
-//        } catch (Exception e) {
-//            System.err.println("Erro ao obter transações do CardHolder: " + e.getMessage());
-//            e.printStackTrace();
-//            throw e;
-//        }
-//    }
     @GetMapping("/{idCardHolder}")
     @ResponseStatus(value = HttpStatus.OK)
     public ListTransactionDTO getTransactionToIdCardHolder(@PathVariable Long idCardHolder) {
