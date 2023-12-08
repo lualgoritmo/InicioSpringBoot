@@ -1,31 +1,34 @@
 package com.lucianobass.cardactivity.controllerresources.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.lucianobass.cardactivity.models.Transaction;
 
 import java.io.Serializable;
 import java.util.List;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CardDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private Long idCardDTO;
     private String numberCard;
     private String cardExpiration;
     private String availableLimit;
     private String cardLimit;
     private String cardCVV;
     private boolean cardActive;
+    @JsonIgnore
     private Long cardHolderId;
     private List<Transaction> transactions;
 
     public CardDTO() {
     }
 
-    public CardDTO(Long id, String numberCard, String cardExpiration,
+    public CardDTO(Long idCardDTO, String numberCard, String cardExpiration,
                    String availableLimit, String cardLimit,
                    String cardCVV, boolean cardActive,
                    Long cardHolderId, List<Transaction> transactions) {
-        this.id = id;
+        this.idCardDTO = idCardDTO;
         this.numberCard = numberCard;
         this.cardExpiration = cardExpiration;
         this.availableLimit = availableLimit;
@@ -36,12 +39,12 @@ public class CardDTO implements Serializable {
         this.transactions = transactions;
     }
 
-//    public Long getId() {
-//        return id;
-//    }
+    public Long getIdCardDTO() {
+        return idCardDTO;
+    }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdCardDTO(Long idCardDTO) {
+        this.idCardDTO = idCardDTO;
     }
 
     public String getNumberCard() {

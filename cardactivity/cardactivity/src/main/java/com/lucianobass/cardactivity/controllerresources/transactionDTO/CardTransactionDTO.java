@@ -1,4 +1,4 @@
-package com.lucianobass.cardactivity.controllerresources.dto;
+package com.lucianobass.cardactivity.controllerresources.transactionDTO;
 
 public class CardTransactionDTO {
     private String numberCard;

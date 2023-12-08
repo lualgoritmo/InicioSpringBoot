@@ -1,7 +1,6 @@
 package com.lucianobass.cardactivity.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
@@ -22,7 +21,7 @@ public class Card implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private Long id;
+    private Long idCard;
     @Column(length = 16, nullable = false)
     private String numberCard;
     @Size(min = 5, max = 5, message = " A data deve ser xx/xx")
@@ -38,10 +37,10 @@ public class Card implements Serializable {
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
 
-    public Card(Long id, String numberCard, String expiration, String availableLimit,
+    public Card(Long idCard, String numberCard, String expiration, String availableLimit,
                 String card_limit, String cvv, boolean active,
                 CardHolder cardHolder, List<Transaction> transactions) {
-        this.id = id;
+        this.idCard = idCard;
         this.numberCard = numberCard;
         this.cardExpiration = expiration;
         this.availableLimit = availableLimit;
@@ -63,12 +62,12 @@ public class Card implements Serializable {
         this.cardLimit = cardLimit;
     }
 
-    public Long getId() {
-        return id;
+    public Long getIdCard() {
+        return idCard;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdCard(Long idCard) {
+        this.idCard = idCard;
     }
 
     public String getNumberCard() {
@@ -141,7 +140,7 @@ public class Card implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(idCard);
     }
 
     @Override
@@ -149,6 +148,6 @@ public class Card implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return Objects.equals(id, card.id);
+        return Objects.equals(idCard, card.idCard);
     }
 }

@@ -1,9 +1,9 @@
-package com.lucianobass.cardactivity.controllerresources;
+package com.lucianobass.cardactivity.controllerresources.controller;
 
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
-import com.lucianobass.cardactivity.controllerresources.dto.ListTransactionDTO;
-import com.lucianobass.cardactivity.controllerresources.dto.TransactionDTO;
-import com.lucianobass.cardactivity.controllerresources.dto.TransactionResponseDTO;
+import com.lucianobass.cardactivity.controllerresources.transactionDTO.ListTransactionDTO;
+import com.lucianobass.cardactivity.controllerresources.transactionDTO.TransactionDTO;
+import com.lucianobass.cardactivity.controllerresources.transactionDTO.TransactionResponseDTO;
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
 import com.lucianobass.cardactivity.models.Transaction;
 import com.lucianobass.cardactivity.services.TransactionService;
@@ -58,16 +58,16 @@ public class TransactionController {
         }
     }
 
-    @GetMapping("/{idCardHolder}")
+    @GetMapping("/{idCardHolder}/invoices")
     @ResponseStatus(value = HttpStatus.OK)
     public ListTransactionDTO getTransactionToIdCardHolder(@PathVariable Long idCardHolder) {
+        if (idCardHolder == null) {
+            throw  new CardNotFoundExceptions(idCardHolder);
+        }
         try {
-            // Chama o serviço para obter a ListTransactionDTO
             ListTransactionDTO listTransactionDTO = transactionService.getTransactionToIdCardHolder(idCardHolder);
 
-            // Certifique-se de que listTransactionDTO não seja nulo antes de retornar
             if (listTransactionDTO == null) {
-                // Lidar com o caso em que não foram encontradas transações para o cardHolder
                 throw new EntityNotFoundException("Transações não encontradas para o CardHolder ID: " + idCardHolder);
             }
 

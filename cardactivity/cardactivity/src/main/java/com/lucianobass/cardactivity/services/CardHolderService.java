@@ -82,41 +82,6 @@ public class CardHolderService {
         return cardHolderRepository.save(existingCardHolder);
     }
 
-//    @Transactional
-//    public CardHolder activateCard(Long id) {
-//        return cardHolderRepository.findById(id)
-//                .map(cardHolder -> {
-//                    if (cardHolder.getCard() != null && Boolean.FALSE.equals(cardHolder.getCard().getCardActive())) {
-//                        cardHolder.getCard().setCardActive(true);
-//                        return cardHolderRepository.save(cardHolder);
-//                    } else if (cardHolder.getCard() != null && Boolean.TRUE.equals(cardHolder.getCard().getCardActive())) {
-//                        System.out.println("O cartão já está ativo para o CardHolder com ID: " + id);
-//                        return null;
-//                    } else {
-//                        System.out.println("Não possui um cartão associado para o CardHolder com ID: " + id);
-//                        return null;
-//                    }
-//                })
-//                .orElseThrow(() -> new CardNotFoundExceptions(id));
-//    }
-
-//    @Transactional
-//    public CardHolder deactivateCardHolder(Long id) {
-//        return cardHolderRepository.findById(id)
-//                .map(cardHolder -> {
-//                    if (cardHolder.getCard() != null && Boolean.TRUE.equals(cardHolder.getCard().getCardActive())) {
-//                        cardHolder.getCard().setCardActive(false);
-//                        return cardHolderRepository.save(cardHolder);
-//                    } else if (cardHolder.getCard() != null && Boolean.FALSE.equals(cardHolder.getCard().getCardActive())) {
-//                        System.out.println("O cartão já está desativado para o CardHolder com ID: " + id);
-//                        return null;
-//                    } else {
-//                        System.out.println("Não possui um cartão associado para o CardHolder com ID: " + id);
-//                        return null;
-//                    }
-//                })
-//                .orElseThrow(() -> new CardNotFoundExceptions(id));
-//    }
 
     @Transactional
     public CardHolder updateCardStatusByDocumentNumber(String documentNumber, boolean activate) {

@@ -2,7 +2,7 @@ package com.lucianobass.cardactivity.util;
 
 import com.lucianobass.cardactivity.controllerresources.dto.CardDTO;
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
-import com.lucianobass.cardactivity.controllerresources.dto.TransactionDTO;
+import com.lucianobass.cardactivity.controllerresources.transactionDTO.TransactionDTO;
 import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.models.Transaction;
@@ -10,10 +10,11 @@ import com.lucianobass.cardactivity.models.Transaction;
 public class MapperConvert {
 
     public static CardHolderDTO convertToResponseDTO(CardHolder cardHolder) {
-        CardHolderDTO responseDTO = new CardHolderDTO();
-        responseDTO.setName(cardHolder.getName());
-        responseDTO.setDocumentNumber(cardHolder.getDocumentNumber());
-        responseDTO.setBirthDate(cardHolder.getBirthDate());
+        CardHolderDTO cardHolderResponseDTO = new CardHolderDTO(
+                cardHolder.getName(),
+                cardHolder.getDocumentNumber(),
+                cardHolder.getBirthDate()
+        );
 
         if (cardHolder.getCard() != null) {
             CardDTO cardDTO = new CardDTO();
@@ -26,20 +27,20 @@ public class MapperConvert {
             // Importante: Atualizar cardActive no DTO após a ativação
             cardDTO.setCardActive(cardHolder.getCard().getCardActive());
 
-            responseDTO.setCard(cardDTO);
+            cardHolderResponseDTO.setCard(cardDTO);
         }
 
-        return responseDTO;
+        return cardHolderResponseDTO;
     }
 
     public static CardHolder convertDTOToCardHolder(CardHolderDTO cardHolderDTO) {
-        CardHolder cardHolder = new CardHolder();
-        cardHolder.setName(cardHolderDTO.getName());
-        cardHolder.setDocumentNumber(cardHolderDTO.getDocumentNumber());
-        if (cardHolderDTO.getName() != null) {
-            cardHolder.setBirthDate(cardHolderDTO.getBirthDate());
-        } else {
-            System.out.println("DATA CHEGANDO NULL");
+        CardHolder cardHolder = new CardHolder(
+                cardHolderDTO.getName(),
+                cardHolderDTO.getDocumentNumber(),
+                cardHolderDTO.getBirthDate());
+
+        if (cardHolderDTO == null) {
+            System.out.println("DTO nulo");
         }
         return cardHolder;
     }
@@ -55,12 +56,12 @@ public class MapperConvert {
         if (transactionDTO == null) {
             throw new IllegalArgumentException("DTO de transação não pode ser nulo");
         }
-        Transaction transaction = new Transaction();
-        transaction.setDescription(transactionDTO.getDescription());
-        transaction.setPriceValue(transactionDTO.getPriceValue());
-        transaction.setTransactionTime(transactionDTO.getTransactionTime());
-
-        return transaction;
+        Transaction tranTest = new Transaction(
+                transactionDTO.getDescription(),
+                transactionDTO.getPriceValue(),
+                transactionDTO.getTransactionTime()
+        );
+        return tranTest;
     }
 
     public static TransactionDTO convertTransacationToDTO(Transaction transaction) {
@@ -75,15 +76,15 @@ public class MapperConvert {
 
     public static CardDTO convertCardToDTO(Card card) {
         return new CardDTO(
-                card.getId(),
+                card.getIdCard(),
                 card.getNumberCard(),
                 card.getCardExpiration(),
                 card.getAvailableLimit(),
                 card.getCardLimit(),
                 card.getCardCVV(),
                 card.isCardActive(),
-                card.getCardHolder().getId(),
-                null
+                card.getCardHolder().getIdCardHolder(),
+                card.getTransactions()
         );
     }
 }

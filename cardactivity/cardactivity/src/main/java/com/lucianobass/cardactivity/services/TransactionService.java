@@ -1,6 +1,6 @@
 package com.lucianobass.cardactivity.services;
 
-import com.lucianobass.cardactivity.controllerresources.dto.*;
+import com.lucianobass.cardactivity.controllerresources.transactionDTO.*;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.models.Transaction;
 import com.lucianobass.cardactivity.repositories.TransactionRepository;
@@ -47,11 +47,10 @@ public class TransactionService {
         CardHolder cardHolder = cardHolderService.getByIdCardHolder(idCardHolder);
 
         if (cardHolder == null) {
-            // Lidar com o caso em que cardHolder não foi encontrado
             throw new EntityNotFoundException("CardHolder não encontrado para o ID: " + idCardHolder);
         }
 
-        List<Transaction> transactions = transactionRepository.findByCardId(cardHolder.getCard().getId());
+        List<Transaction> transactions = transactionRepository.findByCardIdCard(cardHolder.getCard().getIdCard());
 
         CardHolderTransactionDTO cardHolderDTO = new CardHolderTransactionDTO(
                 cardHolder.getName(),

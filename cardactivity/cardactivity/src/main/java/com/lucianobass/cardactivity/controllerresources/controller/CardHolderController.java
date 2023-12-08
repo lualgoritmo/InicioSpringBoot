@@ -1,4 +1,4 @@
-package com.lucianobass.cardactivity.controllerresources;
+package com.lucianobass.cardactivity.controllerresources.controller;
 
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
@@ -46,22 +46,6 @@ public class CardHolderController {
         return convertToResponseDTO(cardHolder);
     }
 
-//    @PutMapping("/{id}/update")
-//    @ResponseStatus(code = HttpStatus.CREATED)
-//    public CardHolderDTO updateCardHolder(@PathVariable Long id,
-//                                          @RequestBody(required = false) CardHolder cardHolder) {
-//        if (id == null) {
-//            throw new IllegalArgumentException("O ID não pode ser nulo para deletar");
-//        }
-//        try {
-//            CardHolder updateCardHolder = cardHolderService.updateCardHolder(id, cardHolder);
-//            return convertToResponseDTO(updateCardHolder);
-//        } catch (EmptyResultDataAccessException e) {
-//            throw new CardNotFoundExceptions(id);
-//        }
-//
-//    }
-
     @PutMapping("/{id}/update")
     @ResponseStatus(code = HttpStatus.CREATED)
     public CardHolderDTO updateCardHolder(@PathVariable Long id,
@@ -71,9 +55,7 @@ public class CardHolderController {
         }
 
         try {
-            //CardHolder updatedCardHolder = convertDTOToCardHolder(updatedCardHolder);
 
-            // Chame o serviço com as informações relevantes do CardHolder
             CardHolder updatedResult = cardHolderService.updateCardHolder(id, updatedCardHolder);
 
             return convertToResponseDTO(updatedResult);
@@ -91,49 +73,6 @@ public class CardHolderController {
         validateCardHolder(cardHolder);
         return MapperConvert.convertToResponseDTO(cardHolder);
     }
-//    @PutMapping("/{id}/activate")
-//    @ResponseStatus(code = HttpStatus.OK)
-//    public CardHolderDTO activateCardHolder(@PathVariable Long id) {
-//        try {
-//            CardHolder updatedCardHolder = cardHolderService.activateCard(id);
-//
-//            if (updatedCardHolder != null) {
-//                return convertToResponseDTO(updatedCardHolder);
-//            } else {
-//                throw new IllegalStateException("O cartão já está ativo ou não há cartão associado");
-//            }
-//        } catch (CardNotFoundExceptions e) {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-//        } catch (IllegalArgumentException e) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-//        } catch (IllegalStateException e) {
-//            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-//        } catch (Exception e) {
-//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro durante a ativação do CardHolder: " + e.getMessage());
-//        }
-//    }
-//
-//    @PutMapping("/{id}/deactivate")
-//    @ResponseStatus(code = HttpStatus.OK)
-//    public CardHolderDTO deactivateCardHolder(@PathVariable Long id) {
-//        try {
-//            CardHolder updatedCardHolder = cardHolderService.deactivateCardHolder(id);
-//
-//            if (updatedCardHolder != null) {
-//                return convertToResponseDTO(updatedCardHolder);
-//            } else {
-//                throw new IllegalStateException("O cartão já está desativado ou não há cartão associado");
-//            }
-//        } catch (CardNotFoundExceptions e) {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-//        } catch (IllegalArgumentException e) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-//        } catch (IllegalStateException e) {
-//            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-//        } catch (Exception e) {
-//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro durante a desativação do CardHolder: " + e.getMessage());
-//        }
-//    }
 
     @DeleteMapping(value = "/{id}/deletedcard")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)

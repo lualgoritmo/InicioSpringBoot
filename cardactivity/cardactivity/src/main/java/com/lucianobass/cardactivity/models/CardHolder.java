@@ -12,7 +12,7 @@ public class CardHolder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long idCardHolder;
 
     //@NotBlank(message = "Escreva o seu nome")
     private String name;
@@ -35,12 +35,12 @@ public class CardHolder {
     public CardHolder() {
     }
 
-    public Long getId() {
-        return id;
+    public Long getIdCardHolder() {
+        return idCardHolder;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdCardHolder(Long idCardHolder) {
+        this.idCardHolder = idCardHolder;
     }
 
     public Card getCard() {
@@ -78,9 +78,9 @@ public class CardHolder {
     @PrePersist
     public void prePersist() {
         try {
-            System.out.println("ID no prePersist: " + this.id);
+            System.out.println("ID no prePersist: " + this.idCardHolder);
             System.out.println("Card no prePersist: " + this.card);
-            if (this.card == null && this.id == null) {
+            if (this.card == null && this.idCardHolder == null) {
                 this.card = new Card();
                 this.card.setNumberCard(generateNumberCard(16)
                         .replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x"));
@@ -91,7 +91,7 @@ public class CardHolder {
                 this.card.setCardActive(false);
                 this.card.setCardHolder(this);
             }
-            System.out.println("ID no prePersist: " + this.id);
+            System.out.println("ID no prePersist: " + this.idCardHolder);
             System.out.println("Card no prePersist: " + this.card);
         } catch (Exception ex) {
             System.out.println(" Erro no PREPERSIST" + ex.getMessage());
