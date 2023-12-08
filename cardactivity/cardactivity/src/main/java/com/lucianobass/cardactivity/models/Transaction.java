@@ -19,9 +19,9 @@ public class Transaction {
     private String transactionTime;
     @ManyToOne
     //@JsonIgnoreProperties("transactions")
-    @JoinColumn(name = "card_holder_id")
+    @JoinColumn(name = "card_id")
     @JsonBackReference
-    private CardHolder cardHolder;
+    private Card card;
 
     public Transaction() {
     }
@@ -60,12 +60,12 @@ public class Transaction {
         this.transactionTime = transactionTime;
     }
 
-    public CardHolder getCardHolder() {
-        return cardHolder;
+    public Card getCard() {
+        return card;
     }
 
-    public void setCardHolder(CardHolder cardHolder) {
-        this.cardHolder = cardHolder;
+    public void setCard(Card card) {
+        this.card = card;
     }
 
     @Override

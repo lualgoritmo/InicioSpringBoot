@@ -1,6 +1,9 @@
 package com.lucianobass.cardactivity.controllerresources.dto;
 
+import com.lucianobass.cardactivity.models.Transaction;
+
 import java.io.Serializable;
+import java.util.List;
 
 public class CardDTO implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -13,11 +16,15 @@ public class CardDTO implements Serializable {
     private String cardCVV;
     private boolean cardActive;
     private Long cardHolderId;
+    private List<Transaction> transactions;
 
     public CardDTO() {
     }
 
-    public CardDTO(Long id, String numberCard, String cardExpiration, String availableLimit, String cardLimit, String cardCVV, boolean cardActive, Long cardHolderId) {
+    public CardDTO(Long id, String numberCard, String cardExpiration,
+                   String availableLimit, String cardLimit,
+                   String cardCVV, boolean cardActive,
+                   Long cardHolderId, List<Transaction> transactions) {
         this.id = id;
         this.numberCard = numberCard;
         this.cardExpiration = cardExpiration;
@@ -26,6 +33,7 @@ public class CardDTO implements Serializable {
         this.cardCVV = cardCVV;
         this.cardActive = cardActive;
         this.cardHolderId = cardHolderId;
+        this.transactions = transactions;
     }
 
 //    public Long getId() {
@@ -84,7 +92,23 @@ public class CardDTO implements Serializable {
         this.cardActive = cardActive;
     }
 
-//    public Long getCardHolderId() {
+    public Long getCardHolderId() {
+        return cardHolderId;
+    }
+
+    public void setCardHolderId(Long cardHolderId) {
+        this.cardHolderId = cardHolderId;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    //    public Long getCardHolderId() {
 //        return cardHolderId;
 //    }
 }

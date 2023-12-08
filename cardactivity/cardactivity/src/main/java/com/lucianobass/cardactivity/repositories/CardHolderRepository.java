@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CardHolderRepository extends JpaRepository<CardHolder, Long> {
+    CardHolder findByDocumentNumber(String numberDocument);
 }

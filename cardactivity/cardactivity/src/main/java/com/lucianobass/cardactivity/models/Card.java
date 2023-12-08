@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -33,11 +34,13 @@ public class Card implements Serializable {
     private boolean cardActive = false;
     @OneToOne()
     @JoinColumn(name = "card_holder_id")
-    @JsonIgnoreProperties("card")
-    @JsonIgnore
     private CardHolder cardHolder;
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
+    private List<Transaction> transactions;
 
-    public Card(Long id, String numberCard, String expiration, String availableLimit, String card_limit, String cvv, boolean active, CardHolder cardHolder) {
+    public Card(Long id, String numberCard, String expiration, String availableLimit,
+                String card_limit, String cvv, boolean active,
+                CardHolder cardHolder, List<Transaction> transactions) {
         this.id = id;
         this.numberCard = numberCard;
         this.cardExpiration = expiration;
@@ -46,7 +49,7 @@ public class Card implements Serializable {
         this.cardCVV = cvv;
         this.cardActive = active;
         this.cardHolder = cardHolder;
-
+        this.transactions = transactions;
     }
 
     public Card() {
@@ -60,7 +63,7 @@ public class Card implements Serializable {
         this.cardLimit = cardLimit;
     }
 
-    public Long getId(Long aLong) {
+    public Long getId() {
         return id;
     }
 
@@ -122,6 +125,18 @@ public class Card implements Serializable {
 
     public void setCardHolder(CardHolder cardHolder) {
         this.cardHolder = cardHolder;
+    }
+
+    public boolean isCardActive() {
+        return cardActive;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     @Override

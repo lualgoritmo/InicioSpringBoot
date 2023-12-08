@@ -3,6 +3,7 @@ package com.lucianobass.cardactivity.util;
 import com.lucianobass.cardactivity.controllerresources.dto.CardDTO;
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
 import com.lucianobass.cardactivity.controllerresources.dto.TransactionDTO;
+import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.models.Transaction;
 
@@ -51,6 +52,9 @@ public class MapperConvert {
     }
 
     public static Transaction convertDTOToTransacation(TransactionDTO transactionDTO) {
+        if (transactionDTO == null) {
+            throw new IllegalArgumentException("DTO de transação não pode ser nulo");
+        }
         Transaction transaction = new Transaction();
         transaction.setDescription(transactionDTO.getDescription());
         transaction.setPriceValue(transactionDTO.getPriceValue());
@@ -58,12 +62,27 @@ public class MapperConvert {
 
         return transaction;
     }
+
     public static TransactionDTO convertTransacationToDTO(Transaction transaction) {
         TransactionDTO transactionDTO = new TransactionDTO();
         transactionDTO.setDescription(transaction.getDescription());
         transactionDTO.setPriceValue(transaction.getPriceValue());
         transactionDTO.setTransactionTime(transaction.getTransactionTime());
+        //transactionDTO.setTransactionTime(transaction.getTransactionTime(LocalDateTime.now()));
 
         return transactionDTO;
+    }
+    public static CardDTO convertCardToDTO(Card card) {
+        return new CardDTO(
+                card.getId(),
+                card.getNumberCard(),
+                card.getCardExpiration(),
+                card.getAvailableLimit(),
+                card.getCardLimit(),
+                card.getCardCVV(),
+                card.isCardActive(),
+                card.getCardHolder().getId(),
+                null
+        );
     }
 }

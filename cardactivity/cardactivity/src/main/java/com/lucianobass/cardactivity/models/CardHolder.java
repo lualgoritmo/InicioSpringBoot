@@ -1,7 +1,6 @@
 package com.lucianobass.cardactivity.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.Random;
@@ -27,7 +26,6 @@ public class CardHolder {
     @OneToOne(mappedBy = "cardHolder", cascade = CascadeType.ALL)
     //@JsonManagedReference
     private Card card;
-
     public CardHolder(String name, String documentNumber, String birthDate) {
         this.name = name;
         this.documentNumber = documentNumber;
@@ -86,7 +84,7 @@ public class CardHolder {
                 this.card = new Card();
                 this.card.setNumberCard(generateNumberCard(16)
                         .replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x"));
-                this.card.setAvailableLimit("150.00");
+                this.card.setAvailableLimit("100.00");
                 this.card.setCardExpiration("30/02");
                 this.card.setCardLimit("100.00");
                 this.card.setCardCVV(generateNumberCard(3).replaceAll("(\\d)", "x"));
