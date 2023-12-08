@@ -5,17 +5,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ResponseDTO implements Serializable {
+public class TransactionResponseDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private CardHolderDTO cardHolderDTO;
     private CardDTO cardDTO;
     private TransactionDTO transactionDTO;
 
-    public ResponseDTO() {
+    public TransactionResponseDTO() {
     }
 
-    public ResponseDTO(CardHolderDTO cardHolder, CardDTO card, TransactionDTO transaction) {
+    public TransactionResponseDTO(CardHolderDTO cardHolder, CardDTO card, TransactionDTO transaction) {
         this.cardHolderDTO = cardHolder;
         this.cardDTO = card;
         this.transactionDTO = transaction;

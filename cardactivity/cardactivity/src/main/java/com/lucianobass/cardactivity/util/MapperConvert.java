@@ -64,14 +64,15 @@ public class MapperConvert {
     }
 
     public static TransactionDTO convertTransacationToDTO(Transaction transaction) {
-        TransactionDTO transactionDTO = new TransactionDTO();
-        transactionDTO.setDescription(transaction.getDescription());
-        transactionDTO.setPriceValue(transaction.getPriceValue());
-        transactionDTO.setTransactionTime(transaction.getTransactionTime());
+        TransactionDTO transactionDTO = new TransactionDTO(
+                transaction.getDescription(),
+                transaction.getPriceValue(),
+                transaction.getTransactionTime());
         //transactionDTO.setTransactionTime(transaction.getTransactionTime(LocalDateTime.now()));
 
         return transactionDTO;
     }
+
     public static CardDTO convertCardToDTO(Card card) {
         return new CardDTO(
                 card.getId(),

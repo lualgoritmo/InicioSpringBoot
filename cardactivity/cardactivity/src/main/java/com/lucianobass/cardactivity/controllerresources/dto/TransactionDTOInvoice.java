@@ -1,34 +1,22 @@
 package com.lucianobass.cardactivity.controllerresources.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import java.io.Serializable;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class TransactionDTO implements Serializable {
-    private static final long serialVersionUID = 1L;
-
-    private Long idTransacation;
+public class TransactionDTOInvoice {
     private String description;
     private Float priceValue;
     private String transactionTime;
-    private Long cardHolderId;
 
-    public TransactionDTO() {
-    }
-
-    public TransactionDTO(String description, Float priceValue, String transactionTime) {
+    public TransactionDTOInvoice(String description, Float priceValue, String transactionTime) {
         this.description = description;
         this.priceValue = priceValue;
         this.transactionTime = transactionTime;
     }
 
-    public Long getIdTransacation() {
-        return idTransacation;
-    }
-
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Float getPriceValue() {
@@ -37,10 +25,6 @@ public class TransactionDTO implements Serializable {
 
     public void setPriceValue(Float priceValue) {
         this.priceValue = priceValue;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getTransactionTime() {

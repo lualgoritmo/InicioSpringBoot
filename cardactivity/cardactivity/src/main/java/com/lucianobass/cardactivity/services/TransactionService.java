@@ -1,6 +1,6 @@
 package com.lucianobass.cardactivity.services;
 
-import com.lucianobass.cardactivity.controllerresources.dto.TransactionDTO;
+import com.lucianobass.cardactivity.controllerresources.dto.*;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.models.Transaction;
 import com.lucianobass.cardactivity.repositories.TransactionRepository;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,7 +34,7 @@ public class TransactionService {
         if (cardHolder == null) {
             throw new EntityNotFoundException("CardHolder não encontrado para o ID: " + id);
         }
-        Transaction transaction = new Transaction();
+        Transaction transaction;
         transaction = MapperConvert.convertDTOToTransacation(transactionDTO);
         transaction.setCard(cardHolder.getCard());
 
@@ -72,12 +73,65 @@ public class TransactionService {
 //    }
 
 
+//    @Transactional
+//    public List<Transaction> getTransactionToIdCardHolder(Long idCardHolder) {
+//        CardHolder cardHolder = cardHolderService.getByIdCardHolder(idCardHolder);
+//        ListTransactionDTO listTransactionDTOInvoice = new ListTransactionDTO(
+//                new CardHolderTransactionDTO(),
+//                new CardTransactionDTO(
+//                        cardHolder.getCard().getNumberCard(),
+//                        cardHolder.getCard().getCardExpiration(),
+//                        cardHolder.getCard().getCardCVV()),
+//                new TransactionDTOInvoice());
+//        List<Transaction> transactions = transactionRepository.findByCardId(cardHolder.getCard().getId());
+//        listTransactionDTOInvoice = transactionRepository.findByCardId(cardHolder.getCard().getId());
+//        // List<Transaction> transactions = transactionRepository.findByCardId(cardHolder.getId());
+//        return transactions;
+//    }
+
     @Transactional
-    public List<Transaction> getTransactionToIdCardHolder(Long idCardHolder) {
+    public ListTransactionDTO getTransactionToIdCardHolder(Long idCardHolder) {
         CardHolder cardHolder = cardHolderService.getByIdCardHolder(idCardHolder);
+
+        // Certifique-se de que cardHolder não seja nulo antes de prosseguir
+        if (cardHolder == null) {
+            // Lidar com o caso em que cardHolder não foi encontrado
+            throw new EntityNotFoundException("CardHolder não encontrado para o ID: " + idCardHolder);
+        }
+
+        // Agora você pode simplesmente obter as transações diretamente usando o cardHolder
         List<Transaction> transactions = transactionRepository.findByCardId(cardHolder.getCard().getId());
-        // List<Transaction> transactions = transactionRepository.findByCardId(cardHolder.getId());
-        return transactions;
+
+        // Crie as instâncias de DTO conforme necessário
+        CardHolderTransactionDTO cardHolderDTO = new CardHolderTransactionDTO(
+                cardHolder.getName(),
+                cardHolder.getDocumentNumber(),
+                cardHolder.getBirthDate());
+
+        CardTransactionDTO cardDTO = new CardTransactionDTO(
+                cardHolder.getCard().getNumberCard(),
+                cardHolder.getCard().getCardExpiration(),
+                cardHolder.getCard().getCardCVV());
+
+        // Crie a lista para armazenar as transações
+        List<TransactionDTOInvoice> transactionDTOList = new ArrayList<>();
+
+        // Preencha a lista de transações
+        for (Transaction transaction : transactions) {
+            TransactionDTOInvoice transactionDTOInvoice = new TransactionDTOInvoice(
+                    transaction.getDescription(),
+                    transaction.getPriceValue(),
+                    transaction.getTransactionTime());
+            transactionDTOList.add(transactionDTOInvoice);
+        }
+
+        // Crie a instância de ListTransactionDTO e configure os campos
+        ListTransactionDTO listTransactionDTOInvoice = new ListTransactionDTO(
+                cardHolderDTO,
+                cardDTO,
+                transactionDTOList);
+
+        return listTransactionDTOInvoice;
     }
 
 }
