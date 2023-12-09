@@ -82,7 +82,6 @@ public class CardHolderService {
         return cardHolderRepository.save(existingCardHolder);
     }
 
-
     @Transactional
     public CardHolder updateCardStatusByDocumentNumber(String documentNumber, boolean activate) {
         CardHolder cardHolder = cardHolderRepository.findByDocumentNumber(documentNumber);
@@ -98,5 +97,20 @@ public class CardHolderService {
             throw new IllegalStateException("Nenhum Card associado para esse cardholder");
         }
     }
+//    @Transactional
+//    public CardHolder updateCardStatusByDocumentNumber(String documentNumber, boolean activate) {
+//        CardHolder cardHolder = cardHolderRepository.findByDocumentNumber(documentNumber);
+//
+//        if (cardHolder == null) {
+//            throw new IllegalStateException("Número de documento não reconhecido!");
+//        }
+//
+//        if (cardHolder.getCard() != null) {
+//            cardHolder.getCard().setCardActive(activate);
+//            return cardHolderRepository.save(cardHolder);
+//        } else {
+//            throw new IllegalStateException("Nenhum Card associado para esse cardholder");
+//        }
+//    }
 
 }

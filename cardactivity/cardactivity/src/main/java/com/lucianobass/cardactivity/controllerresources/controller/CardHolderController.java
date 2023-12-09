@@ -68,9 +68,10 @@ public class CardHolderController {
     @ResponseStatus(HttpStatus.OK)
     public CardHolderDTO updateCardStatusByDocumentNumber(
             @PathVariable String documentNumber,
-            @RequestParam(defaultValue = "false")  boolean activate) {
+            @RequestParam(defaultValue = "false") @RequestBody boolean activate) {
         CardHolder cardHolder = cardHolderService.updateCardStatusByDocumentNumber(documentNumber, activate);
         validateCardHolder(cardHolder);
+        cardHolder.getCard().setCardActive(activate);
         return MapperConvert.convertToResponseDTO(cardHolder);
     }
 

@@ -56,12 +56,12 @@ public class MapperConvert {
         if (transactionDTO == null) {
             throw new IllegalArgumentException("DTO de transação não pode ser nulo");
         }
-        Transaction tranTest = new Transaction(
+        Transaction transaction = new Transaction(
                 transactionDTO.getDescription(),
                 transactionDTO.getPriceValue(),
                 transactionDTO.getTransactionTime()
         );
-        return tranTest;
+        return transaction;
     }
 
     public static TransactionDTO convertTransacationToDTO(Transaction transaction) {
