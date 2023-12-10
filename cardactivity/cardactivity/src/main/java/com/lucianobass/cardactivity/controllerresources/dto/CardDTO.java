@@ -6,17 +6,17 @@ import com.lucianobass.cardactivity.models.Transaction;
 
 import java.io.Serializable;
 import java.util.List;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CardDTO implements Serializable {
-    private static final long serialVersionUID = 1L;
 
     private Long idCardDTO;
     private String numberCard;
     private String cardExpiration;
     private String availableLimit;
-    private String cardLimit;
+    private Double cardLimit;
     private String cardCVV;
-    private boolean cardActive;
+    private Boolean cardActive;
     @JsonIgnore
     private Long cardHolderId;
     private List<Transaction> transactions;
@@ -25,7 +25,7 @@ public class CardDTO implements Serializable {
     }
 
     public CardDTO(Long idCardDTO, String numberCard, String cardExpiration,
-                   String availableLimit, String cardLimit,
+                   String availableLimit, Double cardLimit,
                    String cardCVV, boolean cardActive,
                    Long cardHolderId, List<Transaction> transactions) {
         this.idCardDTO = idCardDTO;
@@ -52,7 +52,7 @@ public class CardDTO implements Serializable {
     }
 
     public void setNumberCard(String numberCard) {
-        this.numberCard =  numberCard;
+        this.numberCard = numberCard;
     }
 
     public String getCardExpiration() {
@@ -71,11 +71,11 @@ public class CardDTO implements Serializable {
         this.availableLimit = availableLimit;
     }
 
-    public String getCardLimit() {
+    public Double getCardLimit() {
         return cardLimit;
     }
 
-    public void setCardLimit(String cardLimit) {
+    public void setCardLimit(Double cardLimit) {
         this.cardLimit = cardLimit;
     }
 

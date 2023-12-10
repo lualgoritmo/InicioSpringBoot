@@ -1,8 +1,10 @@
 package com.lucianobass.cardactivity.controllerresources.transactionDTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TransactionDTO implements Serializable {
@@ -10,14 +12,15 @@ public class TransactionDTO implements Serializable {
 
     private Long idTransacation;
     private String description;
-    private Float priceValue;
-    private String transactionTime;
+    private Double priceValue;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime transactionTime;
     private Long cardHolderId;
 
     public TransactionDTO() {
     }
 
-    public TransactionDTO(String description, Float priceValue, String transactionTime) {
+    public TransactionDTO(String description, Double priceValue, LocalDateTime transactionTime) {
         this.description = description;
         this.priceValue = priceValue;
         this.transactionTime = transactionTime;
@@ -31,11 +34,11 @@ public class TransactionDTO implements Serializable {
         return description;
     }
 
-    public Float getPriceValue() {
+    public Double getPriceValue() {
         return priceValue;
     }
 
-    public void setPriceValue(Float priceValue) {
+    public void setPriceValue(Double priceValue) {
         this.priceValue = priceValue;
     }
 
@@ -43,11 +46,11 @@ public class TransactionDTO implements Serializable {
         this.description = description;
     }
 
-    public String getTransactionTime() {
+    public LocalDateTime getTransactionTime() {
         return transactionTime;
     }
 
-    public void setTransactionTime(String transactionTime) {
+    public void setTransactionTime(LocalDateTime transactionTime) {
         this.transactionTime = transactionTime;
     }
 }

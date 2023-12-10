@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -15,8 +16,8 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idTransaction;
     private String description;
-    private Float priceValue;
-    private String transactionTime;
+    private Double priceValue;
+    private LocalDateTime transactionTime;
     @ManyToOne
     //@JsonIgnoreProperties("transactions")
     @JoinColumn(name = "card_id")
@@ -26,7 +27,7 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(String description, Float priceValue, String transactionTime) {
+    public Transaction(String description, Double priceValue, LocalDateTime transactionTime) {
         this.description = description;
         this.priceValue = priceValue;
         this.transactionTime = transactionTime;
@@ -44,19 +45,19 @@ public class Transaction {
         this.description = description;
     }
 
-    public Float getPriceValue() {
+    public Double getPriceValue() {
         return priceValue;
     }
 
-    public void setPriceValue(Float priceValue) {
+    public void setPriceValue(Double priceValue) {
         this.priceValue = priceValue;
     }
 
-    public String getTransactionTime() {
+    public LocalDateTime getTransactionTime() {
         return transactionTime;
     }
 
-    public void setTransactionTime(String transactionTime) {
+    public void setTransactionTime(LocalDateTime transactionTime) {
         this.transactionTime = transactionTime;
     }
 

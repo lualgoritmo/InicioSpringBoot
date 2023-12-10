@@ -9,18 +9,14 @@ import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CardHolderDTO implements Serializable {
-    private static final long serialVersionUID = 1L;
 
     @JsonIgnore
     private Long id;
-
     private String name;
     private String documentNumber;
-    //    @NotNull(message = "A data de nascimento não pode ser nula")
-//    @NotBlank(message = "A data de nascimento não pode estar em branco")
     private String birthDate;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private CardDTO card;
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<TransactionDTO> transaction;
 
     public CardHolderDTO(String name, String documentNumber, String birthDate) {

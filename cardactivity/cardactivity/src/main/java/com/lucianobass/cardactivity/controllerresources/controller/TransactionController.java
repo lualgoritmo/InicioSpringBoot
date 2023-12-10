@@ -16,38 +16,68 @@ import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.lucianobass.cardactivity.util.MapperConvert.convertToResponseDTO;
-import static com.lucianobass.cardactivity.util.MapperConvert.convertTransacationToDTO;
+import static com.lucianobass.cardactivity.util.ModelMapper.convertToResponseDTO;
+import static com.lucianobass.cardactivity.util.ModelMapper.convertTransacationToDTO;
 
 @RestController
 @RequestMapping(value = "/transaction")
 public class TransactionController {
-    TransactionService transactionService;
+
+    private final TransactionService transactionService;
 
     @Autowired
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
     }
 
+//    @PostMapping("/{cardholderId}")
+//    @ResponseStatus(value = HttpStatus.CREATED)
+//    public TransactionResponseDTO createTransaction(@PathVariable Long cardholderId,
+//                                                    @RequestBody TransactionDTO transactionDTO) {
+//        List<Transaction> listTransaction = new ArrayList<>();
+//        if (cardholderId == null || transactionDTO == null) {
+//            throw new IllegalArgumentException("ID do cardholder ou Transação inválido");
+//        }
+//
+//        try {
+//            Transaction createTransaction = transactionService.createTransactionWithPurchase(cardholderId, transactionDTO);
+//            System.out.println("Transação criada com sucesso.");
+//            CardHolderDTO cardHolderDTO = convertToResponseDTO(createTransaction.getCard().getCardHolder());
+//            //CardDTO cardDTO = convertCardToDTO(createTransaction.getCard());
+//            TransactionDTO DTOTransaction = convertTransacationToDTO(createTransaction);
+//
+//            TransactionResponseDTO responseDTO = new TransactionResponseDTO();
+//            responseDTO.setCardHolderDTO(cardHolderDTO);
+//            //responseDTO.setCardDTO(cardDTO);
+//            responseDTO.setTransactionDTO(DTOTransaction);
+//
+//            return responseDTO;
+//        } catch (Exception e) {
+//            System.err.println("Erro ao criar transação: " + e.getMessage());
+//            e.printStackTrace();
+//            throw e;
+//        }
+//    }
+
     @PostMapping("/{cardholderId}")
     @ResponseStatus(value = HttpStatus.CREATED)
     public TransactionResponseDTO createTransaction(@PathVariable Long cardholderId,
                                                     @RequestBody TransactionDTO transactionDTO) {
-        List<Transaction> listTransaction = new ArrayList<>();
         if (cardholderId == null || transactionDTO == null) {
             throw new IllegalArgumentException("ID do cardholder ou Transação inválido");
         }
 
         try {
-            Transaction createTransaction = transactionService.createTransaction(cardholderId, transactionDTO);
+            // Defina o valor da compra (você deve obter isso de algum lugar)
+            Double purchaseAmount = 150.0; // Substitua pelo valor real da compra
+
+            Transaction createTransaction = transactionService.createTransactionWithPurchase(cardholderId, transactionDTO);
             System.out.println("Transação criada com sucesso.");
             CardHolderDTO cardHolderDTO = convertToResponseDTO(createTransaction.getCard().getCardHolder());
-            //CardDTO cardDTO = convertCardToDTO(createTransaction.getCard());
             TransactionDTO DTOTransaction = convertTransacationToDTO(createTransaction);
 
             TransactionResponseDTO responseDTO = new TransactionResponseDTO();
             responseDTO.setCardHolderDTO(cardHolderDTO);
-            //responseDTO.setCardDTO(cardDTO);
             responseDTO.setTransactionDTO(DTOTransaction);
 
             return responseDTO;
@@ -57,6 +87,7 @@ public class TransactionController {
             throw e;
         }
     }
+
 
     @GetMapping("/{idCardHolder}/invoices")
     @ResponseStatus(value = HttpStatus.OK)
@@ -78,4 +109,3 @@ public class TransactionController {
     }
 
 }
-

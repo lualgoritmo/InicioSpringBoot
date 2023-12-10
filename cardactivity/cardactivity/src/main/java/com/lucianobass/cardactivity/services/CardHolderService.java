@@ -1,9 +1,9 @@
 package com.lucianobass.cardactivity.services;
 
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
+import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.repositories.CardHolderRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static com.lucianobass.cardactivity.util.MapperConvert.validateCardHolder;
+import static com.lucianobass.cardactivity.util.ModelMapper.validateCardHolder;
 
 @Service
 public class CardHolderService {
@@ -77,7 +77,7 @@ public class CardHolderService {
         CardHolder existingCardHolder = cardHolderRepository.findById(id)
                 .orElseThrow(() -> new CardNotFoundExceptions(id));
 
-       // BeanUtils.copyProperties(cardHolder, existingCardHolder, "id");
+        // BeanUtils.copyProperties(cardHolder, existingCardHolder, "id");
         existingCardHolder.setName(cardHolder.getName());
         return cardHolderRepository.save(existingCardHolder);
     }
@@ -97,6 +97,28 @@ public class CardHolderService {
             throw new IllegalStateException("Nenhum Card associado para esse cardholder");
         }
     }
+
+    // No seu CardHolderService
+    @Transactional
+    public void updateCard(Long cardHolderId, Card card) {
+        CardHolder cardHolder = getByIdCardHolder(cardHolderId);
+        if (cardHolder.getCard().getCardActive() == false) {
+            throw new IllegalArgumentException("Ative o seu cartão para realizar compras");
+        }
+        // Atualize as informações do cartão associado ao titular do cartão
+        Card existingCard = cardHolder.getCard();
+        existingCard.setCardActive(card.getCardActive());
+        existingCard.setCardLimit(card.getCardLimit());
+        existingCard.setAvailableLimit(card.getAvailableLimit());
+        existingCard.setCardExpiration(card.getCardExpiration());
+        existingCard.setCardCVV(card.getCardCVV());
+        // Adicione outras atualizações conforme necessário
+
+        // Salve as atualizações no banco de dados
+        cardHolderRepository.save(cardHolder);
+    }
+
+
 //    @Transactional
 //    public CardHolder updateCardStatusByDocumentNumber(String documentNumber, boolean activate) {
 //        CardHolder cardHolder = cardHolderRepository.findByDocumentNumber(documentNumber);

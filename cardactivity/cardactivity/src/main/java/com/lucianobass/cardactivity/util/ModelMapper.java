@@ -7,7 +7,7 @@ import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.models.Transaction;
 
-public class MapperConvert {
+public class ModelMapper {
 
     public static CardHolderDTO convertToResponseDTO(CardHolder cardHolder) {
         CardHolderDTO cardHolderResponseDTO = new CardHolderDTO(
@@ -46,10 +46,18 @@ public class MapperConvert {
     }
 
     public static void validateCardHolder(CardHolder cardHolder) {
-        if (cardHolder.getName().isEmpty() || cardHolder.getDocumentNumber().isEmpty() ||
-                cardHolder.getBirthDate().isEmpty()) {
-            throw new IllegalArgumentException(" O usuário não existe! ");
+        if (cardHolder == null ||
+                cardHolder.getName() == null || cardHolder.getName().isEmpty() ||
+                cardHolder.getDocumentNumber() == null || cardHolder.getDocumentNumber().isEmpty() ||
+                cardHolder.getBirthDate() == null || cardHolder.getBirthDate().isEmpty()) {
+            throw new IllegalArgumentException("O usuário não existe!");
         }
+    }
+
+
+    public static CardHolder convertCardHolderToDTO(CardHolderDTO cardHolderDTO) {
+        return new CardHolder(cardHolderDTO.getName(), cardHolderDTO.getDocumentNumber(),
+                cardHolderDTO.getBirthDate());
     }
 
     public static Transaction convertDTOToTransacation(TransactionDTO transactionDTO) {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.io.Serializable;
@@ -27,7 +28,7 @@ public class Card implements Serializable {
     @Size(min = 5, max = 5, message = " A data deve ser xx/xx")
     private String cardExpiration;
     private String availableLimit;
-    private String cardLimit;
+    private Double cardLimit;
     @Column(name = "cardcvv", length = 3, nullable = false)
     private String cardCVV;
     private boolean cardActive = false;
@@ -38,7 +39,7 @@ public class Card implements Serializable {
     private List<Transaction> transactions;
 
     public Card(Long idCard, String numberCard, String expiration, String availableLimit,
-                String card_limit, String cvv, boolean active,
+                Double card_limit, String cvv, boolean active,
                 CardHolder cardHolder, List<Transaction> transactions) {
         this.idCard = idCard;
         this.numberCard = numberCard;
@@ -54,11 +55,11 @@ public class Card implements Serializable {
     public Card() {
     }
 
-    public String getCardLimit() {
+    public Double getCardLimit() {
         return cardLimit;
     }
 
-    public void setCardLimit(String cardLimit) {
+    public void setCardLimit(Double cardLimit) {
         this.cardLimit = cardLimit;
     }
 

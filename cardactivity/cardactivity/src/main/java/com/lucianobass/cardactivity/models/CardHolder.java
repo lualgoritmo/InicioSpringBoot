@@ -86,7 +86,7 @@ public class CardHolder {
                         .replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x"));
                 this.card.setAvailableLimit("100.00");
                 this.card.setCardExpiration("30/02");
-                this.card.setCardLimit("100.00");
+                this.card.setCardLimit(100.0);
                 this.card.setCardCVV(generateNumberCard(3).replaceAll("(\\d)", "x"));
                 this.card.setCardActive(false);
                 this.card.setCardHolder(this);
