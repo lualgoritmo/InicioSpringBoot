@@ -56,7 +56,7 @@ public class TransactionService {
 
         // Salvar a transação e atualizar o CardHolder (que deve persistir as alterações no Card)
         transactionRepository.save(transacationReturn);
-        cardHolderService.updateCard(idCardHolder, cardHolder.getCard());
+        cardHolderService.updateLimitCard(idCardHolder, cardHolder.getCard());
 
         return transacationReturn;
     }

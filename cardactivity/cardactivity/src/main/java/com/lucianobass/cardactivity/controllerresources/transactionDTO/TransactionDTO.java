@@ -51,6 +51,7 @@ public class TransactionDTO implements Serializable {
     }
 
     public void setTransactionTime(LocalDateTime transactionTime) {
+
         this.transactionTime = transactionTime;
     }
 }

@@ -7,17 +7,15 @@ import com.lucianobass.cardactivity.controllerresources.transactionDTO.Transacti
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
 import com.lucianobass.cardactivity.models.Transaction;
 import com.lucianobass.cardactivity.services.TransactionService;
+import com.lucianobass.cardactivity.util.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.lucianobass.cardactivity.util.ModelMapper.convertToResponseDTO;
-import static com.lucianobass.cardactivity.util.ModelMapper.convertTransacationToDTO;
 
 @RestController
 @RequestMapping(value = "/transaction")
@@ -74,7 +72,7 @@ public class TransactionController {
             Transaction createTransaction = transactionService.createTransactionWithPurchase(cardholderId, transactionDTO);
             System.out.println("Transação criada com sucesso.");
             CardHolderDTO cardHolderDTO = convertToResponseDTO(createTransaction.getCard().getCardHolder());
-            TransactionDTO DTOTransaction = convertTransacationToDTO(createTransaction);
+            TransactionDTO DTOTransaction = ModelMapper.convertTransacationToDTO(createTransaction);
 
             TransactionResponseDTO responseDTO = new TransactionResponseDTO();
             responseDTO.setCardHolderDTO(cardHolderDTO);

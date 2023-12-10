@@ -98,20 +98,19 @@ public class CardHolderService {
         }
     }
 
-    // No seu CardHolderService
     @Transactional
-    public void updateCard(Long cardHolderId, Card card) {
+    public void updateLimitCard(Long cardHolderId, Card card) {
         CardHolder cardHolder = getByIdCardHolder(cardHolderId);
 
-        if (cardHolder.getCard().getCardActive() == false) {
+        if (!cardHolder.getCard().getCardActive()) {
             throw new IllegalArgumentException("Ative o seu cartão para realizar compras");
         }
-                Card existingCard = cardHolder.getCard();
-                existingCard.setCardActive(card.getCardActive());
-                existingCard.setCardLimit(card.getCardLimit());
-                existingCard.setAvailableLimit(card.getAvailableLimit());
-                existingCard.setCardExpiration(card.getCardExpiration());
-                existingCard.setCardCVV(card.getCardCVV());
+        Card existingCard = cardHolder.getCard();
+//                existingCard.setCardActive(card.getCardActive());
+                  existingCard.setCardLimit(card.getCardLimit());
+//                existingCard.setAvailableLimit(card.getAvailableLimit());
+//                existingCard.setCardExpiration(card.getCardExpiration());
+//                existingCard.setCardCVV(card.getCardCVV());
 
         cardHolderRepository.save(cardHolder);
     }
