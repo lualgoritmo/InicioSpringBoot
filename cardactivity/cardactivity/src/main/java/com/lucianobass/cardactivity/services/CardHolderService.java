@@ -102,22 +102,19 @@ public class CardHolderService {
     @Transactional
     public void updateCard(Long cardHolderId, Card card) {
         CardHolder cardHolder = getByIdCardHolder(cardHolderId);
+
         if (cardHolder.getCard().getCardActive() == false) {
             throw new IllegalArgumentException("Ative o seu cartão para realizar compras");
         }
-        // Atualize as informações do cartão associado ao titular do cartão
-        Card existingCard = cardHolder.getCard();
-        existingCard.setCardActive(card.getCardActive());
-        existingCard.setCardLimit(card.getCardLimit());
-        existingCard.setAvailableLimit(card.getAvailableLimit());
-        existingCard.setCardExpiration(card.getCardExpiration());
-        existingCard.setCardCVV(card.getCardCVV());
-        // Adicione outras atualizações conforme necessário
+                Card existingCard = cardHolder.getCard();
+                existingCard.setCardActive(card.getCardActive());
+                existingCard.setCardLimit(card.getCardLimit());
+                existingCard.setAvailableLimit(card.getAvailableLimit());
+                existingCard.setCardExpiration(card.getCardExpiration());
+                existingCard.setCardCVV(card.getCardCVV());
 
-        // Salve as atualizações no banco de dados
         cardHolderRepository.save(cardHolder);
     }
-
 
 //    @Transactional
 //    public CardHolder updateCardStatusByDocumentNumber(String documentNumber, boolean activate) {

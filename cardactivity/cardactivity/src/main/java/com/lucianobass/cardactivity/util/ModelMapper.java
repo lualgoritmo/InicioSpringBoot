@@ -82,6 +82,8 @@ public class ModelMapper {
         return transactionDTO;
     }
 
+
+
     public static CardDTO convertCardToDTO(Card card) {
         return new CardDTO(
                 card.getIdCard(),
