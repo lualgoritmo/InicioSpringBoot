@@ -1,5 +1,6 @@
 package com.lucianobass.cardactivity.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
@@ -8,15 +9,16 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tb_user")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserClient {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore
     private Long idUser;
     private String name;
     private int age;
     private String genere;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Address> address;
 
     public UserClient() {

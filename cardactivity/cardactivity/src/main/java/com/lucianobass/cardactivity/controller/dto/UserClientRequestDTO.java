@@ -1,32 +1,38 @@
 package com.lucianobass.cardactivity.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lucianobass.cardactivity.model.Address;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class UserDTO implements Serializable {
+public class UserClientRequestDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long idUser;
     private String name;
     private int age;
     private String genere;
+    @JsonIgnore
     private List<Address> address;
 
-    public UserDTO() {
+    public UserClientRequestDTO() {
     }
 
-    public UserDTO(String name, int age, String genere, List<Address> address) {
+    public UserClientRequestDTO(String name, int age, String genere) {
+        //this.idUser = idUser;
         this.name = name;
         this.age = age;
         this.genere = genere;
+    }
+
+    public UserClientRequestDTO(List<Address> address) {
         this.address = address;
     }
 
-    public UserDTO(List<Address> address) {
-        this.address = address;
-    }
+//    //public Long getIdUser() {
+//        return idUser;
+//    }
 
     public String getName() {
         return name;

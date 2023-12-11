@@ -1,16 +1,10 @@
 package com.lucianobass.cardactivity.controller.dto;
 
-import com.lucianobass.cardactivity.model.Address;
-
-import java.util.List;
-
 public class UserClientResponseDTO {
 
-    private Long idUser;
     private String name;
     private int age;
     private String genere;
-    private List<Address> address;
 
     public UserClientResponseDTO() {
     }
@@ -19,10 +13,6 @@ public class UserClientResponseDTO {
         this.name = name;
         this.age = age;
         this.genere = genere;
-    }
-
-    public Long getIdUser() {
-        return idUser;
     }
 
     public String getName() {
@@ -49,11 +39,4 @@ public class UserClientResponseDTO {
         this.genere = genere;
     }
 
-    public List<Address> getAddress() {
-        return address;
-    }
-
-    public void setAddress(List<Address> address) {
-        this.address = address;
-    }
 }

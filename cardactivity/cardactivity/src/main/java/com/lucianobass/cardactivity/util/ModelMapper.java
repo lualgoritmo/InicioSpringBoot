@@ -4,6 +4,9 @@ import com.lucianobass.cardactivity.controller.dto.CreateUserRequestDTO;
 import com.lucianobass.cardactivity.controller.dto.UserClientResponseDTO;
 import com.lucianobass.cardactivity.model.UserClient;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ModelMapper {
 
     public static UserClient convertResquestDTOToUser(CreateUserRequestDTO userRequestDTO) {
@@ -15,6 +18,11 @@ public class ModelMapper {
         return userClient;
     }
 
+    public static List<UserClientResponseDTO> responseListUserClient(List<UserClient> userClients) {
+        return userClients.stream().map(ModelMapper::convertUserClientToResponseDTO)
+                .collect(Collectors.toList());
+    }
+
     public static UserClientResponseDTO convertUserClientToResponseDTO(UserClient userClient) {
         UserClientResponseDTO userClientResponseDTO = new UserClientResponseDTO(
                 userClient.getName(),
@@ -23,4 +31,5 @@ public class ModelMapper {
         );
         return userClientResponseDTO;
     }
+
 }
