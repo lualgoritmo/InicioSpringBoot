@@ -1,15 +1,15 @@
 package com.lucianobass.cardactivity.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.springframework.data.web.config.SpringDataJacksonModules;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "tb_user")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class User {
+public class UserClient {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idUser;
@@ -17,13 +17,12 @@ public class User {
     private int age;
     private String genere;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Address> address;
 
-    private Address address;
-
-    public User() {
+    public UserClient() {
     }
 
-    public User(String name, int age, String genere) {
+    public UserClient(String name, int age, String genere) {
         this.name = name;
         this.age = age;
         this.genere = genere;
@@ -57,11 +56,11 @@ public class User {
         this.genere = genere;
     }
 
-    public Address getAddress() {
+    public List<Address> getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(List<Address> address) {
         this.address = address;
     }
 
@@ -69,7 +68,7 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
+        UserClient user = (UserClient) o;
         return age == user.age && idUser.equals(user.idUser) && Objects.equals(name, user.name) && Objects.equals(genere, user.genere);
     }
 

@@ -2,11 +2,9 @@ package com.lucianobass.cardactivity.controller.dto;
 
 import com.lucianobass.cardactivity.model.Address;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class UserDTO implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class UserClientResponseDTO {
 
     private Long idUser;
     private String name;
@@ -14,18 +12,17 @@ public class UserDTO implements Serializable {
     private String genere;
     private List<Address> address;
 
-    public UserDTO() {
+    public UserClientResponseDTO() {
     }
 
-    public UserDTO(String name, int age, String genere, List<Address> address) {
+    public UserClientResponseDTO(String name, int age, String genere) {
         this.name = name;
         this.age = age;
         this.genere = genere;
-        this.address = address;
     }
 
-    public UserDTO(List<Address> address) {
-        this.address = address;
+    public Long getIdUser() {
+        return idUser;
     }
 
     public String getName() {

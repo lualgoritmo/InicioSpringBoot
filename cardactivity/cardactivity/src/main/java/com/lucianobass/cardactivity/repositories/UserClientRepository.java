@@ -1,9 +1,10 @@
 package com.lucianobass.cardactivity.repositories;
 
-import org.apache.catalina.User;
+import com.lucianobass.cardactivity.model.UserClient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserClientRepository extends JpaRepository<UserClient, Long> {
 }
+
