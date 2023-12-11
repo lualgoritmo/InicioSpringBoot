@@ -5,7 +5,7 @@ import com.lucianobass.cardactivity.model.Address;
 import java.util.List;
 
 public class CreateUserRequestDTO {
-    private Long idUser;
+    private Long idUserClient;
     private String name;
     private int age;
     private String genere;
@@ -21,8 +21,8 @@ public class CreateUserRequestDTO {
         this.address = address;
     }
 
-    public Long getIdUser() {
-        return idUser;
+    public Long getIdUserClient() {
+        return idUserClient;
     }
 
     public String getName() {

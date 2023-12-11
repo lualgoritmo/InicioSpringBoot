@@ -1,7 +1,7 @@
 package com.lucianobass.cardactivity.util;
 
 import com.lucianobass.cardactivity.controller.dto.CreateUserRequestDTO;
-import com.lucianobass.cardactivity.controller.dto.UserClientResponseDTO;
+import com.lucianobass.cardactivity.controller.dto.CreateUserResponseDTO;
 import com.lucianobass.cardactivity.model.UserClient;
 
 import java.util.List;
@@ -17,14 +17,23 @@ public class ModelMapper {
 
         return userClient;
     }
+    public static CreateUserRequestDTO converUserClientToRequestDTO(UserClient userClient) {
+        CreateUserRequestDTO userClientRequestDTO = new CreateUserRequestDTO(
+                userClient.getName(),
+                userClient.getAge(),
+                userClient.getGenere(),
+                userClient.getAddress()
+        );
 
-    public static List<UserClientResponseDTO> responseListUserClient(List<UserClient> userClients) {
+        return userClientRequestDTO;
+    }
+    public static List<CreateUserResponseDTO> responseListUserClient(List<UserClient> userClients) {
         return userClients.stream().map(ModelMapper::convertUserClientToResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    public static UserClientResponseDTO convertUserClientToResponseDTO(UserClient userClient) {
-        UserClientResponseDTO userClientResponseDTO = new UserClientResponseDTO(
+    public static CreateUserResponseDTO convertUserClientToResponseDTO(UserClient userClient) {
+        CreateUserResponseDTO userClientResponseDTO = new CreateUserResponseDTO(
                 userClient.getName(),
                 userClient.getAge(),
                 userClient.getGenere()
@@ -32,4 +41,12 @@ public class ModelMapper {
         return userClientResponseDTO;
     }
 
+    public static CreateUserResponseDTO convertRequestDTOTOResponseDTO(CreateUserRequestDTO createUserRequestDTO) {
+        CreateUserResponseDTO userClientResponseDTO = new CreateUserResponseDTO(
+                createUserRequestDTO.getName(),
+                createUserRequestDTO.getAge(),
+                createUserRequestDTO.getGenere()
+        );
+        return userClientResponseDTO;
+    }
 }

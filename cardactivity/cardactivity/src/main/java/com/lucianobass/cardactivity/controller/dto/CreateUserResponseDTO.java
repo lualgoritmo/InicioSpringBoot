@@ -1,15 +1,15 @@
 package com.lucianobass.cardactivity.controller.dto;
 
-public class UserClientResponseDTO {
+public class CreateUserResponseDTO {
 
     private String name;
     private int age;
     private String genere;
 
-    public UserClientResponseDTO() {
+    public CreateUserResponseDTO() {
     }
 
-    public UserClientResponseDTO(String name, int age, String genere) {
+    public CreateUserResponseDTO(String name, int age, String genere) {
         this.name = name;
         this.age = age;
         this.genere = genere;

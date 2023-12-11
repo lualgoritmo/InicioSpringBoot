@@ -1,8 +1,7 @@
 package com.lucianobass.cardactivity.service;
 
 import com.lucianobass.cardactivity.controller.dto.CreateUserRequestDTO;
-import com.lucianobass.cardactivity.controller.dto.UserClientRequestDTO;
-import com.lucianobass.cardactivity.controller.dto.UserClientResponseDTO;
+import com.lucianobass.cardactivity.controller.dto.CreateUserResponseDTO;
 import com.lucianobass.cardactivity.exceptions.UserClientNotFoundException;
 import com.lucianobass.cardactivity.model.UserClient;
 import com.lucianobass.cardactivity.repositories.UserClientRepository;
@@ -27,7 +26,7 @@ public class UserClientService {
     }
 
     @Transactional
-    public UserClientResponseDTO createUserClient(CreateUserRequestDTO requestDTO) {
+    public CreateUserRequestDTO createUserClient(CreateUserRequestDTO requestDTO) {
         UserClient userClient = ModelMapper.convertResquestDTOToUser(requestDTO);
 
         if (userClient == null) {
@@ -35,7 +34,7 @@ public class UserClientService {
         }
 
         try {
-            return convertUserClientToResponseDTO(userClientRepository.save(userClient));
+            return converUserClientToRequestDTO(userClientRepository.save(userClient));
         } catch (DataIntegrityViolationException ex) {
             throw new IllegalArgumentException("Erro ao criar o cliente: Dados " +
                     "duplicados ou violação de integridade.");
@@ -47,13 +46,13 @@ public class UserClientService {
     }
 
     @Transactional
-    public List<UserClientResponseDTO> getUserClientsAll() {
+    public List<CreateUserResponseDTO> getUserClientsAll() {
         List<UserClient> userClients = userClientRepository.findAll();
         return responseListUserClient(userClients);
     }
 
     @Transactional
-    public UserClientResponseDTO getUserClientById(Long idUserClient) {
+    public CreateUserResponseDTO getUserClientById(Long idUserClient) {
         UserClient userClient = userClientRepository.findById(idUserClient)
                 .orElseThrow(() -> new UserClientNotFoundException(idUserClient));
         return convertUserClientToResponseDTO(userClient);
