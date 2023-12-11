@@ -24,7 +24,7 @@ public class ModelMapper {
             cardDTO.setCardCVV(cardHolder.getCard().getCardCVV());
             cardDTO.setAvailableLimit(cardHolder.getCard().getAvailableLimit());
 
-            // Importante: Atualizar cardActive no DTO após a ativação
+
             cardDTO.setCardActive(cardHolder.getCard().getCardActive());
 
             cardHolderResponseDTO.setCard(cardDTO);
