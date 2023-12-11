@@ -7,7 +7,7 @@ import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.models.Transaction;
 
-public class MapperConvert {
+public class ModelMapper {
 
     public static CardHolderDTO convertToResponseDTO(CardHolder cardHolder) {
         CardHolderDTO cardHolderResponseDTO = new CardHolderDTO(
@@ -82,7 +82,7 @@ public class MapperConvert {
                 card.getAvailableLimit(),
                 card.getCardLimit(),
                 card.getCardCVV(),
-                card.isCardActive(),
+                card.getCardActivate(),
                 card.getCardHolder().getIdCardHolder(),
                 card.getTransactions()
         );

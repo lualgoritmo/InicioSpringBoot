@@ -27,10 +27,10 @@ public class Card implements Serializable {
     @Size(min = 5, max = 5, message = " A data deve ser xx/xx")
     private String cardExpiration;
     private String availableLimit;
-    private String cardLimit;
+    private Double cardLimit;
     @Column(name = "cardcvv", length = 3, nullable = false)
     private String cardCVV;
-    private boolean cardActive = false;
+    private Boolean cardActive = false;
     @OneToOne()
     @JoinColumn(name = "card_holder_id")
     private CardHolder cardHolder;
@@ -38,7 +38,7 @@ public class Card implements Serializable {
     private List<Transaction> transactions;
 
     public Card(Long idCard, String numberCard, String expiration, String availableLimit,
-                String card_limit, String cvv, boolean active,
+                Double card_limit, String cvv, boolean active,
                 CardHolder cardHolder, List<Transaction> transactions) {
         this.idCard = idCard;
         this.numberCard = numberCard;
@@ -54,11 +54,11 @@ public class Card implements Serializable {
     public Card() {
     }
 
-    public String getCardLimit() {
+    public Double getCardLimit() {
         return cardLimit;
     }
 
-    public void setCardLimit(String cardLimit) {
+    public void setCardLimit(Double cardLimit) {
         this.cardLimit = cardLimit;
     }
 
@@ -126,7 +126,7 @@ public class Card implements Serializable {
         this.cardHolder = cardHolder;
     }
 
-    public boolean isCardActive() {
+    public Boolean getCardActivate() {
         return cardActive;
     }
 

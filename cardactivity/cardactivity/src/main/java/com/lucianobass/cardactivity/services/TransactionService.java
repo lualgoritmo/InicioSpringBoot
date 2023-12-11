@@ -4,7 +4,7 @@ import com.lucianobass.cardactivity.controllerresources.transactionDTO.*;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.models.Transaction;
 import com.lucianobass.cardactivity.repositories.TransactionRepository;
-import com.lucianobass.cardactivity.util.MapperConvert;
+import com.lucianobass.cardactivity.util.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,20 +26,31 @@ public class TransactionService {
         this.cardHolderService = cardHolderService;
     }
 
-    public Transaction createTransaction(Long id, TransactionDTO transactionDTO) {
-        if (id == null || transactionDTO == null) {
-            throw new IllegalArgumentException("ID do cardholder ou Transação inválido");
+    @Transactional
+    public Transaction createTransactionWithPurchase(Long idCardHolder, TransactionDTO transactionDTO) {
+        if (idCardHolder == null || transactionDTO == null) {
+            throw new IllegalArgumentException("Parâmetros inválidos para criar a transação.");
         }
-        CardHolder cardHolder = cardHolderService.getByIdCardHolder(id);
+        Transaction transaction = ModelMapper.convertDTOToTransacation(transactionDTO);
+        CardHolder cardHolder = cardHolderService.getByIdCardHolder(idCardHolder);
         if (cardHolder == null) {
-            throw new EntityNotFoundException("CardHolder não encontrado para o ID: " + id);
+            throw new EntityNotFoundException("CardHolder não encontrado para o ID: " + idCardHolder);
         }
-        Transaction transaction;
-        transaction = MapperConvert.convertDTOToTransacation(transactionDTO);
-        transaction.setCard(cardHolder.getCard());
 
-        Transaction savedTransaction = transactionRepository.save(transaction);
-        return savedTransaction;
+        Double remainingLimit = cardHolder.getCard().getCardLimit() - transaction.getPriceValue();
+        if(remainingLimit <= 0) {
+            throw new EntityNotFoundException("Limit Insuficiente para a compra: " + cardHolder.getCard().getCardLimit() );
+        }
+
+        Transaction transacationReturn = ModelMapper.convertDTOToTransacation(transactionDTO);
+        transacationReturn.setCard(cardHolder.getCard());
+
+        cardHolder.getCard().setCardLimit(remainingLimit);
+
+        transactionRepository.save(transacationReturn);
+        cardHolderService.updateLimitCard(idCardHolder, cardHolder.getCard());
+
+        return transacationReturn;
     }
 
     @Transactional

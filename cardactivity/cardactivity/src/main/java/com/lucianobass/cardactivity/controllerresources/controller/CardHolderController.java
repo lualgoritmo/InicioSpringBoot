@@ -4,7 +4,7 @@ import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.services.CardHolderService;
-import com.lucianobass.cardactivity.util.MapperConvert;
+import com.lucianobass.cardactivity.util.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.lucianobass.cardactivity.util.MapperConvert.*;
+import static com.lucianobass.cardactivity.util.ModelMapper.*;
 
 @RestController
 @RequestMapping(value = "/cards")
@@ -34,7 +34,7 @@ public class CardHolderController {
     public List<CardHolderDTO> getAllCardHolder() {
         List<CardHolder> listCardHolder = cardHolderService.getAllCardsHolders();
         List<CardHolderDTO> responseListCardHolderDTO = listCardHolder.stream()
-                .map(MapperConvert::convertToResponseDTO)
+                .map(ModelMapper::convertToResponseDTO)
                 .collect(Collectors.toList());
         return responseListCardHolderDTO;
     }
@@ -72,7 +72,7 @@ public class CardHolderController {
         CardHolder cardHolder = cardHolderService.updateCardStatusByDocumentNumber(documentNumber, activate);
         validateCardHolder(cardHolder);
         cardHolder.getCard().setCardActive(activate);
-        return MapperConvert.convertToResponseDTO(cardHolder);
+        return ModelMapper.convertToResponseDTO(cardHolder);
     }
 
     @DeleteMapping(value = "/{id}/deletedcard")

@@ -14,7 +14,7 @@ public class CardDTO implements Serializable {
     private String numberCard;
     private String cardExpiration;
     private String availableLimit;
-    private String cardLimit;
+    private Double cardLimit;
     private String cardCVV;
     private boolean cardActive;
     @JsonIgnore
@@ -25,7 +25,7 @@ public class CardDTO implements Serializable {
     }
 
     public CardDTO(Long idCardDTO, String numberCard, String cardExpiration,
-                   String availableLimit, String cardLimit,
+                   String availableLimit, Double cardLimit,
                    String cardCVV, boolean cardActive,
                    Long cardHolderId, List<Transaction> transactions) {
         this.idCardDTO = idCardDTO;
@@ -71,11 +71,11 @@ public class CardDTO implements Serializable {
         this.availableLimit = availableLimit;
     }
 
-    public String getCardLimit() {
+    public Double getCardLimit() {
         return cardLimit;
     }
 
-    public void setCardLimit(String cardLimit) {
+    public void setCardLimit(Double cardLimit) {
         this.cardLimit = cardLimit;
     }
 

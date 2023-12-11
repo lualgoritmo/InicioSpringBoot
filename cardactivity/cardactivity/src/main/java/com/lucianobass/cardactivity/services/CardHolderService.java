@@ -1,9 +1,9 @@
 package com.lucianobass.cardactivity.services;
 
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
+import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.repositories.CardHolderRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static com.lucianobass.cardactivity.util.MapperConvert.validateCardHolder;
+import static com.lucianobass.cardactivity.util.ModelMapper.validateCardHolder;
 
 @Service
 public class CardHolderService {
@@ -77,7 +77,7 @@ public class CardHolderService {
         CardHolder existingCardHolder = cardHolderRepository.findById(id)
                 .orElseThrow(() -> new CardNotFoundExceptions(id));
 
-       // BeanUtils.copyProperties(cardHolder, existingCardHolder, "id");
+        // BeanUtils.copyProperties(cardHolder, existingCardHolder, "id");
         existingCardHolder.setName(cardHolder.getName());
         return cardHolderRepository.save(existingCardHolder);
     }
@@ -97,20 +97,18 @@ public class CardHolderService {
             throw new IllegalStateException("Nenhum Card associado para esse cardholder");
         }
     }
-//    @Transactional
-//    public CardHolder updateCardStatusByDocumentNumber(String documentNumber, boolean activate) {
-//        CardHolder cardHolder = cardHolderRepository.findByDocumentNumber(documentNumber);
-//
-//        if (cardHolder == null) {
-//            throw new IllegalStateException("Número de documento não reconhecido!");
-//        }
-//
-//        if (cardHolder.getCard() != null) {
-//            cardHolder.getCard().setCardActive(activate);
-//            return cardHolderRepository.save(cardHolder);
-//        } else {
-//            throw new IllegalStateException("Nenhum Card associado para esse cardholder");
-//        }
-//    }
 
+    @Transactional
+    public void updateLimitCard(Long idCardHolder, Card card) {
+        CardHolder cardHolder = getByIdCardHolder(idCardHolder);
+
+        if (!cardHolder.getCard().getCardActive()) {
+            throw new IllegalArgumentException("Ative o seu cartão para realizar compras");
+        }
+
+        Card existingCard = cardHolder.getCard();
+        existingCard.setCardLimit(card.getCardLimit());
+
+        cardHolderRepository.save(cardHolder);
+    }
 }

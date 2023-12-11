@@ -7,17 +7,15 @@ import com.lucianobass.cardactivity.controllerresources.transactionDTO.Transacti
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
 import com.lucianobass.cardactivity.models.Transaction;
 import com.lucianobass.cardactivity.services.TransactionService;
+import com.lucianobass.cardactivity.util.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 
-import static com.lucianobass.cardactivity.util.MapperConvert.convertToResponseDTO;
-import static com.lucianobass.cardactivity.util.MapperConvert.convertTransacationToDTO;
+import static com.lucianobass.cardactivity.util.ModelMapper.convertToResponseDTO;
 
 @RestController
 @RequestMapping(value = "/transaction")
@@ -33,21 +31,23 @@ public class TransactionController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public TransactionResponseDTO createTransaction(@PathVariable Long cardholderId,
                                                     @RequestBody TransactionDTO transactionDTO) {
-        List<Transaction> listTransaction = new ArrayList<>();
         if (cardholderId == null || transactionDTO == null) {
             throw new IllegalArgumentException("ID do cardholder ou Transação inválido");
         }
 
         try {
-            Transaction createTransaction = transactionService.createTransaction(cardholderId, transactionDTO);
+
+            Transaction createTransaction = transactionService.createTransactionWithPurchase(cardholderId, transactionDTO);
             System.out.println("Transação criada com sucesso.");
+            Double purchaseAmount = createTransaction.getCard().getCardLimit();
+            if(purchaseAmount <= 0) {
+                throw new IllegalArgumentException("Sem limite disponível para a compra");
+            }
             CardHolderDTO cardHolderDTO = convertToResponseDTO(createTransaction.getCard().getCardHolder());
-            //CardDTO cardDTO = convertCardToDTO(createTransaction.getCard());
-            TransactionDTO DTOTransaction = convertTransacationToDTO(createTransaction);
+            TransactionDTO DTOTransaction = ModelMapper.convertTransacationToDTO(createTransaction);
 
             TransactionResponseDTO responseDTO = new TransactionResponseDTO();
             responseDTO.setCardHolderDTO(cardHolderDTO);
-            //responseDTO.setCardDTO(cardDTO);
             responseDTO.setTransactionDTO(DTOTransaction);
 
             return responseDTO;
