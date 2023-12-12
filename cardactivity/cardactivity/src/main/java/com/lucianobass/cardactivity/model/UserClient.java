@@ -1,6 +1,7 @@
 package com.lucianobass.cardactivity.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,13 +12,12 @@ import java.util.Objects;
 public class UserClient {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonIgnore
     private Long idUser;
     private String name;
     private int age;
     private String genere;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<Address> address;
 
     public UserClient() {

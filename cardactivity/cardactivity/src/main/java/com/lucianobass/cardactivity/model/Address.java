@@ -22,6 +22,7 @@ public class Address {
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private UserClient user;
 
     public Address() {

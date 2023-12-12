@@ -1,22 +1,24 @@
 package com.lucianobass.cardactivity.controller.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.lucianobass.cardactivity.model.Address;
 
-public class CreateUserResponseDTO {
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+import java.util.List;
+
+public class CreateAddressResponseDTO {
     private Long idUserClient;
     private String name;
     private int age;
     private String genere;
+    private List<Address> address;
 
-    public CreateUserResponseDTO() {
+    public CreateAddressResponseDTO() {
     }
 
-    public CreateUserResponseDTO(String name, int age, String genere) {
-        this.idUserClient = idUserClient;
+    public CreateAddressResponseDTO(String name, int age, String genere, List<Address> address) {
         this.name = name;
         this.age = age;
         this.genere = genere;
+        this.address = address;
     }
 
     public Long getIdUserClient() {
@@ -47,4 +49,11 @@ public class CreateUserResponseDTO {
         this.genere = genere;
     }
 
+    public List<Address> getAddress() {
+        return address;
+    }
+
+    public void setAddress(List<Address> address) {
+        this.address = address;
+    }
 }

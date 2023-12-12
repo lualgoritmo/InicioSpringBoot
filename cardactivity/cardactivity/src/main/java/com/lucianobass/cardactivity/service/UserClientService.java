@@ -57,4 +57,20 @@ public class UserClientService {
                 .orElseThrow(() -> new UserClientNotFoundException(idUserClient));
         return convertUserClientToResponseDTO(userClient);
     }
+
+    //    @Transactional
+//    public UserClient getByIdUserClient(Long idUser) {
+//        UserClient userClient = userClientRepository.findByIdUser(idUser);
+//        if(userClient == null) {
+//            throw new IllegalArgumentException("Sem resposta");
+//        }
+//        else {
+//           return userClient;
+//        }
+//
+//    }
+    @Transactional
+    public CreateUserRequestDTO getByIdUserClient(Long idUser) {
+        return userClientRepository.findByIdUser(idUser);
+    }
 }

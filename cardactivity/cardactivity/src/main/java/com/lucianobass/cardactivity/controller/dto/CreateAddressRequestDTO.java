@@ -1,5 +1,7 @@
 package com.lucianobass.cardactivity.controller.dto;
 
+import com.lucianobass.cardactivity.model.UserClient;
+
 import java.io.Serializable;
 
 public class CreateAddressRequestDTO implements Serializable {
@@ -11,6 +13,7 @@ public class CreateAddressRequestDTO implements Serializable {
     private String road;
     private String city;
     private String UF;
+    private UserClient userClient;
 
     public CreateAddressRequestDTO() {
     }
@@ -65,5 +68,13 @@ public class CreateAddressRequestDTO implements Serializable {
 
     public void setUF(String UF) {
         this.UF = UF;
+    }
+
+    public UserClient getUserClient() {
+        return userClient;
+    }
+
+    public void setUserClient(UserClient userClient) {
+        this.userClient = userClient;
     }
 }

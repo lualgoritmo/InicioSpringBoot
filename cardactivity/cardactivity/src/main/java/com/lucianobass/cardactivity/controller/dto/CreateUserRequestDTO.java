@@ -14,7 +14,8 @@ public class CreateUserRequestDTO {
     public CreateUserRequestDTO() {
     }
 
-    public CreateUserRequestDTO(String name, int age, String genere, List<Address> address) {
+    public CreateUserRequestDTO(Long idUserClient,String name, int age, String genere, List<Address> address) {
+        this.idUserClient = idUserClient;
         this.name = name;
         this.age = age;
         this.genere = genere;
