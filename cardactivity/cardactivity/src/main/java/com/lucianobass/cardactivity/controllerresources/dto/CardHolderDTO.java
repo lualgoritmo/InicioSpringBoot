@@ -4,20 +4,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.lucianobass.cardactivity.controllerresources.transactionDTO.TransactionDTO;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CardHolderDTO implements Serializable {
     private static final long serialVersionUID = 1L; // não é utilizando em lugar nenhum
 
-    @JsonIgnore
-    private Long id; //Como é seu DTO e vc ta ignorando esse campo, ele não precisa ficar aqui .. pode ser removido
+    //Como é seu DTO e vc ta ignorando esse campo, ele não precisa ficar aqui .. pode ser removido
 
     private String name;
     private String documentNumber;
-    //    @NotNull(message = "A data de nascimento não pode ser nula")
-//    @NotBlank(message = "A data de nascimento não pode estar em branco")
+    @NotBlank(message = "A data de nascimento não pode estar em branco")
     private String birthDate;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private CardDTO card;
@@ -31,10 +30,6 @@ public class CardHolderDTO implements Serializable {
 
     public CardHolderDTO() {
 
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {

@@ -65,7 +65,8 @@ public class CardHolderController {
     }
 
     @PutMapping("/{id}/update")
-    @ResponseStatus(code = HttpStatus.CREATED) //Como você está atualizando um objeto e não criando, o status code que vc deve retornar é um OK
+    @ResponseStatus(code = HttpStatus.OK)
+    //Como você está atualizando um objeto e não criando, o status code que vc deve retornar é um OK
     public CardHolderDTO updateCardHolder(@PathVariable Long id,
                                           //Aqui entra o caso do dto que comentei, no service você só atualiza o nome, então deveria ter um "CardHolderUpdateRequest" somente com "name" para receber aqui no body
                                           @RequestBody(required = false) CardHolder updatedCardHolder) {
@@ -88,18 +89,19 @@ public class CardHolderController {
     public CardHolderDTO updateCardStatusByDocumentNumber(
             @PathVariable String documentNumber,
             @RequestParam(defaultValue = "false") @RequestBody boolean activate) {
-            //Aqui não deveria ser um "requestParam" mas ter um objeto "updateCardStatusRequest" com "active" do tipo boolean e receber usando o @RequestBody
-            @RequestParam(defaultValue = "false")  boolean activate) {
-        CardHolder cardHolder = cardHolderService.updateCardStatusByDocumentNumber(documentNumber, activate);
-        //Esse Validate aqui não é necessário, pois no updateCardStatusByDocumentNumber você busca o usuário de dentro do database. logo se não cair na exception o usuãrio é válido
-        validateCardHolder(cardHolder);
-        cardHolder.getCard().setCardActive(activate);
-        return ModelMapper.convertToResponseDTO(cardHolder);
+        //Aqui não deveria ser um "requestParam" mas ter um objeto "updateCardStatusRequest" com "active" do tipo boolean e receber usando o @RequestBody){
+            CardHolder cardHolder = cardHolderService.updateCardStatusByDocumentNumber(documentNumber, activate);
+            //Esse Validate aqui não é necessário, pois no updateCardStatusByDocumentNumber você busca o usuário de dentro do database. logo se não cair na exception o usuãrio é válido
+            validateCardHolder(cardHolder);
+            cardHolder.getCard().setCardActive(activate);
+            return ModelMapper.convertToResponseDTO(cardHolder);
+        }
+
+        @DeleteMapping(value = "/{id}/deletedcard")
+        @ResponseStatus(code = HttpStatus.NO_CONTENT)
+        public void deleteIdCardHolder (@PathVariable Long id) {
+            cardHolderService.deleteIdCard(id);
+        }
     }
 
-    @DeleteMapping(value = "/{id}/deletedcard")
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteIdCardHolder(@PathVariable Long id) {
-        cardHolderService.deleteIdCard(id);
-    }
-}
+

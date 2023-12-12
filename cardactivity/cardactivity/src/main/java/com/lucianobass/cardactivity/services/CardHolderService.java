@@ -18,13 +18,8 @@ import static com.lucianobass.cardactivity.util.ModelMapper.validateCardHolder;
 @Service
 public class CardHolderService {
 
-    //@Autowired //Se utilizar o @Autowired aqui, não é necessário a função de baixo.
+    @Autowired //Se utilizar o @Autowired aqui, não é necessário a função de baixo.
     private CardHolderRepository cardHolderRepository;
-
-    @Autowired //Poderia criar o constutor da classe, assim não precisaria do @Autowired
-    public void setCardHolderRepository(CardHolderRepository cardHolderRepository) { //Essa função deveria ser o construtor, então o nome ficaria CardHolderService
-        this.cardHolderRepository = cardHolderRepository;
-    }
 
     @Transactional
     public CardHolder createCard(CardHolder cardHolder) {
@@ -44,10 +39,10 @@ public class CardHolderService {
 
     @Transactional()
     public CardHolder getByIdCardHolder(@PathVariable long id) { //Aqui não vai o "@PathVariable", pois essa é uma anotação para o controller
-        CardHolder cardHolder = cardHolderRepository.findById(id).orElseThrow(
+        return cardHolderRepository.findById(id).orElseThrow(
                 () -> new CardNotFoundExceptions(id)
         );
-        return cardHolder; // o return poderia ser diretametne da linha de cima, pois fica "redundante" criar uma variável nesse caso
+        // o return poderia ser diretametne da linha de cima, pois fica "redundante" criar uma variável nesse caso
     }
 
     @Transactional
