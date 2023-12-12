@@ -3,6 +3,7 @@ package com.lucianobass.cardactivity.controllerresources.controller;
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
 import com.lucianobass.cardactivity.models.CardHolder;
+import com.lucianobass.cardactivity.models.UpdateCardStatusRequest;
 import com.lucianobass.cardactivity.services.CardHolderService;
 import com.lucianobass.cardactivity.util.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,7 @@ public class CardHolderController {
     public CardHolderDTO createCardHolder(@RequestBody CardHolderDTO cardHolderDTO) {
         CardHolder createCardHolder = cardHolderService.createCard(convertDTOToCardHolder(cardHolderDTO));
         //Essa linha é redundante, então você poderia retornar direto o "convertToResponseDTO(createCardHolder) como no exemplo abaixo"
-        CardHolderDTO responseCardHolderDTO = convertToResponseDTO(createCardHolder);
-        return responseCardHolderDTO;
+        return convertToResponseDTO(createCardHolder);
     }
 
 //    @PostMapping
@@ -42,20 +42,10 @@ public class CardHolderController {
     public List<CardHolderDTO> getAllCardHolder() {
         List<CardHolder> listCardHolder = cardHolderService.getAllCardsHolders();
         //A mesma coisa aqui, você está convertendo um objeto e então retornando ele, mas você consegue retornar diretamente a conversão
-        List<CardHolderDTO> responseListCardHolderDTO = listCardHolder.stream()
+        return listCardHolder.stream()
                 .map(ModelMapper::convertToResponseDTO)
                 .collect(Collectors.toList());
-        return responseListCardHolderDTO;
     }
-
-//    @GetMapping
-//    @ResponseStatus(code = HttpStatus.OK)
-//    public List<CardHolderDTO> getAllCardHolder() {
-//        List<CardHolder> listCardHolder = cardHolderService.getAllCardsHolders();
-//        return listCardHolder.stream()
-//          .map(MapperConvert::convertToResponseDTO)
-//          .collect(Collectors.toList());
-//    }
 
     @GetMapping("/cardholder/{documentNumber}")
     @ResponseStatus(code = HttpStatus.OK)
@@ -88,20 +78,32 @@ public class CardHolderController {
     @ResponseStatus(HttpStatus.OK)
     public CardHolderDTO updateCardStatusByDocumentNumber(
             @PathVariable String documentNumber,
-            @RequestParam(defaultValue = "false") @RequestBody boolean activate) {
-        //Aqui não deveria ser um "requestParam" mas ter um objeto "updateCardStatusRequest" com "active" do tipo boolean e receber usando o @RequestBody){
-            CardHolder cardHolder = cardHolderService.updateCardStatusByDocumentNumber(documentNumber, activate);
-            //Esse Validate aqui não é necessário, pois no updateCardStatusByDocumentNumber você busca o usuário de dentro do database. logo se não cair na exception o usuãrio é válido
-            validateCardHolder(cardHolder);
-            cardHolder.getCard().setCardActive(activate);
-            return ModelMapper.convertToResponseDTO(cardHolder);
-        }
+            @RequestBody UpdateCardStatusRequest updateCardStatusRequest) {
+
+        boolean active = updateCardStatusRequest.getActive();
+        CardHolder cardHolder = cardHolderService.updateCardStatusByDocumentNumber(documentNumber, active);
+
+        cardHolder.getCard().setCardActive(active);
+        return ModelMapper.convertToResponseDTO(cardHolder);
+    }
+
+//    @PatchMapping("/{documentNumber}")
+//    @ResponseStatus(HttpStatus.OK)
+//    public CardHolderDTO updateCardStatusByDocumentNumber(
+//            @PathVariable String documentNumber,
+//            @RequestParam(defaultValue = "false") @RequestBody boolean activate) {
+//        //Aqui não deveria ser um "requestParam" mas ter um objeto "updateCardStatusRequest" com "active" do tipo boolean e receber usando o @RequestBody){
+//            CardHolder cardHolder = cardHolderService.getByCardHolderDocumentNumber((documentNumber, activate);
+//            //Esse Validate aqui não é necessário, pois no updateCardStatusByDocumentNumber você busca o usuário de dentro do database. logo se não cair na exception o usuãrio é válido
+//            validateCardHolder(cardHolder);
+//            cardHolder.getCard().setCardActive(activate);
+//            return ModelMapper.convertToResponseDTO(cardHolder);
+//        }
 
         @DeleteMapping(value = "/{id}/deletedcard")
         @ResponseStatus(code = HttpStatus.NO_CONTENT)
-        public void deleteIdCardHolder (@PathVariable Long id) {
+        public void deleteIdCardHolder (@PathVariable Long id){
             cardHolderService.deleteIdCard(id);
         }
     }
-
 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -78,14 +79,13 @@ public class CardHolderService {
         return cardHolderRepository.save(existingCardHolder);
     }
 
-    @Transactional
     public CardHolder updateCardStatusByDocumentNumber(String documentNumber, boolean activate) {
+        // Se necessário, implemente a lógica para buscar o CardHolder no banco de dados
+        // Ainda é possível manter a validação, dependendo das suas necessidades
         CardHolder cardHolder = cardHolderRepository.findByDocumentNumber(documentNumber);
-
         if (cardHolder == null) {
-            throw new IllegalStateException("Número de documento não reconhecido!"); //ao invés de retornar um IllegalStateException, vc deve retornar um 404 (CardHolderNotFound)
+            throw new EntityNotFoundException("CardHolder não encontrado para o número de documento: " + documentNumber);
         }
-
         if (cardHolder.getCard() != null) {
             cardHolder.getCard().setCardActive(activate);
             return cardHolderRepository.save(cardHolder);
@@ -93,6 +93,22 @@ public class CardHolderService {
             throw new IllegalStateException("Nenhum Card associado para esse cardholder");
         }
     }
+
+//    @Transactional
+//    public CardHolder updateCardStatusByDocumentNumber(String documentNumber, boolean activate) {
+//        CardHolder cardHolder = cardHolderRepository.findByDocumentNumber(documentNumber);
+//
+//        if (cardHolder == null) {
+//            throw new IllegalStateException("Número de documento não reconhecido!"); //ao invés de retornar um IllegalStateException, vc deve retornar um 404 (CardHolderNotFound)
+//        }
+//
+//        if (cardHolder.getCard() != null) {
+//            cardHolder.getCard().setCardActive(activate);
+//            return cardHolderRepository.save(cardHolder);
+//        } else {
+//            throw new IllegalStateException("Nenhum Card associado para esse cardholder");
+//        }
+//    }
 
     @Transactional
     public void updateLimitCard(Long idCardHolder, Card card) {
