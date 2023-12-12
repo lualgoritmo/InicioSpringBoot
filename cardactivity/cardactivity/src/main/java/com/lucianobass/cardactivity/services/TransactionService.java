@@ -1,6 +1,7 @@
 package com.lucianobass.cardactivity.services;
 
 import com.lucianobass.cardactivity.controllerresources.transactionDTO.*;
+import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.models.Transaction;
 import com.lucianobass.cardactivity.repositories.TransactionRepository;
@@ -54,41 +55,52 @@ public class TransactionService {
     }
 
     @Transactional
-    public ListTransactionDTO getTransactionToIdCardHolder(Long idCardHolder) {
+    public List<Transaction> getTransactionToIdCardHolder(Long idCardHolder) {
         CardHolder cardHolder = cardHolderService.getByIdCardHolder(idCardHolder);
 
         if (cardHolder == null) {
             throw new EntityNotFoundException("CardHolder não encontrado para o ID: " + idCardHolder);
         }
 
-        List<Transaction> transactions = transactionRepository.findByCardIdCard(cardHolder.getCard().getIdCard());
-
-        CardHolderTransactionDTO cardHolderDTO = new CardHolderTransactionDTO(
-                cardHolder.getName(),
-                cardHolder.getDocumentNumber(),
-                cardHolder.getBirthDate());
-
-        CardTransactionDTO cardDTO = new CardTransactionDTO(
-                cardHolder.getCard().getNumberCard(),
-                cardHolder.getCard().getCardExpiration(),
-                cardHolder.getCard().getCardCVV());
-
-        List<TransactionDTOInvoice> transactionDTOList = new ArrayList<>();
-
-        for (Transaction transaction : transactions) {
-            TransactionDTOInvoice transactionDTOInvoice = new TransactionDTOInvoice(
-                    transaction.getDescription(),
-                    transaction.getPriceValue(),
-                    transaction.getTransactionTime());
-            transactionDTOList.add(transactionDTOInvoice);
-        }
-
-        ListTransactionDTO listTransactionDTOInvoice = new ListTransactionDTO(
-                cardHolderDTO,
-                cardDTO,
-                transactionDTOList);
-
-        return listTransactionDTOInvoice;
+        return transactionRepository.findByCardIdCard(cardHolder.getCard().getIdCard());
     }
+
+//    @Transactional
+//    public ListTransactionDTO getTransactionToIdCardHolder(Long idCardHolder) {
+//        CardHolder cardHolder = cardHolderService.getByIdCardHolder(idCardHolder);
+//
+//        if (cardHolder == null) {
+//            throw new EntityNotFoundException("CardHolder não encontrado para o ID: " + idCardHolder);
+//        }
+//
+//        List<Transaction> transactions = transactionRepository.findByCardIdCard(cardHolder.getCard().getIdCard());
+//
+//        CardHolderTransactionDTO cardHolderDTO = new CardHolderTransactionDTO(
+//                cardHolder.getName(),
+//                cardHolder.getDocumentNumber(),
+//                cardHolder.getBirthDate());
+//
+//        CardTransactionDTO cardDTO = new CardTransactionDTO(
+//                cardHolder.getCard().getNumberCard(),
+//                cardHolder.getCard().getCardExpiration(),
+//                cardHolder.getCard().getCardCVV());
+//
+//        List<TransactionDTOInvoice> transactionDTOList = new ArrayList<>();
+//
+//        for (Transaction transaction : transactions) {
+//            TransactionDTOInvoice transactionDTOInvoice = new TransactionDTOInvoice(
+//                    transaction.getDescription(),
+//                    transaction.getPriceValue(),
+//                    transaction.getTransactionTime());
+//            transactionDTOList.add(transactionDTOInvoice);
+//        }
+//
+//        ListTransactionDTO listTransactionDTOInvoice = new ListTransactionDTO(
+//                cardHolderDTO,
+//                cardDTO,
+//                transactionDTOList);
+//
+//        return listTransactionDTOInvoice;
+//    }
 
 }

@@ -1,10 +1,10 @@
 package com.lucianobass.cardactivity.controllerresources.controller;
 
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
-import com.lucianobass.cardactivity.controllerresources.transactionDTO.ListTransactionDTO;
-import com.lucianobass.cardactivity.controllerresources.transactionDTO.TransactionDTO;
-import com.lucianobass.cardactivity.controllerresources.transactionDTO.TransactionResponseDTO;
+import com.lucianobass.cardactivity.controllerresources.transactionDTO.*;
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
+import com.lucianobass.cardactivity.models.Card;
+import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.models.Transaction;
 import com.lucianobass.cardactivity.services.TransactionService;
 import com.lucianobass.cardactivity.util.ModelMapper;
@@ -14,6 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.lucianobass.cardactivity.util.ModelMapper.convertToResponseDTO;
 
@@ -62,20 +65,69 @@ public class TransactionController {
     @ResponseStatus(value = HttpStatus.OK)
     public ListTransactionDTO getTransactionToIdCardHolder(@PathVariable Long idCardHolder) {
         if (idCardHolder == null) {
-            throw  new CardNotFoundExceptions(idCardHolder);
+            throw new CardNotFoundExceptions(idCardHolder);
         }
-        try {
-            ListTransactionDTO listTransactionDTO = transactionService.getTransactionToIdCardHolder(idCardHolder);
 
-            if (listTransactionDTO == null) {
+        try {
+            List<Transaction> transactions = transactionService.getTransactionToIdCardHolder(idCardHolder);
+
+            if (transactions == null || transactions.isEmpty()) {
                 throw new EntityNotFoundException("Transações não encontradas para o CardHolder ID: " + idCardHolder);
             }
 
-            return listTransactionDTO;
+            CardHolder cardHolder = transactions.get(0).getCard().getCardHolder(); // Assume que cada transação tem um único cartão associado
+
+            CardHolderTransactionDTO cardHolderDTO = new CardHolderTransactionDTO(
+                    cardHolder.getName(),
+                    cardHolder.getDocumentNumber(),
+                    cardHolder.getBirthDate());
+
+            Card card = transactions.get(0).getCard(); // Assumindo que cada transação está associada a um único cartão
+
+            CardTransactionDTO cardDTO = new CardTransactionDTO(
+                    card.getNumberCard(),
+                    card.getCardExpiration(),
+                    card.getCardCVV());
+
+            List<TransactionDTOInvoice> transactionDTOList = new ArrayList<>();
+
+            for (Transaction transaction : transactions) {
+                TransactionDTOInvoice transactionDTOInvoice = new TransactionDTOInvoice(
+                        transaction.getDescription(),
+                        transaction.getPriceValue(),
+                        transaction.getTransactionTime());
+                transactionDTOList.add(transactionDTOInvoice);
+            }
+
+            return new ListTransactionDTO(
+                    cardHolderDTO,
+                    cardDTO,
+                    transactionDTOList);
         } catch (EmptyResultDataAccessException e) {
             throw new CardNotFoundExceptions(idCardHolder);
         }
     }
+
+
+
+//    @GetMapping("/{idCardHolder}/invoices")
+//    @ResponseStatus(value = HttpStatus.OK)
+//    public ListTransactionDTO getTransactionToIdCardHolder(@PathVariable Long idCardHolder) {
+//        if (idCardHolder == null) {
+//            throw  new CardNotFoundExceptions(idCardHolder);
+//        }
+//        try {
+//            ListTransactionDTO listTransactionDTO = transactionService.getTransactionToIdCardHolder(idCardHolder);
+//
+//            if (listTransactionDTO == null) {
+//                throw new EntityNotFoundException("Transações não encontradas para o CardHolder ID: " + idCardHolder);
+//            }
+//
+//            return listTransactionDTO;
+//        } catch (EmptyResultDataAccessException e) {
+//            throw new CardNotFoundExceptions(idCardHolder);
+//        }
+//    }
 
 }
 
