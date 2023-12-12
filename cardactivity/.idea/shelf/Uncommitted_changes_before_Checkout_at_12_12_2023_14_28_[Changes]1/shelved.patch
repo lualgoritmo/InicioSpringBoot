@@ -1,0 +1,184 @@
+Index: ../.idea/runConfigurations.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../.idea/runConfigurations.xml b/../.idea/runConfigurations.xml
+new file mode 100644
+--- /dev/null	
++++ b/../.idea/runConfigurations.xml	
+@@ -0,0 +1,10 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="RunConfigurationProducerService">
++    <option name="ignoredProducers">
++      <set>
++        <option value="com.android.tools.idea.compose.preview.runconfiguration.ComposePreviewRunConfigurationProducer" />
++      </set>
++    </option>
++  </component>
++</project>
+\ No newline at end of file
+Index: ../.idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../.idea/vcs.xml b/../.idea/vcs.xml
+new file mode 100644
+--- /dev/null	
++++ b/../.idea/vcs.xml	
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: ../.idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../.idea/modules.xml b/../.idea/modules.xml
+new file mode 100644
+--- /dev/null	
++++ b/../.idea/modules.xml	
+@@ -0,0 +1,12 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectModuleManager">
++    <modules>
++      <module fileurl="file://$PROJECT_DIR$/.idea/InicioSpringBootTest.iml" filepath="$PROJECT_DIR$/.idea/InicioSpringBootTest.iml" />
++      <module fileurl="file://$PROJECT_DIR$/cardactivity/cardactivity/cardactivity.iml" filepath="$PROJECT_DIR$/cardactivity/cardactivity/cardactivity.iml" />
++      <module fileurl="file://$PROJECT_DIR$/criarhelloword/criarhelloword/criarhelloword.iml" filepath="$PROJECT_DIR$/criarhelloword/criarhelloword/criarhelloword.iml" />
++      <module fileurl="file://$PROJECT_DIR$/lucianobass/lucianobass/lucianobass.iml" filepath="$PROJECT_DIR$/lucianobass/lucianobass/lucianobass.iml" />
++      <module fileurl="file://$PROJECT_DIR$/useraddress/useraddress/useraddress.iml" filepath="$PROJECT_DIR$/useraddress/useraddress/useraddress.iml" />
++    </modules>
++  </component>
++</project>
+\ No newline at end of file
+Index: ../.idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../.idea/compiler.xml b/../.idea/compiler.xml
+new file mode 100644
+--- /dev/null	
++++ b/../.idea/compiler.xml	
+@@ -0,0 +1,30 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="CompilerConfiguration">
++    <annotationProcessing>
++      <profile name="Maven default annotation processors profile" enabled="true">
++        <sourceOutputDir name="target/generated-sources/annotations" />
++        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
++        <outputRelativeToContentRoot value="true" />
++        <module name="lucianobass" />
++        <module name="useraddress" />
++        <module name="cardactivity" />
++        <module name="criarhelloword" />
++      </profile>
++    </annotationProcessing>
++    <bytecodeTargetLevel>
++      <module name="cardactivity" target="17" />
++      <module name="criarhelloword" target="17" />
++      <module name="lucianobass" target="17" />
++      <module name="useraddress" target="17" />
++    </bytecodeTargetLevel>
++  </component>
++  <component name="JavacSettings">
++    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
++      <module name="cardactivity" options="-parameters" />
++      <module name="criarhelloword" options="-parameters" />
++      <module name="lucianobass" options="-parameters" />
++      <module name="useraddress" options="-parameters" />
++    </option>
++  </component>
++</project>
+\ No newline at end of file
+Index: ../.idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../.idea/misc.xml b/../.idea/misc.xml
+new file mode 100644
+--- /dev/null	
++++ b/../.idea/misc.xml	
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="MavenProjectsManager">
++    <option name="originalFiles">
++      <list>
++        <option value="$PROJECT_DIR$/lucianobass/lucianobass/pom.xml" />
++        <option value="$PROJECT_DIR$/useraddress/useraddress/pom.xml" />
++        <option value="$PROJECT_DIR$/cardactivity/cardactivity/pom.xml" />
++        <option value="$PROJECT_DIR$/criarhelloword/criarhelloword/pom.xml" />
++      </list>
++    </option>
++  </component>
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="17" project-jdk-type="JavaSDK" />
++</project>
+\ No newline at end of file
+Index: ../.idea/encodings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../.idea/encodings.xml b/../.idea/encodings.xml
+new file mode 100644
+--- /dev/null	
++++ b/../.idea/encodings.xml	
+@@ -0,0 +1,13 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="Encoding">
++    <file url="file://$PROJECT_DIR$/cardactivity/cardactivity/src/main/java" charset="UTF-8" />
++    <file url="file://$PROJECT_DIR$/cardactivity/cardactivity/src/main/resources" charset="UTF-8" />
++    <file url="file://$PROJECT_DIR$/criarhelloword/criarhelloword/src/main/java" charset="UTF-8" />
++    <file url="file://$PROJECT_DIR$/criarhelloword/criarhelloword/src/main/resources" charset="UTF-8" />
++    <file url="file://$PROJECT_DIR$/lucianobass/lucianobass/src/main/java" charset="UTF-8" />
++    <file url="file://$PROJECT_DIR$/lucianobass/lucianobass/src/main/resources" charset="UTF-8" />
++    <file url="file://$PROJECT_DIR$/useraddress/useraddress/src/main/java" charset="UTF-8" />
++    <file url="file://$PROJECT_DIR$/useraddress/useraddress/src/main/resources" charset="UTF-8" />
++  </component>
++</project>
+\ No newline at end of file
+Index: ../.idea/InicioSpringBootTest.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../.idea/InicioSpringBootTest.iml b/../.idea/InicioSpringBootTest.iml
+new file mode 100644
+--- /dev/null	
++++ b/../.idea/InicioSpringBootTest.iml	
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module type="JAVA_MODULE" version="4">
++  <component name="NewModuleRootManager" inherit-compiler-output="true">
++    <exclude-output />
++    <content url="file://$MODULE_DIR$" />
++    <orderEntry type="inheritedJdk" />
++    <orderEntry type="sourceFolder" forTests="false" />
++  </component>
++</module>
+\ No newline at end of file
+Index: ../.idea/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../.idea/.gitignore b/../.idea/.gitignore
+new file mode 100644
+--- /dev/null	
++++ b/../.idea/.gitignore	
+@@ -0,0 +1,3 @@
++# Default ignored files
++/shelf/
++/workspace.xml

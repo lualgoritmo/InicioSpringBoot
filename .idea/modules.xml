@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/InicioSpringBootTest.iml" filepath="$PROJECT_DIR$/.idea/InicioSpringBootTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cardactivity/cardactivity/cardactivity.iml" filepath="$PROJECT_DIR$/cardactivity/cardactivity/cardactivity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/criarhelloword/criarhelloword/criarhelloword.iml" filepath="$PROJECT_DIR$/criarhelloword/criarhelloword/criarhelloword.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lucianobass/lucianobass/lucianobass.iml" filepath="$PROJECT_DIR$/lucianobass/lucianobass/lucianobass.iml" />
+      <module fileurl="file://$PROJECT_DIR$/useraddress/useraddress/useraddress.iml" filepath="$PROJECT_DIR$/useraddress/useraddress/useraddress.iml" />
+    </modules>
+  </component>
+</project>

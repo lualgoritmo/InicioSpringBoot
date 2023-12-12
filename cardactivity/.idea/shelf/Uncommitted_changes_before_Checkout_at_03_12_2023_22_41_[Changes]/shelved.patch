@@ -1,0 +1,428 @@
+Index: cardactivity/src/main/java/com/lucianobass/cardactivity/services/CardHolderService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.lucianobass.cardactivity.services;\r\n\r\nimport com.lucianobass.cardactivity.controllerresources.dto.CardDTO;\r\nimport com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;\r\nimport com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;\r\nimport com.lucianobass.cardactivity.models.CardHolder;\r\nimport com.lucianobass.cardactivity.repositories.CardHolderRepository;\r\nimport org.springframework.beans.BeanUtils;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.dao.EmptyResultDataAccessException;\r\nimport org.springframework.stereotype.Service;\r\nimport org.springframework.web.bind.annotation.PathVariable;\r\nimport org.springframework.web.bind.annotation.RequestBody;\r\n\r\nimport javax.transaction.Transactional;\r\nimport java.util.List;\r\nimport java.util.stream.Collectors;\r\n\r\n@Service\r\npublic class CardHolderService {\r\n\r\n    //    @Autowired\r\n//    private CardHolderRepository cardHolderRepository;\r\n\r\n    private CardHolderRepository cardHolderRepository;\r\n\r\n    @Autowired\r\n    public void setCardHolderRepository(CardHolderRepository cardHolderRepository) {\r\n        this.cardHolderRepository = cardHolderRepository;\r\n    }\r\n\r\n    @Transactional\r\n    public CardHolderDTO createCard(CardHolderDTO cardHolderDTO) {\r\n        CardHolder cardHolder = setCardHolder(cardHolderDTO);\r\n        CardHolder savedCardHolder = cardHolderRepository.save(cardHolder);\r\n        return convertToResponseDTO(savedCardHolder);\r\n    }\r\n\r\n//    @Transactional\r\n//    public CardHolderDTO createCard(CardHolderDTO cardHolderDTO) {\r\n//        validateCardHolder(cardHolderDTO);\r\n//        try {\r\n//            CardHolder savedCardHolderDTO = cardHolderRepository.save(setCardHolder(cardHolderDTO));\r\n//            CardHolderDTO responseDTO = convertToResponseDTO(savedCardHolderDTO);\r\n//            return responseDTO;\r\n//        } catch (Exception ex) {\r\n//            System.out.println(\"ERRO AO CRIAR\");\r\n//            throw ex;\r\n//        }\r\n//    }\r\n\r\n//        @Transactional()\r\n//    public List<CardHolderDTO> getAllCardsHolders() {\r\n//        return cardHolderRepository.findAll();\r\n//    }\r\n\r\n    @Transactional()\r\n    public List<CardHolderDTO> getAllCardsHolders() {\r\n        List<CardHolder> cardHolder = cardHolderRepository.findAll();\r\n        return cardHolder.stream().map(this::convertToResponseDTO)\r\n                .collect(Collectors.toList());\r\n    }\r\n\r\n    @Transactional()\r\n    public CardHolderDTO getByIdCardHolder(@PathVariable Long id) {\r\n        CardHolder cardHolder = cardHolderRepository.findById(id).orElseThrow(\r\n                () -> new CardNotFoundExceptions(id)\r\n        );\r\n        return convertToResponseDTO(cardHolder);\r\n    }\r\n\r\n    CardHolderDTO convertToResponseDTO(CardHolder cardHolder) {\r\n        CardHolderDTO responseDTO = new CardHolderDTO();\r\n        responseDTO.setName(cardHolder.getName());\r\n        responseDTO.setDocumentNumber(cardHolder.getDocumentNumber());\r\n        responseDTO.setBirthDate(cardHolder.getBirthDate());\r\n        //responseDTO.setId(cardHolder.getId());\r\n        if (cardHolder.getCard() != null) {\r\n            CardDTO cardDTO = new CardDTO();\r\n            cardDTO.setNumberCard(cardHolder.getCard().getNumberCard());\r\n            cardDTO.setCardExpiration(cardHolder.getCard().getCardExpiration());\r\n            cardDTO.setCardLimit(cardHolder.getCard().getCardLimit());\r\n            cardDTO.setCardCVV(cardHolder.getCard().getCardCVV());\r\n            cardDTO.setAvailableLimit(cardHolder.getCard().getAvailableLimit());\r\n            responseDTO.setCard(cardDTO);\r\n        }\r\n        return responseDTO;\r\n    }\r\n\r\n//    private CardHolderDTO convertToResponseDTO(CardHolder cardHolder) {\r\n//        CardHolderDTO responseDTO = new CardHolderDTO();\r\n//        responseDTO.setName(cardHolder.getName());\r\n//        responseDTO.setDocumentNumber(cardHolder.getDocumentNumber());\r\n//        responseDTO.setBirthDate(cardHolder.getBirthDate());\r\n//        return responseDTO;\r\n//    }\r\n\r\n    private CardHolder setCardHolder(CardHolderDTO cardHolderDTO) {\r\n        CardHolder cardHolder = new CardHolder();\r\n        cardHolder.setName(cardHolderDTO.getName());\r\n        cardHolder.setDocumentNumber(cardHolderDTO.getDocumentNumber());\r\n        if (cardHolderDTO.getName() != null) {\r\n            cardHolder.setBirthDate(cardHolderDTO.getBirthDate());\r\n        } else {\r\n            System.out.println(\"DATA CHEGANDO NULL\");\r\n        }\r\n        return cardHolder;\r\n    }\r\n\r\n    private void validateCardHolder(CardHolderDTO cardHolderDTO) {\r\n        if (cardHolderDTO.getName().isEmpty() || cardHolderDTO.getDocumentNumber().isEmpty() ||\r\n                cardHolderDTO.getBirthDate().isEmpty()) {\r\n            throw new IllegalArgumentException(\" O usuário não existe! \");\r\n        }\r\n    }\r\n\r\n    @Transactional()\r\n    public void deleteIdCard(@PathVariable Long id) {\r\n        try {\r\n            cardHolderRepository.deleteById(id);\r\n        } catch (EmptyResultDataAccessException e) {\r\n            throw new CardNotFoundExceptions(id);\r\n        }\r\n    }\r\n//\r\n//    public CardHolderDTO updateCardHolder(Long id, @RequestBody CardHolderDTO cardHolderDTO) {\r\n//        CardHolder cardHolder = cardHolderRepository.findById(id).orElseThrow(\r\n//                () -> new CardNotFoundExceptions(id)\r\n//        );\r\n//\r\n//        BeanUtils.copyProperties(setCardHolder(cardHolderDTO), cardHolder, \"id\");\r\n//        return convertToResponseDTO(cardHolderRepository.save(cardHolder));\r\n//    }\r\n\r\n    public CardHolderDTO updateCardHolder(Long id, @RequestBody CardHolderDTO cardHolderDTO) {\r\n        if (id == null) {\r\n            throw new IllegalArgumentException(\"O ID não pode ser nulo para a atualização\");\r\n        }\r\n\r\n        CardHolder cardHolder = cardHolderRepository.findById(id).orElseThrow(\r\n                () -> new CardNotFoundExceptions(id)\r\n        );\r\n\r\n        BeanUtils.copyProperties(setCardHolder(cardHolderDTO), cardHolder, \"id\");\r\n        return convertToResponseDTO(cardHolderRepository.save(cardHolder));\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cardactivity/src/main/java/com/lucianobass/cardactivity/services/CardHolderService.java b/cardactivity/src/main/java/com/lucianobass/cardactivity/services/CardHolderService.java
+--- a/cardactivity/src/main/java/com/lucianobass/cardactivity/services/CardHolderService.java	
++++ b/cardactivity/src/main/java/com/lucianobass/cardactivity/services/CardHolderService.java	
+@@ -3,6 +3,7 @@
+ import com.lucianobass.cardactivity.controllerresources.dto.CardDTO;
+ import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
+ import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
++import com.lucianobass.cardactivity.models.Card;
+ import com.lucianobass.cardactivity.models.CardHolder;
+ import com.lucianobass.cardactivity.repositories.CardHolderRepository;
+ import org.springframework.beans.BeanUtils;
+@@ -29,25 +30,26 @@
+         this.cardHolderRepository = cardHolderRepository;
+     }
+ 
+-    @Transactional
+-    public CardHolderDTO createCard(CardHolderDTO cardHolderDTO) {
+-        CardHolder cardHolder = setCardHolder(cardHolderDTO);
+-        CardHolder savedCardHolder = cardHolderRepository.save(cardHolder);
+-        return convertToResponseDTO(savedCardHolder);
+-    }
+-
+ //    @Transactional
+ //    public CardHolderDTO createCard(CardHolderDTO cardHolderDTO) {
+ //        validateCardHolder(cardHolderDTO);
+-//        try {
+-//            CardHolder savedCardHolderDTO = cardHolderRepository.save(setCardHolder(cardHolderDTO));
+-//            CardHolderDTO responseDTO = convertToResponseDTO(savedCardHolderDTO);
+-//            return responseDTO;
+-//        } catch (Exception ex) {
+-//            System.out.println("ERRO AO CRIAR");
+-//            throw ex;
+-//        }
++//        CardHolder cardHolder = setCardHolder(cardHolderDTO);
++//        CardHolder savedCardHolder = cardHolderRepository.save(cardHolder);
++//        return convertToResponseDTO(savedCardHolder);
+ //    }
++
++    @Transactional
++    public CardHolderDTO createCard(CardHolderDTO cardHolderDTO) {
++        validateCardHolder(cardHolderDTO);
++        try {
++            CardHolder savedCardHolderDTO = cardHolderRepository.save(setCardHolder(cardHolderDTO));
++            CardHolderDTO responseDTO = convertToResponseDTO(savedCardHolderDTO);
++            return responseDTO;
++        } catch (Exception ex) {
++            System.out.println("ERRO AO CRIAR");
++            throw ex;
++        }
++    }
+ 
+ //        @Transactional()
+ //    public List<CardHolderDTO> getAllCardsHolders() {
+@@ -71,19 +73,26 @@
+ 
+     CardHolderDTO convertToResponseDTO(CardHolder cardHolder) {
+         CardHolderDTO responseDTO = new CardHolderDTO();
++
++        // Setar os valores do cardholder no responseDTO
+         responseDTO.setName(cardHolder.getName());
+         responseDTO.setDocumentNumber(cardHolder.getDocumentNumber());
+         responseDTO.setBirthDate(cardHolder.getBirthDate());
+-        //responseDTO.setId(cardHolder.getId());
++
++        // Criar um novo objeto para o card no formato desejado
+         if (cardHolder.getCard() != null) {
+             CardDTO cardDTO = new CardDTO();
+             cardDTO.setNumberCard(cardHolder.getCard().getNumberCard());
+             cardDTO.setCardExpiration(cardHolder.getCard().getCardExpiration());
++            cardDTO.setAvailableLimit(cardHolder.getCard().getAvailableLimit());
+             cardDTO.setCardLimit(cardHolder.getCard().getCardLimit());
+             cardDTO.setCardCVV(cardHolder.getCard().getCardCVV());
+-            cardDTO.setAvailableLimit(cardHolder.getCard().getAvailableLimit());
++            cardDTO.setCardActive(cardHolder.getCard().getCardActive());
++
++            // Setar o cardDTO no responseDTO
+             responseDTO.setCard(cardDTO);
+         }
++
+         return responseDTO;
+     }
+ 
+@@ -95,24 +104,7 @@
+ //        return responseDTO;
+ //    }
+ 
+-    private CardHolder setCardHolder(CardHolderDTO cardHolderDTO) {
+-        CardHolder cardHolder = new CardHolder();
+-        cardHolder.setName(cardHolderDTO.getName());
+-        cardHolder.setDocumentNumber(cardHolderDTO.getDocumentNumber());
+-        if (cardHolderDTO.getName() != null) {
+-            cardHolder.setBirthDate(cardHolderDTO.getBirthDate());
+-        } else {
+-            System.out.println("DATA CHEGANDO NULL");
+-        }
+-        return cardHolder;
+-    }
+ 
+-    private void validateCardHolder(CardHolderDTO cardHolderDTO) {
+-        if (cardHolderDTO.getName().isEmpty() || cardHolderDTO.getDocumentNumber().isEmpty() ||
+-                cardHolderDTO.getBirthDate().isEmpty()) {
+-            throw new IllegalArgumentException(" O usuário não existe! ");
+-        }
+-    }
+ 
+     @Transactional()
+     public void deleteIdCard(@PathVariable Long id) {
+@@ -145,4 +137,32 @@
+         return convertToResponseDTO(cardHolderRepository.save(cardHolder));
+     }
+ 
++    private CardHolder setCardHolder(CardHolderDTO cardHolderDTO) {
++        CardHolder cardHolder = new CardHolder();
++        cardHolder.setName(cardHolderDTO.getName());
++        cardHolder.setDocumentNumber(cardHolderDTO.getDocumentNumber());
++        cardHolder.setBirthDate(cardHolderDTO.getBirthDate());
++
++        if (cardHolderDTO.getCard() != null) {
++            Card card = new Card();
++            card.setNumberCard(cardHolderDTO.getCard().getNumberCard());
++            card.setCardExpiration(cardHolderDTO.getCard().getCardExpiration());
++            card.setCardLimit(cardHolderDTO.getCard().getCardLimit());
++            card.setCardCVV(cardHolderDTO.getCard().getCardCVV());
++            card.setCardActive(cardHolderDTO.getCard().getCardActive());
++            card.setCardHolder(cardHolder);
++            cardHolder.setCard(card);
++        }
++
++        return cardHolder;
++    }
++
++
++    private void validateCardHolder(CardHolderDTO cardHolderDTO) {
++        if (cardHolderDTO.getName().isEmpty() || cardHolderDTO.getDocumentNumber().isEmpty() ||
++                cardHolderDTO.getBirthDate().isEmpty()) {
++            throw new IllegalArgumentException(" O usuário não existe! ");
++        }
++    }
++
+ }
+Index: cardactivity/src/main/java/com/lucianobass/cardactivity/controllerresources/dto/CardDTO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.lucianobass.cardactivity.controllerresources.dto;\r\n\r\nimport com.lucianobass.cardactivity.models.Card;\r\n\r\nimport java.io.Serializable;\r\n\r\npublic class CardDTO implements Serializable {\r\n    private static final long serialVersionUID = 1L;\r\n\r\n    private Long id;\r\n    private String numberCard;\r\n    private String cardExpiration;\r\n    private String availableLimit;\r\n    private String cardLimit;\r\n    private String cardCVV;\r\n    private boolean cardActive;\r\n    private Long cardHolderId;\r\n\r\n    public CardDTO() {\r\n    }\r\n\r\n    public CardDTO(Long id, String numberCard, String cardExpiration, String availableLimit, String cardLimit, String cardCVV, boolean cardActive, Long cardHolderId) {\r\n        this.id = id;\r\n        this.numberCard = numberCard;\r\n        this.cardExpiration = cardExpiration;\r\n        this.availableLimit = availableLimit;\r\n        this.cardLimit = cardLimit;\r\n        this.cardCVV = cardCVV;\r\n        this.cardActive = cardActive;\r\n        this.cardHolderId = cardHolderId;\r\n    }\r\n\r\n//    public Long getId() {\r\n//        return id;\r\n//    }\r\n\r\n    public void setId(Long id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public String getNumberCard() {\r\n        return numberCard;\r\n    }\r\n\r\n    public void setNumberCard(String numberCard) {\r\n        this.numberCard =  numberCard;\r\n    }\r\n\r\n    public String getCardExpiration() {\r\n        return cardExpiration;\r\n    }\r\n\r\n    public void setCardExpiration(String cardExpiration) {\r\n        this.cardExpiration = cardExpiration;\r\n    }\r\n\r\n    public String getAvailableLimit() {\r\n        return availableLimit;\r\n    }\r\n\r\n    public void setAvailableLimit(String availableLimit) {\r\n        this.availableLimit = availableLimit;\r\n    }\r\n\r\n    public String getCardLimit() {\r\n        return cardLimit;\r\n    }\r\n\r\n    public void setCardLimit(String cardLimit) {\r\n        this.cardLimit = cardLimit;\r\n    }\r\n\r\n    public String getCardCVV() {\r\n        return cardCVV;\r\n    }\r\n\r\n    public void setCardCVV(String cardCVV) {\r\n        this.cardCVV = Card.generateNumberCard(3).replaceAll(\"(\\\\d)\", \"x\");\r\n    }\r\n\r\n    public boolean getCardActive() {\r\n        return cardActive;\r\n    }\r\n\r\n    public void setCardActive(boolean cardActive) {\r\n        this.cardActive = cardActive;\r\n    }\r\n\r\n//    public Long getCardHolderId() {\r\n//        return cardHolderId;\r\n//    }\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cardactivity/src/main/java/com/lucianobass/cardactivity/controllerresources/dto/CardDTO.java b/cardactivity/src/main/java/com/lucianobass/cardactivity/controllerresources/dto/CardDTO.java
+--- a/cardactivity/src/main/java/com/lucianobass/cardactivity/controllerresources/dto/CardDTO.java	
++++ b/cardactivity/src/main/java/com/lucianobass/cardactivity/controllerresources/dto/CardDTO.java	
+@@ -1,5 +1,6 @@
+ package com.lucianobass.cardactivity.controllerresources.dto;
+ 
++import com.fasterxml.jackson.annotation.JsonIgnore;
+ import com.lucianobass.cardactivity.models.Card;
+ 
+ import java.io.Serializable;
+@@ -19,8 +20,7 @@
+     public CardDTO() {
+     }
+ 
+-    public CardDTO(Long id, String numberCard, String cardExpiration, String availableLimit, String cardLimit, String cardCVV, boolean cardActive, Long cardHolderId) {
+-        this.id = id;
++    public CardDTO(String numberCard, String cardExpiration, String availableLimit, String cardLimit, String cardCVV, boolean cardActive, Long cardHolderId) {
+         this.numberCard = numberCard;
+         this.cardExpiration = cardExpiration;
+         this.availableLimit = availableLimit;
+@@ -29,10 +29,10 @@
+         this.cardActive = cardActive;
+         this.cardHolderId = cardHolderId;
+     }
+-
+-//    public Long getId() {
+-//        return id;
+-//    }
++    @JsonIgnore
++    public Long getId() {
++        return id;
++    }
+ 
+     public void setId(Long id) {
+         this.id = id;
+@@ -85,9 +85,9 @@
+     public void setCardActive(boolean cardActive) {
+         this.cardActive = cardActive;
+     }
+-
+-//    public Long getCardHolderId() {
+-//        return cardHolderId;
+-//    }
++    @JsonIgnore
++    public Long getCardHolderId() {
++        return cardHolderId;
++    }
+ }
+ 
+Index: cardactivity/src/main/java/com/lucianobass/cardactivity/models/Card.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.lucianobass.cardactivity.models;\r\n\r\nimport com.fasterxml.jackson.annotation.JsonIgnore;\r\nimport com.fasterxml.jackson.annotation.JsonIgnoreProperties;\r\nimport com.fasterxml.jackson.annotation.JsonInclude;\r\n\r\nimport javax.persistence.*;\r\nimport javax.validation.constraints.Size;\r\nimport java.io.Serial;\r\nimport java.io.Serializable;\r\nimport java.util.Objects;\r\nimport java.util.Random;\r\n\r\n@Entity\r\n@Table(name = \"tb_card\")\r\n@JsonInclude(JsonInclude.Include.NON_NULL)\r\npublic class Card implements Serializable {\r\n\r\n    @Serial\r\n    private static final long serialVersionUID = 1L;\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    @JsonIgnore\r\n    private Long id;\r\n    @Column(length = 16, nullable = false)\r\n    private String numberCard;\r\n    @Size(min = 5, max = 5, message = \" A data deve ser xx/xx\")\r\n    private String cardExpiration;\r\n    private String availableLimit;\r\n    private String cardLimit;\r\n    @Column(name = \"cardcvv\", length = 3, nullable = false)\r\n    private String cardCVV;\r\n    private boolean cardActive = false;\r\n    @OneToOne()\r\n    @JoinColumn(name = \"card_holder_id\")\r\n    @JsonIgnoreProperties(\"card\")\r\n    @JsonIgnore\r\n    private CardHolder cardHolder;\r\n\r\n    public Card(Long id, String numberCard, String expiration, String availableLimit, String card_limit, String cvv, boolean active, CardHolder cardHolder) {\r\n        this.id = id;\r\n        this.numberCard = numberCard;\r\n        this.cardExpiration = expiration;\r\n        this.availableLimit = availableLimit;\r\n        this.cardLimit = card_limit;\r\n        this.cardCVV = cvv;\r\n        this.cardActive = active;\r\n        this.cardHolder = cardHolder;\r\n\r\n    }\r\n\r\n    public Card() {\r\n    }\r\n\r\n    public String getCardLimit() {\r\n        return cardLimit;\r\n    }\r\n\r\n    public void setCardLimit(String cardLimit) {\r\n        this.cardLimit = cardLimit;\r\n    }\r\n\r\n    public Long getId(Long aLong) {\r\n        return id;\r\n    }\r\n\r\n    public void setId(Long id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public String getNumberCard() {\r\n        return numberCard;\r\n    }\r\n\r\n    //    public void setNumberCard(String numberCard) {\r\n//        this.numberCard = Card.generateNumberCard(16).replaceAll(\"(?<=\\\\d{4})\\\\d(?=\\\\d{4})\", \"x\");\r\n//    }\r\n\r\n    public void setNumberCard(String numberCard) {\r\n        this.numberCard = numberCard;\r\n    }\r\n\r\n    public String getCardExpiration() {\r\n        return cardExpiration;\r\n    }\r\n\r\n    public void setCardExpiration(String cardExpiration) {\r\n        this.cardExpiration = cardExpiration;\r\n    }\r\n\r\n    public String getAvailableLimit() {\r\n        return availableLimit;\r\n    }\r\n\r\n    public void setAvailableLimit(String availableLimit) {\r\n        this.availableLimit = availableLimit;\r\n    }\r\n\r\n    public String getCardCVV() {\r\n        return cardCVV;\r\n    }\r\n\r\n    //    public void setCardCVV(String cardCVV) {\r\n//        this.cardCVV = Card.generateNumberCard(3).replaceAll(\"(\\\\d)\", \"x\");\r\n//    }\r\n\r\n    public void setCardCVV(String cardCVV) {\r\n        this.cardCVV = cardCVV;\r\n    }\r\n\r\n    public boolean getCardActive() {\r\n        return cardActive;\r\n    }\r\n\r\n    public void setCardActive(boolean cardActive) {\r\n        this.cardActive = cardActive;\r\n    }\r\n\r\n    public CardHolder getCardHolder() {\r\n        return cardHolder;\r\n    }\r\n\r\n    public void setCardHolder(CardHolder cardHolder) {\r\n        this.cardHolder = cardHolder;\r\n    }\r\n\r\n    @Override\r\n    public int hashCode() {\r\n        return Objects.hash(id);\r\n    }\r\n\r\n    @Override\r\n    public boolean equals(Object o) {\r\n        if (this == o) return true;\r\n        if (o == null || getClass() != o.getClass()) return false;\r\n        Card card = (Card) o;\r\n        return Objects.equals(id, card.id);\r\n    }\r\n\r\n    public static String generateNumberCard(int number) {\r\n        StringBuilder stringBuilder = new StringBuilder();\r\n        Random random = new Random();\r\n        for (int i = 0; i < number; i++) {\r\n            stringBuilder.append(random.nextInt(10));\r\n        }\r\n        return stringBuilder.toString();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cardactivity/src/main/java/com/lucianobass/cardactivity/models/Card.java b/cardactivity/src/main/java/com/lucianobass/cardactivity/models/Card.java
+--- a/cardactivity/src/main/java/com/lucianobass/cardactivity/models/Card.java	
++++ b/cardactivity/src/main/java/com/lucianobass/cardactivity/models/Card.java	
+@@ -22,7 +22,7 @@
+     @Id
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     @JsonIgnore
+-    private Long id;
++    private Long cardId;
+     @Column(length = 16, nullable = false)
+     private String numberCard;
+     @Size(min = 5, max = 5, message = " A data deve ser xx/xx")
+@@ -38,8 +38,7 @@
+     @JsonIgnore
+     private CardHolder cardHolder;
+ 
+-    public Card(Long id, String numberCard, String expiration, String availableLimit, String card_limit, String cvv, boolean active, CardHolder cardHolder) {
+-        this.id = id;
++    public Card(String numberCard, String expiration, String availableLimit, String card_limit, String cvv, boolean active, CardHolder cardHolder) {
+         this.numberCard = numberCard;
+         this.cardExpiration = expiration;
+         this.availableLimit = availableLimit;
+@@ -61,12 +60,12 @@
+         this.cardLimit = cardLimit;
+     }
+ 
+-    public Long getId(Long aLong) {
+-        return id;
++    public Long getCardId(Long aLong) {
++        return cardId;
+     }
+ 
+-    public void setId(Long id) {
+-        this.id = id;
++    public void setCardId(Long cardId) {
++        this.cardId = cardId;
+     }
+ 
+     public String getNumberCard() {
+@@ -127,7 +126,7 @@
+ 
+     @Override
+     public int hashCode() {
+-        return Objects.hash(id);
++        return Objects.hash(cardId);
+     }
+ 
+     @Override
+@@ -135,7 +134,7 @@
+         if (this == o) return true;
+         if (o == null || getClass() != o.getClass()) return false;
+         Card card = (Card) o;
+-        return Objects.equals(id, card.id);
++        return Objects.equals(cardId, card.cardId);
+     }
+ 
+     public static String generateNumberCard(int number) {
+Index: cardactivity/src/main/java/com/lucianobass/cardactivity/models/CardHolder.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.lucianobass.cardactivity.models;\r\n\r\nimport com.fasterxml.jackson.annotation.JsonInclude;\r\nimport com.fasterxml.jackson.annotation.JsonManagedReference;\r\n\r\nimport javax.persistence.*;\r\nimport java.util.Random;\r\n\r\n@Entity\r\n@Table(name = \"tb_cardholder\")\r\n@JsonInclude(JsonInclude.Include.NON_NULL)\r\npublic class CardHolder {\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.AUTO)\r\n    private Long id;\r\n\r\n    //@NotBlank(message = \"Escreva o seu nome\")\r\n    private String name;\r\n\r\n    //@NotBlank(message = \"Digite o seu documento\")\r\n    private String documentNumber;\r\n\r\n    //@NotBlank(message = \"Data de nascimento\")\r\n    private String birthDate;\r\n\r\n    @OneToOne(mappedBy = \"cardHolder\", cascade = CascadeType.ALL)\r\n    @JsonManagedReference\r\n    private Card card;\r\n\r\n    public CardHolder(String name, String documentNumber, String birthDate) {\r\n        this.name = name;\r\n        this.documentNumber = documentNumber;\r\n        this.birthDate = birthDate;\r\n    }\r\n\r\n    public CardHolder() {\r\n    }\r\n\r\n    public Long getId() {\r\n        return id;\r\n    }\r\n\r\n    public void setId(Long id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public Card getCard() {\r\n        return card;\r\n    }\r\n\r\n    public void setCard(Card card) {\r\n        this.card = card;\r\n    }\r\n\r\n    public String getName() {\r\n        return name;\r\n    }\r\n\r\n    public void setName(String name) {\r\n        this.name = name;\r\n    }\r\n\r\n    public String getDocumentNumber() {\r\n        return documentNumber;\r\n    }\r\n\r\n    public void setDocumentNumber(String documentNumber) {\r\n        this.documentNumber = documentNumber;\r\n    }\r\n\r\n    public String getBirthDate() {\r\n        return birthDate;\r\n    }\r\n\r\n    public void setBirthDate(String birthDate) {\r\n        this.birthDate = birthDate;\r\n    }\r\n\r\n    public String generateNumberCard(int number) {\r\n        StringBuilder stringBuilder = new StringBuilder();\r\n        Random random = new Random();\r\n        for (int i = 0; i < number; i++) {\r\n            stringBuilder.append(random.nextInt(10));\r\n        }\r\n        return stringBuilder.toString();\r\n    }\r\n\r\n    @PrePersist\r\n    public void prePersist() {\r\n        try {\r\n            System.out.println(\"ID no prePersist: \" + this.id);\r\n            System.out.println(\"Card no prePersist: \" + this.card);\r\n            if (this.card == null && this.id == null) {\r\n                this.card = new Card();\r\n                this.card.setNumberCard(generateNumberCard(16)\r\n                        .replaceAll(\"(?<=\\\\d{4})\\\\d(?=\\\\d{4})\", \"x\"));\r\n                this.card.setAvailableLimit(\"150.00\");\r\n                this.card.setCardExpiration(\"30/02\");\r\n                this.card.setCardLimit(\"100.00\");\r\n                this.card.setCardCVV(generateNumberCard(3).replaceAll(\"(\\\\d)\", \"x\"));\r\n                this.card.setCardActive(false);\r\n                this.card.setCardHolder(this);\r\n            }\r\n        } catch (Exception ex) {\r\n            System.out.println(\" Erro no PREPERSIST\" + ex.getMessage());\r\n        }\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cardactivity/src/main/java/com/lucianobass/cardactivity/models/CardHolder.java b/cardactivity/src/main/java/com/lucianobass/cardactivity/models/CardHolder.java
+--- a/cardactivity/src/main/java/com/lucianobass/cardactivity/models/CardHolder.java	
++++ b/cardactivity/src/main/java/com/lucianobass/cardactivity/models/CardHolder.java	
+@@ -12,8 +12,8 @@
+ public class CardHolder {
+ 
+     @Id
+-    @GeneratedValue(strategy = GenerationType.AUTO)
+-    private Long id;
++    @GeneratedValue(strategy = GenerationType.IDENTITY)
++    private Long cardHolderid;
+ 
+     //@NotBlank(message = "Escreva o seu nome")
+     private String name;
+@@ -37,12 +37,12 @@
+     public CardHolder() {
+     }
+ 
+-    public Long getId() {
+-        return id;
++    public Long getCardHolderid() {
++        return cardHolderid;
+     }
+ 
+-    public void setId(Long id) {
+-        this.id = id;
++    public void setCardHolderid(Long cardHolderid) {
++        this.cardHolderid = cardHolderid;
+     }
+ 
+     public Card getCard() {
+@@ -89,9 +89,9 @@
+     @PrePersist
+     public void prePersist() {
+         try {
+-            System.out.println("ID no prePersist: " + this.id);
++            System.out.println("ID no prePersist: " + this.cardHolderid);
+             System.out.println("Card no prePersist: " + this.card);
+-            if (this.card == null && this.id == null) {
++            if (this.card == null && this.cardHolderid == null) {
+                 this.card = new Card();
+                 this.card.setNumberCard(generateNumberCard(16)
+                         .replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x"));
+Index: cardactivity/src/main/java/com/lucianobass/cardactivity/controllerresources/dto/CardHolderDTO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.lucianobass.cardactivity.controllerresources.dto;\r\n\r\nimport com.fasterxml.jackson.annotation.JsonIgnore;\r\n\r\nimport java.io.Serializable;\r\n\r\npublic class CardHolderDTO implements Serializable {\r\n    private static final long serialVersionUID = 1L;\r\n\r\n    @JsonIgnore\r\n    private Long id;\r\n    private String name;\r\n    private String documentNumber;\r\n//    @NotNull(message = \"A data de nascimento não pode ser nula\")\r\n//    @NotBlank(message = \"A data de nascimento não pode estar em branco\")\r\n    private String birthDate;\r\n    private CardDTO card;\r\n\r\n    public CardHolderDTO(Long id, String name, String documentNumber, String birthDate) {\r\n        this.id = id;\r\n        this.name = name;\r\n        this.documentNumber = documentNumber;\r\n        this.birthDate = birthDate;\r\n    }\r\n\r\n    public CardHolderDTO() {\r\n\r\n    }\r\n\r\n    public Long getId() {\r\n        return id;\r\n    }\r\n\r\n    public String getName() {\r\n        return name;\r\n    }\r\n\r\n    public void setName(String name) {\r\n        this.name = name;\r\n    }\r\n\r\n    public String getDocumentNumber() {\r\n        return documentNumber;\r\n    }\r\n\r\n    public void setDocumentNumber(String documentNumber) {\r\n        this.documentNumber = documentNumber;\r\n    }\r\n\r\n    public String getBirthDate() {\r\n        return birthDate;\r\n    }\r\n\r\n    public void setBirthDate(String birthDate) {\r\n        this.birthDate = birthDate;\r\n    }\r\n\r\n    public CardDTO getCard() {\r\n        return card;\r\n    }\r\n\r\n    public void setCard(CardDTO card) {\r\n        this.card = card;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cardactivity/src/main/java/com/lucianobass/cardactivity/controllerresources/dto/CardHolderDTO.java b/cardactivity/src/main/java/com/lucianobass/cardactivity/controllerresources/dto/CardHolderDTO.java
+--- a/cardactivity/src/main/java/com/lucianobass/cardactivity/controllerresources/dto/CardHolderDTO.java	
++++ b/cardactivity/src/main/java/com/lucianobass/cardactivity/controllerresources/dto/CardHolderDTO.java	
+@@ -7,17 +7,16 @@
+ public class CardHolderDTO implements Serializable {
+     private static final long serialVersionUID = 1L;
+ 
++    private CardDTO card;
+     @JsonIgnore
+     private Long id;
+     private String name;
+     private String documentNumber;
+-//    @NotNull(message = "A data de nascimento não pode ser nula")
++    //    @NotNull(message = "A data de nascimento não pode ser nula")
+ //    @NotBlank(message = "A data de nascimento não pode estar em branco")
+     private String birthDate;
+-    private CardDTO card;
+ 
+-    public CardHolderDTO(Long id, String name, String documentNumber, String birthDate) {
+-        this.id = id;
++    public CardHolderDTO(String name, String documentNumber, String birthDate) {
+         this.name = name;
+         this.documentNumber = documentNumber;
+         this.birthDate = birthDate;
+Index: cardactivity/src/test/java/com/lucianobass/cardactivity/services/CardHolderServiceTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.lucianobass.cardactivity.services;\r\n\r\nimport com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;\r\nimport com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;\r\nimport com.lucianobass.cardactivity.models.Card;\r\nimport com.lucianobass.cardactivity.models.CardHolder;\r\nimport org.junit.jupiter.api.Test;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.boot.test.context.SpringBootTest;\r\n\r\nimport java.util.List;\r\n\r\nimport static com.lucianobass.cardactivity.models.Card.generateNumberCard;\r\nimport static org.junit.jupiter.api.Assertions.*;\r\n\r\n@SpringBootTest\r\nclass CardHolderServiceTest {\r\n    @Autowired\r\n    CardHolderService cardHolderService = new CardHolderService();\r\n\r\n    @Test\r\n    void testCreateCard() {\r\n        CardHolder cardHolder = new CardHolder(\"Luciano\", \"123456789\", \"1983-10-10\");\r\n        cardHolder.setCard(new Card(null,\r\n                generateNumberCard(16),\r\n                \"30/02\",\r\n                \"100.00\",\r\n                \"100.00\",\r\n                \"123\",\r\n                false,\r\n                null));\r\n        CardHolderDTO cardHolderDTO = cardHolderService.convertToResponseDTO(cardHolder);\r\n        System.out.println(\"ID antes de salvar: \" + cardHolderDTO.getId());\r\n        cardHolderService.createCard(cardHolderDTO);\r\n        assertEquals(cardHolder.getName(), cardHolderDTO.getName());\r\n        assertEquals(cardHolder.getDocumentNumber(), cardHolderDTO.getDocumentNumber());\r\n        assertEquals(cardHolder.getBirthDate(), cardHolderDTO.getBirthDate());\r\n        assertNotEquals(cardHolder.generateNumberCard(16).replaceAll(\"(?<=\\\\d{4})\\\\d(?=\\\\d{4})\", \"x\"),\r\n                cardHolderDTO.getCard().getNumberCard());\r\n        assertEquals(cardHolder.getCard().getCardLimit(), cardHolderDTO.getCard().getCardLimit());\r\n        assertEquals(cardHolder.generateNumberCard(3).replaceAll(\"(\\\\d)\",\r\n                \"x\"), cardHolderDTO.getCard().getCardCVV());\r\n        assertEquals(cardHolder.getCard().getCardExpiration(), cardHolderDTO.getCard().getCardExpiration());\r\n    }\r\n\r\n    @Test\r\n    void testGetCardHolderById() {\r\n        // Arrange\r\n        CardHolder cardHolder = new CardHolder(\"Luciano\", \"123456789\", \"1983-10-10\");\r\n        CardHolderDTO savedCardHolder = cardHolderService.createCard(cardHolderService.convertToResponseDTO(cardHolder));\r\n\r\n        // Imprimir informações úteis\r\n        System.out.println(\"ID salvo: \" + savedCardHolder.getId());\r\n\r\n        // Act\r\n        CardHolderDTO retrievedCardHolder = cardHolderService.getByIdCardHolder(savedCardHolder.getId());\r\n\r\n        // Imprimir informações úteis\r\n        System.out.println(\"ID recuperado: \" + retrievedCardHolder.getId());\r\n\r\n        // Assert\r\n        assertNotNull(retrievedCardHolder.getId(), \"O ID não deveria ser nulo ao buscar por ID\");\r\n        assertNotNull(savedCardHolder.getId(), \"O ID não deveria ser nulo após a criação\");\r\n        assertEquals(savedCardHolder.getId(), retrievedCardHolder.getId(), \"O ID retornado deve ser igual ao ID salvo\");\r\n\r\n    }\r\n\r\n    @Test\r\n    void testGetAllCardsHolders() {\r\n        //Arrange\r\n        CardHolder cardHolderOne = new CardHolder(\"Luciano\", \"123456789\", \"1983-10-10\");\r\n        CardHolder cardHolderTwo = new CardHolder(\"Maria\", \"123456789\", \"1963-02-12\");\r\n        CardHolderDTO cardHolderDTOOne = cardHolderService.convertToResponseDTO(cardHolderOne);\r\n        CardHolderDTO cardHolderDTOTwo = cardHolderService.convertToResponseDTO(cardHolderTwo);\r\n        //ACT\r\n        cardHolderService.createCard(cardHolderDTOOne);\r\n        cardHolderService.createCard(cardHolderDTOTwo);\r\n        List<CardHolderDTO> listDTO = cardHolderService.getAllCardsHolders();\r\n        CardHolderDTO firstDTO = listDTO.get(0);\r\n        //ASSERT DTO\r\n        assertFalse(listDTO.contains(cardHolderDTOOne));\r\n        assertEquals(\"Luciano\", firstDTO.getName());\r\n        assertEquals(cardHolderOne.getDocumentNumber(), firstDTO.getDocumentNumber());\r\n        assertEquals(cardHolderOne.getBirthDate(), firstDTO.getBirthDate());\r\n        //ASSERT\r\n        //assertNotNull(cardHolderDTOOne.getId(), \"O ID não deveria ser nulo após a criação do cartão.\");\r\n        assertEquals(2, listDTO.size());\r\n        assertFalse(listDTO.size() == 0, \"É falso\");\r\n        assertTrue(listDTO.size() > 0, \"É verdadeiro\");\r\n        assertFalse(listDTO.isEmpty());\r\n        //assertTrue(listDTO.isEmpty());\r\n    }\r\n\r\n    //    @Test\r\n//    void testGetByIdCardHolder() {\r\n//        //Arrange\r\n//        CardHolder cardHolder = new CardHolder(\"Luciano\", \"123456789\", \"1983-10-10\");\r\n//        CardHolderDTO cardHolderDTO = cardHolderService.convertToResponseDTO(cardHolder);\r\n//        CardHolderDTO cardDTO = cardHolderService.createCard(cardHolderDTO);\r\n//        //ACT\r\n//        CardHolderDTO retrievedCardHolderDTO = cardHolderService.getByIdCardHolder(cardHolderDTO.getId());\r\n//        //ASSERT\r\n//        assertNotNull(retrievedCardHolderDTO, \"O CardHolderDTO recuperado não deveria ser nulo\");\r\n//        assertEquals(cardHolderDTO.getId(), retrievedCardHolderDTO.getId(), \"Os IDs deveriam ser iguais\");\r\n//    }\r\n\r\n    @Test\r\n    void testUpdateCardHolder() {\r\n        // Arrange\r\n        CardHolder cardHolder = new CardHolder(\"Luciano\", \"123456789\", \"1983-10-10\");\r\n        CardHolderDTO savedCardHolder = cardHolderService.createCard(cardHolderService.convertToResponseDTO(cardHolder));\r\n\r\n        // Modifique alguns atributos para simular uma atualização\r\n        String newName = \"Luciano Updated\";\r\n        String newDocumentNumber = \"987654321\";\r\n        String newBirthDate = \"1990-01-01\";\r\n\r\n        CardHolderDTO updatedCardHolderDTO = new CardHolderDTO();\r\n        updatedCardHolderDTO.setName(newName);\r\n        updatedCardHolderDTO.setDocumentNumber(newDocumentNumber);\r\n        updatedCardHolderDTO.setBirthDate(newBirthDate);\r\n\r\n        // Act\r\n        cardHolderService.updateCardHolder(savedCardHolder.getId(), updatedCardHolderDTO);\r\n\r\n        // Assert\r\n        // Obtenha o CardHolder após a atualização\r\n        CardHolderDTO retrievedCardHolder = cardHolderService.getByIdCardHolder(savedCardHolder.getId());\r\n\r\n        // Verifique se os atributos foram atualizados corretamente\r\n        assertEquals(newName, retrievedCardHolder.getName(), \"O nome não foi atualizado corretamente\");\r\n        assertEquals(newDocumentNumber, retrievedCardHolder.getDocumentNumber(), \"O número do documento não foi atualizado corretamente\");\r\n        assertEquals(newBirthDate, retrievedCardHolder.getBirthDate(), \"A data de nascimento não foi atualizada corretamente\");\r\n    }\r\n\r\n\r\n//    @Test\r\n//    void testDeleteIdCard() {\r\n//        // Arrange\r\n//        CardHolder cardHolder = new CardHolder(\"Luciano\", \"123456789\", \"1983-10-10\");\r\n//        CardHolderDTO[] savedCardHolder = { cardHolderService.createCard(cardHolderService.convertToResponseDTO(cardHolder)) };\r\n//\r\n//        // Verifique se o ID não é nulo antes de chamar deleteIdCard\r\n//        assertNotNull(savedCardHolder[0].getId(), \"O ID não deveria ser nulo após a criação\");\r\n//\r\n//        // Imprima informações úteis para diagnóstico\r\n//        System.out.println(\"ID do CardHolder após a criação: \" + savedCardHolder[0].getId());\r\n//\r\n//        // Agora, recupere novamente o CardHolder após a criação para garantir que o ID seja gerado\r\n//        savedCardHolder[0] = cardHolderService.getByIdCardHolder(savedCardHolder[0].getId());\r\n//\r\n//        // Act\r\n//        try {\r\n//            cardHolderService.deleteIdCard(savedCardHolder[0].getId());\r\n//        } catch (Exception e) {\r\n//            // Se for lançada uma exceção, falhe o teste\r\n//            fail(\"Não deveria lançar exceção ao excluir um CardHolder existente. Exceção: \" + e.getMessage());\r\n//        }\r\n//\r\n//        // Assert\r\n//        assertThrows(CardNotFoundExceptions.class, () -> {\r\n//            cardHolderService.getByIdCardHolder(savedCardHolder[0].getId());\r\n//        }, \"Deveria lançar exceção de CardNotFoundExceptions após excluir o CardHolder\");\r\n//\r\n//        // Tente excluir novamente para garantir que não lance uma exceção diferente\r\n//        assertDoesNotThrow(() -> {\r\n//            cardHolderService.deleteIdCard(savedCardHolder[0].getId());\r\n//        }, \"Não deveria lançar exceção após tentar excluir um CardHolder inexistente\");\r\n//    }\r\n\r\n}\r\n
+===================================================================
+diff --git a/cardactivity/src/test/java/com/lucianobass/cardactivity/services/CardHolderServiceTest.java b/cardactivity/src/test/java/com/lucianobass/cardactivity/services/CardHolderServiceTest.java
+--- a/cardactivity/src/test/java/com/lucianobass/cardactivity/services/CardHolderServiceTest.java	
++++ b/cardactivity/src/test/java/com/lucianobass/cardactivity/services/CardHolderServiceTest.java	
+@@ -1,8 +1,6 @@
+ package com.lucianobass.cardactivity.services;
+ 
+ import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
+-import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
+-import com.lucianobass.cardactivity.models.Card;
+ import com.lucianobass.cardactivity.models.CardHolder;
+ import org.junit.jupiter.api.Test;
+ import org.springframework.beans.factory.annotation.Autowired;
+@@ -10,7 +8,6 @@
+ 
+ import java.util.List;
+ 
+-import static com.lucianobass.cardactivity.models.Card.generateNumberCard;
+ import static org.junit.jupiter.api.Assertions.*;
+ 
+ @SpringBootTest
+@@ -18,30 +15,30 @@
+     @Autowired
+     CardHolderService cardHolderService = new CardHolderService();
+ 
+-    @Test
+-    void testCreateCard() {
+-        CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
+-        cardHolder.setCard(new Card(null,
+-                generateNumberCard(16),
+-                "30/02",
+-                "100.00",
+-                "100.00",
+-                "123",
+-                false,
+-                null));
+-        CardHolderDTO cardHolderDTO = cardHolderService.convertToResponseDTO(cardHolder);
+-        System.out.println("ID antes de salvar: " + cardHolderDTO.getId());
+-        cardHolderService.createCard(cardHolderDTO);
+-        assertEquals(cardHolder.getName(), cardHolderDTO.getName());
+-        assertEquals(cardHolder.getDocumentNumber(), cardHolderDTO.getDocumentNumber());
+-        assertEquals(cardHolder.getBirthDate(), cardHolderDTO.getBirthDate());
+-        assertNotEquals(cardHolder.generateNumberCard(16).replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x"),
+-                cardHolderDTO.getCard().getNumberCard());
+-        assertEquals(cardHolder.getCard().getCardLimit(), cardHolderDTO.getCard().getCardLimit());
+-        assertEquals(cardHolder.generateNumberCard(3).replaceAll("(\\d)",
+-                "x"), cardHolderDTO.getCard().getCardCVV());
+-        assertEquals(cardHolder.getCard().getCardExpiration(), cardHolderDTO.getCard().getCardExpiration());
+-    }
++//    @Test
++//    void testCreateCard() {
++//        CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
++//        cardHolder.setCard(new Card(null,
++//                generateNumberCard(16),
++//                "30/02",
++//                "100.00",
++//                "100.00",
++//                "123",
++//                false,
++//                null));
++//        CardHolderDTO cardHolderDTO = cardHolderService.convertToResponseDTO(cardHolder);
++//        System.out.println("ID antes de salvar: " + cardHolderDTO.getId());
++//        cardHolderService.createCard(cardHolderDTO);
++//        assertEquals(cardHolder.getName(), cardHolderDTO.getName());
++//        assertEquals(cardHolder.getDocumentNumber(), cardHolderDTO.getDocumentNumber());
++//        assertEquals(cardHolder.getBirthDate(), cardHolderDTO.getBirthDate());
++//        assertNotEquals(cardHolder.generateNumberCard(16).replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x"),
++//                cardHolderDTO.getCard().getNumberCard());
++//        assertEquals(cardHolder.getCard().getCardLimit(), cardHolderDTO.getCard().getCardLimit());
++//        assertEquals(cardHolder.generateNumberCard(3).replaceAll("(\\d)",
++//                "x"), cardHolderDTO.getCard().getCardCVV());
++//        assertEquals(cardHolder.getCard().getCardExpiration(), cardHolderDTO.getCard().getCardExpiration());
++//    }
+ 
+     @Test
+     void testGetCardHolderById() {
