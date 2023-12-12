@@ -18,10 +18,11 @@ import static com.lucianobass.cardactivity.util.ModelMapper.validateCardHolder;
 @Service
 public class CardHolderService {
 
+    //@Autowired //Se utilizar o @Autowired aqui, não é necessário a função de baixo.
     private CardHolderRepository cardHolderRepository;
 
-    @Autowired
-    public void setCardHolderRepository(CardHolderRepository cardHolderRepository) {
+    @Autowired //Poderia criar o constutor da classe, assim não precisaria do @Autowired
+    public void setCardHolderRepository(CardHolderRepository cardHolderRepository) { //Essa função deveria ser o construtor, então o nome ficaria CardHolderService
         this.cardHolderRepository = cardHolderRepository;
     }
 
@@ -42,25 +43,25 @@ public class CardHolderService {
     }
 
     @Transactional()
-    public CardHolder getByIdCardHolder(@PathVariable long id) {
+    public CardHolder getByIdCardHolder(@PathVariable long id) { //Aqui não vai o "@PathVariable", pois essa é uma anotação para o controller
         CardHolder cardHolder = cardHolderRepository.findById(id).orElseThrow(
                 () -> new CardNotFoundExceptions(id)
         );
-        return cardHolder;
+        return cardHolder; // o return poderia ser diretametne da linha de cima, pois fica "redundante" criar uma variável nesse caso
     }
 
     @Transactional
-    public CardHolder getByCardHolderDocumentNumber(@PathVariable String documentNumber) {
+    public CardHolder getByCardHolderDocumentNumber(@PathVariable String documentNumber) { //Aqui não vai o "@PathVariable", pois essa é uma anotação para o controller
         CardHolder cardHolder = cardHolderRepository.findByDocumentNumber(documentNumber);
         if (cardHolder == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(); //Se cardHolder não existir, vc deve retornar a exception "CardNotFoundExceptions" não?
         } else {
             return cardHolder;
         }
     }
 
     @Transactional()
-    public void deleteIdCard(@PathVariable Long id) {
+    public void deleteIdCard(@PathVariable Long id) {  //Aqui não vai o "@PathVariable", pois essa é uma anotação para o controller
         try {
             cardHolderRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
@@ -69,7 +70,7 @@ public class CardHolderService {
     }
 
     @Transactional
-    public CardHolder updateCardHolder(Long id, @RequestBody CardHolder cardHolder) {
+    public CardHolder updateCardHolder(Long id, @RequestBody CardHolder cardHolder) {  //Aqui não vai o "@RequestBody", pois essa é uma anotação para o controller
         if (id == null) {
             throw new IllegalArgumentException("O ID não pode ser nulo para a atualização");
         }
@@ -87,7 +88,7 @@ public class CardHolderService {
         CardHolder cardHolder = cardHolderRepository.findByDocumentNumber(documentNumber);
 
         if (cardHolder == null) {
-            throw new IllegalStateException("Número de documento não reconhecido!");
+            throw new IllegalStateException("Número de documento não reconhecido!"); //ao invés de retornar um IllegalStateException, vc deve retornar um 404 (CardHolderNotFound)
         }
 
         if (cardHolder.getCard() != null) {

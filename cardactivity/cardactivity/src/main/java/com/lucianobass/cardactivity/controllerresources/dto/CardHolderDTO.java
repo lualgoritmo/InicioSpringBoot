@@ -9,10 +9,10 @@ import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CardHolderDTO implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; // não é utilizando em lugar nenhum
 
     @JsonIgnore
-    private Long id;
+    private Long id; //Como é seu DTO e vc ta ignorando esse campo, ele não precisa ficar aqui .. pode ser removido
 
     private String name;
     private String documentNumber;

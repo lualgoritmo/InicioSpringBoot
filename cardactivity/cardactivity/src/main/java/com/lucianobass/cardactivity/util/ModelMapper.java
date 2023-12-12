@@ -17,7 +17,7 @@ public class ModelMapper {
         );
 
         if (cardHolder.getCard() != null) {
-            CardDTO cardDTO = new CardDTO();
+            CardDTO cardDTO = new CardDTO(); //ao invés de usar os set`s do card .. você poderia usar o construtor
             cardDTO.setNumberCard(cardHolder.getCard().getNumberCard());
             cardDTO.setCardExpiration(cardHolder.getCard().getCardExpiration());
             cardDTO.setCardLimit(cardHolder.getCard().getCardLimit());
@@ -48,7 +48,7 @@ public class ModelMapper {
     public static void validateCardHolder(CardHolder cardHolder) {
         if (cardHolder.getName().isEmpty() || cardHolder.getDocumentNumber().isEmpty() ||
                 cardHolder.getBirthDate().isEmpty()) {
-            throw new IllegalArgumentException(" O usuário não existe! ");
+            throw new IllegalArgumentException(" O usuário não existe! "); //aqui, a expetion poderia ser "usuário inválido, verifique os dados informados!"
         }
     }
 
