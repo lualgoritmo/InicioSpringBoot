@@ -12,7 +12,6 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tb_card")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Card implements Serializable {
 
     @Serial

@@ -39,7 +39,7 @@ public class CardHolderService {
     }
 
     @Transactional()
-    public CardHolder getByIdCardHolder(@PathVariable long id) { //Aqui não vai o "@PathVariable", pois essa é uma anotação para o controller
+    public CardHolder getByIdCardHolder(Long id) { //Aqui não vai o "@PathVariable", pois essa é uma anotação para o controller
         return cardHolderRepository.findById(id).orElseThrow(
                 () -> new CardNotFoundExceptions(id)
         );
@@ -47,7 +47,7 @@ public class CardHolderService {
     }
 
     @Transactional
-    public CardHolder getByCardHolderDocumentNumber(@PathVariable String documentNumber) { //Aqui não vai o "@PathVariable", pois essa é uma anotação para o controller
+    public CardHolder getByCardHolderDocumentNumber(String documentNumber) { //Aqui não vai o "@PathVariable", pois essa é uma anotação para o controller
         CardHolder cardHolder = cardHolderRepository.findByDocumentNumber(documentNumber);
         if (cardHolder == null) {
             throw new IllegalArgumentException(); //Se cardHolder não existir, vc deve retornar a exception "CardNotFoundExceptions" não?
@@ -79,7 +79,7 @@ public class CardHolderService {
         return cardHolderRepository.save(existingCardHolder);
     }
 
-    public CardHolder updateCardStatusByDocumentNumber(String documentNumber, boolean activate) {
+    public CardHolder updateCardStatusByDocumentNumber(String documentNumber, boolean active) {
         // Se necessário, implemente a lógica para buscar o CardHolder no banco de dados
         // Ainda é possível manter a validação, dependendo das suas necessidades
         CardHolder cardHolder = cardHolderRepository.findByDocumentNumber(documentNumber);
@@ -87,7 +87,7 @@ public class CardHolderService {
             throw new EntityNotFoundException("CardHolder não encontrado para o número de documento: " + documentNumber);
         }
         if (cardHolder.getCard() != null) {
-            cardHolder.getCard().setCardActive(activate);
+            cardHolder.getCard().setCardActive(active);
             return cardHolderRepository.save(cardHolder);
         } else {
             throw new IllegalStateException("Nenhum Card associado para esse cardholder");

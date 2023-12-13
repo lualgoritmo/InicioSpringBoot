@@ -8,7 +8,6 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tb_transaction")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Transaction {
 
     @Id

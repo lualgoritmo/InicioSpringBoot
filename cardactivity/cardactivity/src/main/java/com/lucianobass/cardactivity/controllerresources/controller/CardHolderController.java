@@ -58,7 +58,9 @@ public class CardHolderController {
     @ResponseStatus(code = HttpStatus.OK)
     //Como você está atualizando um objeto e não criando, o status code que vc deve retornar é um OK
     public CardHolderDTO updateCardHolder(@PathVariable Long id,
-                                          //Aqui entra o caso do dto que comentei, no service você só atualiza o nome, então deveria ter um "CardHolderUpdateRequest" somente com "name" para receber aqui no body
+                                          //Aqui entra o caso do dto que comentei, no service você só atualiza o nome,
+                                          // então deveria ter um "CardHolderUpdateRequest" somente com "name"
+                                          // para receber aqui no body
                                           @RequestBody(required = false) CardHolder updatedCardHolder) {
         if (id == null) {
             throw new IllegalArgumentException("O ID não pode ser nulo para atualizar"); //Você está fazendo essa validação no service também, ai fica redundante .. poderia deixar somente lá e remover essa

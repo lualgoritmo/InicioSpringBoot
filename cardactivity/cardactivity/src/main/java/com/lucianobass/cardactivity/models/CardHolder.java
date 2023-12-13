@@ -7,7 +7,6 @@ import java.util.Random;
 
 @Entity
 @Table(name = "tb_cardholder")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CardHolder {
 
     @Id
