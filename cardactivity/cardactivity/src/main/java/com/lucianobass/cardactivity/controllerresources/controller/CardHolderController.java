@@ -3,7 +3,7 @@ package com.lucianobass.cardactivity.controllerresources.controller;
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
 import com.lucianobass.cardactivity.models.CardHolder;
-import com.lucianobass.cardactivity.models.UpdateCardStatusRequest;
+import com.lucianobass.cardactivity.controllerresources.dto.UpdateCardStatusRequestDTO;
 import com.lucianobass.cardactivity.services.CardHolderService;
 import com.lucianobass.cardactivity.util.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,12 +80,11 @@ public class CardHolderController {
     @ResponseStatus(HttpStatus.OK)
     public CardHolderDTO updateCardStatusByDocumentNumber(
             @PathVariable String documentNumber,
-            @RequestBody UpdateCardStatusRequest updateCardStatusRequest) {
-
-        boolean active = updateCardStatusRequest.getActive();
-        CardHolder cardHolder = cardHolderService.updateCardStatusByDocumentNumber(documentNumber, active);
-
-        cardHolder.getCard().setCardActive(active);
+            @RequestBody UpdateCardStatusRequestDTO updateCardStatusRequest) {
+        CardHolder cardHolder = cardHolderService.updateCardStatusByDocumentNumber(
+                documentNumber,
+                updateCardStatusRequest.getActive()
+        );
         return ModelMapper.convertToResponseDTO(cardHolder);
     }
 

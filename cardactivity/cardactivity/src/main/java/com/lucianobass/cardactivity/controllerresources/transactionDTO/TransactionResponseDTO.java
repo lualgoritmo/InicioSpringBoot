@@ -1,12 +1,10 @@
 package com.lucianobass.cardactivity.controllerresources.transactionDTO;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.lucianobass.cardactivity.controllerresources.dto.CardDTO;
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
 
 import java.io.Serializable;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TransactionResponseDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 

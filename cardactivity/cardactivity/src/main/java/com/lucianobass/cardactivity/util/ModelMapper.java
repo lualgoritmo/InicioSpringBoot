@@ -76,15 +76,12 @@ public class ModelMapper {
 
     public static CardDTO convertCardToDTO(Card card) {
         return new CardDTO(
-                card.getIdCard(),
                 card.getNumberCard(),
                 card.getCardExpiration(),
                 card.getAvailableLimit(),
                 card.getCardLimit(),
                 card.getCardCVV(),
-                card.getCardActivate(),
-                card.getCardHolder().getIdCardHolder(),
-                card.getTransactions()
+                card.getCardActivate()
         );
     }
 }

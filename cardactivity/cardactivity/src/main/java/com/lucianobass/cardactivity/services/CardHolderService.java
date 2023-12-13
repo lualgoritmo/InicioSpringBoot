@@ -19,8 +19,12 @@ import static com.lucianobass.cardactivity.util.ModelMapper.validateCardHolder;
 @Service
 public class CardHolderService {
 
-    @Autowired //Se utilizar o @Autowired aqui, não é necessário a função de baixo.
+    //@Autowired //Se utilizar o @Autowired aqui, não é necessário a função de baixo.
     private CardHolderRepository cardHolderRepository;
+
+    public CardHolderService(CardHolderRepository cardHolderRepository) {
+        this.cardHolderRepository = cardHolderRepository;
+    }
 
     @Transactional
     public CardHolder createCard(CardHolder cardHolder) {

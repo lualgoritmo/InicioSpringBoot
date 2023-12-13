@@ -1,6 +1,7 @@
 package com.lucianobass.cardactivity.controllerresources.controller;
 
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
+import com.lucianobass.cardactivity.controllerresources.transactionDTO.TransactionDTO;
 import com.lucianobass.cardactivity.controllerresources.transactionDTO.*;
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
 import com.lucianobass.cardactivity.models.Card;
@@ -42,10 +43,8 @@ public class TransactionController {
 
             Transaction createTransaction = transactionService.createTransactionWithPurchase(cardholderId, transactionDTO);
             System.out.println("Transação criada com sucesso.");
-            Double purchaseAmount = createTransaction.getCard().getCardLimit();
-            if(purchaseAmount <= 0) {
-                throw new IllegalArgumentException("Sem limite disponível para a compra");
-            }
+            createTransaction.getCard().getCardLimit();
+
             CardHolderDTO cardHolderDTO = convertToResponseDTO(createTransaction.getCard().getCardHolder());
             TransactionDTO DTOTransaction = ModelMapper.convertTransacationToDTO(createTransaction);
 

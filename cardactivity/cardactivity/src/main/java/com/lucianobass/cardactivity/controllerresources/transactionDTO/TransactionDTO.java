@@ -6,13 +6,10 @@ import java.io.Serializable;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TransactionDTO implements Serializable {
-    private static final long serialVersionUID = 1L;
 
-    private Long idTransacation;
     private String description;
     private Float priceValue;
     private String transactionTime;
-    private Long cardHolderId;
 
     public TransactionDTO() {
     }
@@ -21,10 +18,6 @@ public class TransactionDTO implements Serializable {
         this.description = description;
         this.priceValue = priceValue;
         this.transactionTime = transactionTime;
-    }
-
-    public Long getIdTransacation() {
-        return idTransacation;
     }
 
     public String getDescription() {

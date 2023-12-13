@@ -1,7 +1,5 @@
 package com.lucianobass.cardactivity.models;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import javax.persistence.*;
 import java.util.Random;
 

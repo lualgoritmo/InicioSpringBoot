@@ -1,6 +1,6 @@
-package com.lucianobass.cardactivity.models;
+package com.lucianobass.cardactivity.controllerresources.dto;
 
-public class UpdateCardStatusRequest {
+public class UpdateCardStatusRequestDTO {
     private boolean active;
 
     public boolean getActive() {

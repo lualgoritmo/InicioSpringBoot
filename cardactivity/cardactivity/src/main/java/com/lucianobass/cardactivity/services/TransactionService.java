@@ -6,7 +6,6 @@ import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.models.Transaction;
 import com.lucianobass.cardactivity.repositories.TransactionRepository;
 import com.lucianobass.cardactivity.util.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -15,11 +14,14 @@ import java.util.List;
 
 @Service
 public class TransactionService {
-    @Autowired
+
     private TransactionRepository transactionRepository;
-    @Autowired
     private CardHolderService cardHolderService;
 
+    TransactionService(TransactionRepository transactionRepository, CardHolderService cardHolderService) {
+        this.transactionRepository = transactionRepository;
+        this.cardHolderService = cardHolderService;
+    }
 
     @Transactional
     public Transaction createTransactionWithPurchase(Long idCardHolder, TransactionDTO transactionDTO) {
@@ -35,14 +37,15 @@ public class TransactionService {
         }
 
         transaction.setCard(cardHolder.getCard());
-        transactionRepository.save(transaction);
 
         Double remainingLimit = cardHolder.getCard().getCardLimit() - transaction.getPriceValue();
 
         if (remainingLimit < 0) {
-            throw new InsufficientLimitException("Limit Insuficiente para a compra: " + cardHolder.getCard().getCardLimit());
+            throw new InsufficientLimitException("Limit Insuficiente para a compra: "
+                    + cardHolder.getCard().getCardLimit()
+            );
         }
-
+        transactionRepository.save(transaction);
         cardHolder.getCard().setCardLimit(remainingLimit);
         cardHolderService.updateLimitCard(idCardHolder, cardHolder.getCard());
 

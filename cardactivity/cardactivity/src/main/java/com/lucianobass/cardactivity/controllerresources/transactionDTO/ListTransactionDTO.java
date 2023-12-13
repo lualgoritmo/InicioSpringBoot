@@ -4,41 +4,41 @@ import java.util.List;
 
 public class ListTransactionDTO {
 
-   private CardHolderTransactionDTO cardHolderDTO;
-   private CardTransactionDTO cardDTO;
-   private List<TransactionDTOInvoice> transactionDTO;
+   private CardHolderTransactionDTO cardHolder;
+   private CardTransactionDTO card;
+   private List<TransactionDTOInvoice> transaction;
 
     public ListTransactionDTO() {
     }
 
     public ListTransactionDTO(CardHolderTransactionDTO cardHolderDTO,CardTransactionDTO cardDTO,
                               List<TransactionDTOInvoice> transactionDTO) {
-        this.cardHolderDTO = cardHolderDTO;
-        this.cardDTO = cardDTO;
-        this.transactionDTO = transactionDTO;
+        this.cardHolder = cardHolderDTO;
+        this.card = cardDTO;
+        this.transaction = transactionDTO;
     }
 
-    public CardHolderTransactionDTO getCardHolderDTO() {
-        return cardHolderDTO;
+    public CardHolderTransactionDTO getCardHolder() {
+        return cardHolder;
     }
 
-    public void setCardHolderDTO(CardHolderTransactionDTO cardHolderDTO) {
-        this.cardHolderDTO = cardHolderDTO;
+    public void setCardHolder(CardHolderTransactionDTO cardHolder) {
+        this.cardHolder = cardHolder;
     }
 
-    public CardTransactionDTO getCardDTO() {
-        return cardDTO;
+    public CardTransactionDTO getCard() {
+        return card;
     }
 
-    public void setCardDTO(CardTransactionDTO cardDTO) {
-        this.cardDTO = cardDTO;
+    public void setCard(CardTransactionDTO card) {
+        this.card = card;
     }
 
-    public List<TransactionDTOInvoice> getTransactionDTO() {
-        return transactionDTO;
+    public List<TransactionDTOInvoice> getTransaction() {
+        return transaction;
     }
 
-    public void setTransactionDTO(List<TransactionDTOInvoice> transactionDTO) {
-        this.transactionDTO = transactionDTO;
+    public void setTransaction(List<TransactionDTOInvoice> transaction) {
+        this.transaction = transaction;
     }
 }
