@@ -49,8 +49,8 @@ public class TransactionController {
             TransactionDTO DTOTransaction = ModelMapper.convertTransacationToDTO(createTransaction);
 
             TransactionResponseDTO responseDTO = new TransactionResponseDTO();
-            responseDTO.setCardHolderDTO(cardHolderDTO);
-            responseDTO.setTransactionDTO(DTOTransaction);
+            responseDTO.setCardHolder(cardHolderDTO);
+            responseDTO.setTransaction(DTOTransaction);
 
             return responseDTO;
         } catch (Exception e) {

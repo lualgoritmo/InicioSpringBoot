@@ -1,47 +1,48 @@
 package com.lucianobass.cardactivity.controllerresources.transactionDTO;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.lucianobass.cardactivity.controllerresources.dto.CardDTO;
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
 
 import java.io.Serializable;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TransactionResponseDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private CardHolderDTO cardHolderDTO;
-    private CardDTO cardDTO;
-    private TransactionDTO transactionDTO;
+    private CardHolderDTO cardHolder;
+    private CardDTO card;
+    private TransactionDTO transaction;
 
     public TransactionResponseDTO() {
     }
 
     public TransactionResponseDTO(CardHolderDTO cardHolder, CardDTO card, TransactionDTO transaction) {
-        this.cardHolderDTO = cardHolder;
-        this.cardDTO = card;
-        this.transactionDTO = transaction;
+        this.cardHolder = cardHolder;
+        this.card = card;
+        this.transaction = transaction;
     }
 
-    public CardHolderDTO getCardHolderDTO() {
-        return cardHolderDTO;
+    public CardHolderDTO getCardHolder() {
+        return cardHolder;
     }
 
-    public void setCardHolderDTO(CardHolderDTO cardHolderDTO) {
-        this.cardHolderDTO = cardHolderDTO;
+    public void setCardHolder(CardHolderDTO cardHolder) {
+        this.cardHolder = cardHolder;
     }
 
-    public CardDTO getCardDTO() {
-        return cardDTO;
+    public CardDTO getCard() {
+        return card;
     }
 
-    public void setCardDTO(CardDTO cardDTO) {
-        this.cardDTO = cardDTO;
+    public void setCard(CardDTO card) {
+        this.card = card;
     }
 
-    public TransactionDTO getTransactionDTO() {
-        return transactionDTO;
+    public TransactionDTO getTransaction() {
+        return transaction;
     }
 
-    public void setTransactionDTO(TransactionDTO transactionDTO) {
-        this.transactionDTO = transactionDTO;
+    public void setTransaction(TransactionDTO transaction) {
+        this.transaction = transaction;
     }
 }

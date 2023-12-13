@@ -15,7 +15,6 @@ public class CardDTO implements Serializable {
     private Double cardLimit;
     private String cardCVV;
     private boolean cardActive;
-    private Long cardHolderId;
     private List<Transaction> transactions;
 
     public CardDTO() {
