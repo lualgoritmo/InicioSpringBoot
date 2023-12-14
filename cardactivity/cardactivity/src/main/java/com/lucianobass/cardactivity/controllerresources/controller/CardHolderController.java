@@ -27,7 +27,7 @@ public class CardHolderController {
     public CardHolderDTO createCardHolder(@RequestBody CardHolderDTO cardHolderDTO) {
         CardHolder createCardHolder = cardHolderService.createCard(convertDTOToCardHolder(cardHolderDTO));
         //Essa linha é redundante, então você poderia retornar direto o "convertToResponseDTO(createCardHolder) como no exemplo abaixo"
-        return convertToResponseDTO(createCardHolder);
+        return convertCardHolderTODTO(createCardHolder);
     }
 
 //    @PostMapping
@@ -43,7 +43,7 @@ public class CardHolderController {
         List<CardHolder> listCardHolder = cardHolderService.getAllCardsHolders();
         //A mesma coisa aqui, você está convertendo um objeto e então retornando ele, mas você consegue retornar diretamente a conversão
         return listCardHolder.stream()
-                .map(ModelMapper::convertToResponseDTO)
+                .map(ModelMapper::convertCardHolderTODTO)
                 .collect(Collectors.toList());
     }
 
@@ -51,7 +51,7 @@ public class CardHolderController {
     @ResponseStatus(code = HttpStatus.OK)
     public CardHolderDTO getByCardHolderDocumentNumber(@PathVariable String documentNumber) {
         CardHolder cardHolder = cardHolderService.getByCardHolderDocumentNumber(documentNumber);
-        return convertToResponseDTO(cardHolder);
+        return convertCardHolderTODTO(cardHolder);
     }
 
     @PutMapping("/{id}/update")
@@ -70,7 +70,7 @@ public class CardHolderController {
 
             CardHolder updatedResult = cardHolderService.updateCardHolder(id, updatedCardHolder);
 
-            return convertToResponseDTO(updatedResult);
+            return convertCardHolderTODTO(updatedResult);
         } catch (EmptyResultDataAccessException e) {
             throw new CardNotFoundExceptions(id);
         } //Esse try/catch deveria ficar dentro do seu service, pois é lá que você faz a tentativa de comunicação com banco de dados
@@ -85,7 +85,7 @@ public class CardHolderController {
                 documentNumber,
                 updateCardStatusRequest.getActive()
         );
-        return ModelMapper.convertToResponseDTO(cardHolder);
+        return ModelMapper.convertCardHolderTODTO(cardHolder);
     }
 
 //    @PatchMapping("/{documentNumber}")

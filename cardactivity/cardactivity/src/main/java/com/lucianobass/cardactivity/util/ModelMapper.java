@@ -9,11 +9,9 @@ import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.models.Invoice;
 import com.lucianobass.cardactivity.models.Transaction;
 
-import java.time.LocalDateTime;
-
 public class ModelMapper {
 
-    public static CardHolderDTO convertToResponseDTO(CardHolder cardHolder) {
+    public static CardHolderDTO convertCardHolderTODTO(CardHolder cardHolder) {
         CardHolderDTO cardHolderResponseDTO = new CardHolderDTO(
                 cardHolder.getName(),
                 cardHolder.getDocumentNumber(),
@@ -93,7 +91,7 @@ public class ModelMapper {
         return new InvoiceDTO(
                 invoice.getTotal(),
                 invoice.getStatus(),
-                invoice.getTransaction()
+                invoice.getTransactions()
         );
     }
 

@@ -22,6 +22,7 @@ public class Transaction {
     private Card card;
     @ManyToOne
     @JoinColumn(name = "invoice_id")
+    @JsonBackReference
     private Invoice invoice;
 
     public Transaction() {
@@ -68,6 +69,14 @@ public class Transaction {
 
     public void setCard(Card card) {
         this.card = card;
+    }
+
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
     }
 
     @Override

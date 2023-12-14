@@ -19,7 +19,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.lucianobass.cardactivity.util.ModelMapper.convertToResponseDTO;
+import static com.lucianobass.cardactivity.util.ModelMapper.convertCardHolderTODTO;
 
 @RestController
 @RequestMapping(value = "/transaction")
@@ -45,7 +45,7 @@ public class TransactionController {
             System.out.println("Transação criada com sucesso.");
             createTransaction.getCard().getCardLimit();
 
-            CardHolderDTO cardHolderDTO = convertToResponseDTO(createTransaction.getCard().getCardHolder());
+            CardHolderDTO cardHolderDTO = convertCardHolderTODTO(createTransaction.getCard().getCardHolder());
             TransactionDTO DTOTransaction = ModelMapper.convertTransacationToDTO(createTransaction);
 
             TransactionResponseDTO responseDTO = new TransactionResponseDTO();
@@ -74,19 +74,19 @@ public class TransactionController {
                 throw new EntityNotFoundException("Transações não encontradas para o CardHolder ID: " + idCardHolder);
             }
 
-            CardHolder cardHolder = transactions.get(0).getCard().getCardHolder(); // Assume que cada transação tem um único cartão associado
+            CardHolder cardHolder = transactions.get(0).getCard().getCardHolder();
 
             CardHolderTransactionDTO cardHolderDTO = new CardHolderTransactionDTO(
                     cardHolder.getName(),
                     cardHolder.getDocumentNumber(),
                     cardHolder.getBirthDate());
 
-            Card card = transactions.get(0).getCard(); // Assumindo que cada transação está associada a um único cartão
+            Card card = transactions.get(0).getCard();
 
-            CardTransactionDTO cardDTO = new CardTransactionDTO(
+
+            CardTransactionDTO  cardDTO = new CardTransactionDTO(
                     card.getNumberCard(),
-                    card.getCardExpiration(),
-                    card.getCardCVV());
+                    card.getCardExpiration());
 
             List<TransactionDTOTra> transactionDTOList = new ArrayList<>();
 
@@ -129,4 +129,3 @@ public class TransactionController {
 //    }
 
 }
-

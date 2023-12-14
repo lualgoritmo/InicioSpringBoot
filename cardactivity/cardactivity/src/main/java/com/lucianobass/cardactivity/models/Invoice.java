@@ -1,5 +1,7 @@
 package com.lucianobass.cardactivity.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -11,7 +13,7 @@ public class Invoice {
     private Long idInvoice;
     private Float total;
     private String status;
-    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Transaction> transactions;
 
     public Invoice() {
@@ -21,6 +23,9 @@ public class Invoice {
         this.total = total;
         this.status = status;
         this.transactions = transactions;
+        if (transactions != null) {
+            transactions.forEach(transaction -> transaction.setInvoice(this));
+        }
     }
 
     public Long getIdInvoice() {
@@ -43,11 +48,11 @@ public class Invoice {
         this.status = status;
     }
 
-    public List<Transaction> getTransaction() {
+    public List<Transaction> getTransactions() {
         return transactions;
     }
 
-    public void setTransaction(List<Transaction> transactions) {
+    public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
     }
 }

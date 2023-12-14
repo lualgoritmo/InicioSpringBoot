@@ -1,49 +1,48 @@
 package com.lucianobass.cardactivity.controllerresources.invoiceDTO;
 
-import com.lucianobass.cardactivity.controllerresources.invoiceDTO.InvoiceDTO;
 import com.lucianobass.cardactivity.controllerresources.transactionDTO.CardHolderTransactionDTO;
 import com.lucianobass.cardactivity.controllerresources.transactionDTO.CardTransactionDTO;
 
 import java.util.List;
 
 public class ListInvoiceDTO {
-    private CardHolderTransactionDTO cardHolder;
-    private CardTransactionDTO card;
-    private List<InvoiceDTO> invoiceDTOList;
+    private CardHolderTransactionDTO cardHolderDTO;
+    private CardTransactionDTO cardDTO;
+    private List<InvoiceDTO> listInvoiceDTO;
 
     public ListInvoiceDTO() {
     }
 
     public ListInvoiceDTO(
-            CardHolderTransactionDTO cardHolder,
-            CardTransactionDTO card,
-            List<InvoiceDTO> invoiceDTOList) {
-        this.cardHolder = cardHolder;
-        this.card = card;
-        this.invoiceDTOList = invoiceDTOList;
+            CardHolderTransactionDTO cardHolderDTO,
+            CardTransactionDTO cardTransactionDTO,
+            List<InvoiceDTO> listInvoiceDTO) {
+        this.cardHolderDTO = cardHolderDTO;
+        this.cardDTO = cardTransactionDTO;
+        this.listInvoiceDTO = listInvoiceDTO;
     }
 
-    public CardHolderTransactionDTO getCardHolder() {
-        return cardHolder;
+    public CardHolderTransactionDTO getCardHolderDTO() {
+        return cardHolderDTO;
     }
 
-    public void setCardHolder(CardHolderTransactionDTO cardHolder) {
-        this.cardHolder = cardHolder;
+    public void setCardHolderDTO(CardHolderTransactionDTO cardHolderDTO) {
+        this.cardHolderDTO = cardHolderDTO;
     }
 
-    public CardTransactionDTO getCard() {
-        return card;
+    public CardTransactionDTO getCardDTO() {
+        return cardDTO;
     }
 
-    public void setCard(CardTransactionDTO card) {
-        this.card = card;
+    public void setCardDTO(CardTransactionDTO cardTransactionDTO) {
+        this.cardDTO = cardTransactionDTO;
     }
 
-    public List<InvoiceDTO> getInvoiceDTOList() {
-        return invoiceDTOList;
+    public List<InvoiceDTO> getListInvoiceDTO() {
+        return listInvoiceDTO;
     }
 
-    public void setInvoiceDTOList(List<InvoiceDTO> invoiceDTOList) {
-        this.invoiceDTOList = invoiceDTOList;
+    public void setListInvoiceDTO(List<InvoiceDTO> listInvoiceDTO) {
+        this.listInvoiceDTO = listInvoiceDTO;
     }
 }

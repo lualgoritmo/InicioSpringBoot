@@ -7,7 +7,7 @@ public class CardTransactionDTO {
     public CardTransactionDTO() {
     }
 
-    public CardTransactionDTO(String numberCard, String expiration, String cvv) {
+    public CardTransactionDTO(String numberCard, String expiration) {
         this.numberCard = numberCard;
         this.expiration = expiration;
     }
