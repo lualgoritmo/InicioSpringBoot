@@ -1,7 +1,6 @@
 package com.lucianobass.cardactivity.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -21,6 +20,9 @@ public class Transaction {
     @JoinColumn(name = "card_id")
     @JsonBackReference
     private Card card;
+    @ManyToOne
+    @JoinColumn(name = "invoice_id")
+    private Invoice invoice;
 
     public Transaction() {
     }
@@ -29,6 +31,7 @@ public class Transaction {
         this.description = description;
         this.priceValue = priceValue;
         this.transactionTime = transactionTime;
+
     }
 
     public Long getIdTransaction() {

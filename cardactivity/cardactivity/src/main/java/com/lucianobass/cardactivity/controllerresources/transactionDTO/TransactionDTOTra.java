@@ -1,11 +1,11 @@
 package com.lucianobass.cardactivity.controllerresources.transactionDTO;
 
-public class TransactionDTOInvoice {
+public class TransactionDTOTra {
     private String description;
     private Float priceValue;
     private String transactionTime;
 
-    public TransactionDTOInvoice(String description, Float priceValue, String transactionTime) {
+    public TransactionDTOTra(String description, Float priceValue, String transactionTime) {
         this.description = description;
         this.priceValue = priceValue;
         this.transactionTime = transactionTime;

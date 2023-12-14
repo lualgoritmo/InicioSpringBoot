@@ -3,7 +3,6 @@ package com.lucianobass.cardactivity.controllerresources.transactionDTO;
 public class CardTransactionDTO {
     private String numberCard;
     private String expiration;
-    private String cvv;
 
     public CardTransactionDTO() {
     }
@@ -11,7 +10,6 @@ public class CardTransactionDTO {
     public CardTransactionDTO(String numberCard, String expiration, String cvv) {
         this.numberCard = numberCard;
         this.expiration = expiration;
-        this.cvv = cvv;
     }
 
     public String getNumberCard() {
@@ -30,11 +28,4 @@ public class CardTransactionDTO {
         this.expiration = expiration;
     }
 
-    public String getCvv() {
-        return cvv;
-    }
-
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
-    }
 }

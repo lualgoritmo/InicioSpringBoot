@@ -18,7 +18,7 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
     private CardHolderService cardHolderService;
 
-    TransactionService(TransactionRepository transactionRepository, CardHolderService cardHolderService) {
+    public TransactionService(TransactionRepository transactionRepository, CardHolderService cardHolderService) {
         this.transactionRepository = transactionRepository;
         this.cardHolderService = cardHolderService;
     }

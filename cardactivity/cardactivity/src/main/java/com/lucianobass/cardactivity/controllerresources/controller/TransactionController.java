@@ -88,10 +88,10 @@ public class TransactionController {
                     card.getCardExpiration(),
                     card.getCardCVV());
 
-            List<TransactionDTOInvoice> transactionDTOList = new ArrayList<>();
+            List<TransactionDTOTra> transactionDTOList = new ArrayList<>();
 
             for (Transaction transaction : transactions) {
-                TransactionDTOInvoice transactionDTOInvoice = new TransactionDTOInvoice(
+                TransactionDTOTra transactionDTOInvoice = new TransactionDTOTra(
                         transaction.getDescription(),
                         transaction.getPriceValue(),
                         transaction.getTransactionTime());

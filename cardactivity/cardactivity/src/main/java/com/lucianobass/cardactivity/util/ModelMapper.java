@@ -2,10 +2,14 @@ package com.lucianobass.cardactivity.util;
 
 import com.lucianobass.cardactivity.controllerresources.dto.CardDTO;
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
+import com.lucianobass.cardactivity.controllerresources.invoiceDTO.InvoiceDTO;
 import com.lucianobass.cardactivity.controllerresources.transactionDTO.TransactionDTO;
 import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.models.CardHolder;
+import com.lucianobass.cardactivity.models.Invoice;
 import com.lucianobass.cardactivity.models.Transaction;
+
+import java.time.LocalDateTime;
 
 public class ModelMapper {
 
@@ -83,5 +87,20 @@ public class ModelMapper {
                 card.getCardCVV(),
                 card.getCardActivate()
         );
+    }
+
+    public static InvoiceDTO convertInvoiceTODTO(Invoice invoice) {
+        return new InvoiceDTO(
+                invoice.getTotal(),
+                invoice.getStatus(),
+                invoice.getTransaction()
+        );
+    }
+
+    public static Invoice convertDTOTOInvoice(InvoiceDTO invoiceDTO) {
+        return new Invoice(
+                invoiceDTO.getTotal(),
+                invoiceDTO.getStatus(),
+                invoiceDTO.getTransactions());
     }
 }

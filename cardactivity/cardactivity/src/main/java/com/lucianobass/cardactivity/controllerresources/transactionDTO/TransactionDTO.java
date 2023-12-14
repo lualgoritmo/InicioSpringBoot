@@ -12,6 +12,7 @@ public class TransactionDTO implements Serializable {
     private String transactionTime;
 
     public TransactionDTO() {
+
     }
 
     public TransactionDTO(String description, Float priceValue, String transactionTime) {
