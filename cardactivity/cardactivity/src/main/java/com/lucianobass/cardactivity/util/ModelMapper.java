@@ -60,8 +60,7 @@ public class ModelMapper {
         }
         Transaction transaction = new Transaction(
                 transactionDTO.getDescription(),
-                transactionDTO.getPriceValue(),
-                transactionDTO.getTransactionTime()
+                transactionDTO.getPriceValue()
         );
         return transaction;
     }
@@ -69,8 +68,8 @@ public class ModelMapper {
     public static TransactionDTO convertTransacationToDTO(Transaction transaction) {
         TransactionDTO transactionDTO = new TransactionDTO(
                 transaction.getDescription(),
-                transaction.getPriceValue(),
-                transaction.getTransactionTime());
+                transaction.getPriceValue()
+        );
         //transactionDTO.setTransactionTime(transaction.getTransactionTime(LocalDateTime.now()));
 
         return transactionDTO;

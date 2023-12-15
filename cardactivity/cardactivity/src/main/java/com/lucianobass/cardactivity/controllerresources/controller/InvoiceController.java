@@ -49,10 +49,9 @@ public class InvoiceController {
         return ModelMapper.convertInvoiceTODTO(createdInvoice);
     }
 
-    @GetMapping("/{id}/invoices")
+    @GetMapping("/{invoiceId}/invoices")
     @ResponseStatus(HttpStatus.OK)
     public ListInvoiceDTO getInvoiceDetails(
-            @PathVariable Long id,
             @PathVariable Long invoiceId) {
         CardHolder cardHolder = new CardHolder();
         CardHolderTransactionDTO cardHolderInvoiceDTO = new CardHolderTransactionDTO(
@@ -72,7 +71,7 @@ public class InvoiceController {
                 cardInvoiceDTO,
                 Collections.singletonList(ModelMapper.convertInvoiceTODTO(invoice))
         );
-
+        System.out.println("Erro aqui");
         return listResponseInvoiceDTO;
     }
 }

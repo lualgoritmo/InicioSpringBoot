@@ -3,22 +3,23 @@ package com.lucianobass.cardactivity.controllerresources.transactionDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TransactionDTO implements Serializable {
 
     private String description;
     private Float priceValue;
-    private String transactionTime;
+    private LocalDateTime transactionTime;
 
     public TransactionDTO() {
-
+        this.transactionTime = LocalDateTime.now();
     }
 
-    public TransactionDTO(String description, Float priceValue, String transactionTime) {
+    public TransactionDTO(String description, Float priceValue) {
         this.description = description;
         this.priceValue = priceValue;
-        this.transactionTime = transactionTime;
+        this.transactionTime = LocalDateTime.now();
     }
 
     public String getDescription() {
@@ -37,11 +38,11 @@ public class TransactionDTO implements Serializable {
         this.description = description;
     }
 
-    public String getTransactionTime() {
+    public LocalDateTime getTransactionTime() {
         return transactionTime;
     }
 
-    public void setTransactionTime(String transactionTime) {
-        this.transactionTime = transactionTime;
+    public void setTransactionTime(LocalDateTime transactionTime) {
+        this.transactionTime = LocalDateTime.now();
     }
 }

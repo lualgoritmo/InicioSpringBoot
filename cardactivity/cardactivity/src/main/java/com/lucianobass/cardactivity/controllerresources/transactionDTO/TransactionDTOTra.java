@@ -1,14 +1,16 @@
 package com.lucianobass.cardactivity.controllerresources.transactionDTO;
 
+import java.time.LocalDateTime;
+
 public class TransactionDTOTra {
     private String description;
     private Float priceValue;
-    private String transactionTime;
+    private LocalDateTime transactionTime;
 
-    public TransactionDTOTra(String description, Float priceValue, String transactionTime) {
+    public TransactionDTOTra(String description, Float priceValue) {
         this.description = description;
         this.priceValue = priceValue;
-        this.transactionTime = transactionTime;
+        this.transactionTime = LocalDateTime.now();
     }
 
     public String getDescription() {
@@ -27,11 +29,11 @@ public class TransactionDTOTra {
         this.priceValue = priceValue;
     }
 
-    public String getTransactionTime() {
+    public LocalDateTime getTransactionTime() {
         return transactionTime;
     }
 
-    public void setTransactionTime(String transactionTime) {
-        this.transactionTime = transactionTime;
+    public void setTransactionTime(LocalDateTime transactionTime) {
+        this.transactionTime = LocalDateTime.now();
     }
 }

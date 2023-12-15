@@ -3,6 +3,7 @@ package com.lucianobass.cardactivity.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -14,7 +15,7 @@ public class Transaction {
     private Long idTransaction;
     private String description;
     private Float priceValue;
-    private String transactionTime;
+    private LocalDateTime transactionTime;
     @ManyToOne
     //@JsonIgnoreProperties("transactions")
     @JoinColumn(name = "card_id")
@@ -28,10 +29,10 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(String description, Float priceValue, String transactionTime) {
+    public Transaction(String description, Float priceValue) {
         this.description = description;
         this.priceValue = priceValue;
-        this.transactionTime = transactionTime;
+        this.transactionTime = LocalDateTime.now();
 
     }
 
@@ -55,12 +56,12 @@ public class Transaction {
         this.priceValue = priceValue;
     }
 
-    public String getTransactionTime() {
+    public LocalDateTime getTransactionTime() {
         return transactionTime;
     }
 
-    public void setTransactionTime(String transactionTime) {
-        this.transactionTime = transactionTime;
+    public void setTransactionTime(LocalDateTime transactionTime) {
+        this.transactionTime = LocalDateTime.now();
     }
 
     public Card getCard() {

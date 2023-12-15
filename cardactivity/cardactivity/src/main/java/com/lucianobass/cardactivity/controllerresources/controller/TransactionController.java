@@ -93,8 +93,7 @@ public class TransactionController {
             for (Transaction transaction : transactions) {
                 TransactionDTOTra transactionDTOInvoice = new TransactionDTOTra(
                         transaction.getDescription(),
-                        transaction.getPriceValue(),
-                        transaction.getTransactionTime());
+                        transaction.getPriceValue());
                 transactionDTOList.add(transactionDTOInvoice);
             }
 

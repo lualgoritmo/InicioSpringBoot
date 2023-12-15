@@ -1,5 +1,6 @@
 package com.lucianobass.cardactivity.services;
 
+import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.models.Invoice;
 import com.lucianobass.cardactivity.models.Transaction;
 import com.lucianobass.cardactivity.repositories.InvoiceRepository;
@@ -14,18 +15,22 @@ import java.util.List;
 public class InvoiceService {
     InvoiceRepository invoiceRepository;
     TransactionService transactionService;
+    CardHolderService cardHolderService;
 
     @Autowired
     public InvoiceService(
-            InvoiceRepository invoiceRepository, TransactionService transactionService) {
+            InvoiceRepository invoiceRepository, TransactionService transactionService,
+            CardHolderService cardHolderService) {
         this.invoiceRepository = invoiceRepository;
         this.transactionService = transactionService;
+        this.cardHolderService = cardHolderService;
     }
 
     public Invoice getInvoiceById(Long invoiceId) {
         return invoiceRepository.findById(invoiceId)
                 .orElseThrow(() -> new EntityNotFoundException("Invoice não encontrado para o ID: " + invoiceId));
     }
+
 
     @Transactional
     public Long createInvoice(Long idCardHolder) {
@@ -43,22 +48,6 @@ public class InvoiceService {
         Invoice savedInvoice = invoiceRepository.save(invoice);
         return savedInvoice.getIdInvoice();
     }
-//    @Transactional
-//    public Long createInvoice(Long idCardHolder) {
-//        List<Transaction> transactions = transactionService.getTransactionToIdCardHolder(idCardHolder);
-//
-//        if (transactions.isEmpty()) {
-//            System.out.println("Está vazio");
-//            return null;
-//        }
-//
-//        Invoice invoice = new Invoice();
-//        invoice.setTransactions(transactions);
-//        calculateTotal(invoice);
-//
-//        Invoice savedInvoice = invoiceRepository.save(invoice);
-//        return savedInvoice.getIdInvoice();
-//    }
 
     private void calculateTotal(Invoice invoice) {
         double total = invoice.getTransactions().stream().mapToDouble(Transaction::getPriceValue).sum();

@@ -28,7 +28,7 @@ public class TransactionService {
         if (idCardHolder == null || transactionDTO == null) {
             throw new IllegalArgumentException("Parâmetros inválidos para criar a transação.");
         }
-
+        //SETAR o invoice na transaction
         Transaction transaction = ModelMapper.convertDTOToTransacation(transactionDTO);
         CardHolder cardHolder = cardHolderService.getByIdCardHolder(idCardHolder);
 
