@@ -35,7 +35,8 @@ public class TransactionService {
         if (idCardHolder == null || transactionDTO == null) {
             throw new IllegalArgumentException("Parâmetros inválidos para criar a transação.");
         }
-        //SETAR o invoice na transaction
+
+        // SETAR o invoice na transaction
         Transaction transaction = ModelMapper.convertDTOToTransacation(transactionDTO);
         CardHolder cardHolder = cardHolderService.getByIdCardHolder(idCardHolder);
 
@@ -48,24 +49,28 @@ public class TransactionService {
         Double remainingLimit = cardHolder.getCard().getCardLimit() - transaction.getPriceValue();
 
         if (remainingLimit < 0) {
-            throw new InsufficientLimitException("Limit Insuficiente para a compra: "
-                    + cardHolder.getCard().getCardLimit()
-            );
-        }
-        //BUSCOU A FATURA ATUAL
-        Invoice invoice = invoiceService.getCurrentInvoice();
-        //SENAÕEXISTE
-        //PRECISA CRIAR A FATURA
-        if (invoice == null) {
-            invoice = new Invoice();
+            throw new InsufficientLimitException("Limit Insuficiente para a compra: " + cardHolder.getCard().getCardLimit());
         }
 
-        //INCREMENTAR O VALOR DA FATURA ATUAL(TOTAL+ VALOR DA TRANSAÇÃO)
+        // BUSCOU A FATURA ATUAL
+        Invoice invoice = invoiceService.getCurrentInvoice();
+
+        // SE NÃO EXISTE, PRECISA CRIAR A FATURA
+        if (invoice == null) {
+            invoice = new Invoice();
+            invoiceService.createInvoice(invoice);  // Salve a instância de Invoice primeiro
+        }
+
+        // INCREMENTAR O VALOR DA FATURA ATUAL (TOTAL + VALOR DA TRANSAÇÃO)
         Float newTotal = invoice.getTotal() + transaction.getPriceValue();
 
         invoice.setTotal(newTotal);
-        //SETAR A INVOICE DENTRO DA TRANSAÇÃO(transaction.set)
+
+        // SETAR A INVOICE DENTRO DA TRANSAÇÃO (transaction.set)
         transaction.setInvoice(invoice);
+
+        // Salve a instância de Invoice antes de salvar a Transaction
+        invoiceService.createInvoice(invoice);
 
         transactionRepository.save(transaction);
         cardHolder.getCard().setCardLimit(remainingLimit);
@@ -73,6 +78,50 @@ public class TransactionService {
 
         return transaction;
     }
+
+//    @Transactional
+//    public Transaction createTransactionWithPurchase(Long idCardHolder, TransactionDTO transactionDTO) {
+//        if (idCardHolder == null || transactionDTO == null) {
+//            throw new IllegalArgumentException("Parâmetros inválidos para criar a transação.");
+//        }
+//        //SETAR o invoice na transaction
+//        Transaction transaction = ModelMapper.convertDTOToTransacation(transactionDTO);
+//        CardHolder cardHolder = cardHolderService.getByIdCardHolder(idCardHolder);
+//
+//        if (cardHolder == null) {
+//            throw new EntityNotFoundException("CardHolder não encontrado para o ID: " + idCardHolder);
+//        }
+//
+//        transaction.setCard(cardHolder.getCard());
+//
+//        Double remainingLimit = cardHolder.getCard().getCardLimit() - transaction.getPriceValue();
+//
+//        if (remainingLimit < 0) {
+//            throw new InsufficientLimitException("Limit Insuficiente para a compra: "
+//                    + cardHolder.getCard().getCardLimit()
+//            );
+//        }
+//        //BUSCOU A FATURA ATUAL
+//        Invoice invoice = invoiceService.getCurrentInvoice();
+//        //SENAÕEXISTE
+//        //PRECISA CRIAR A FATURA
+//        if (invoice == null) {
+//            invoice = new Invoice();
+//        }
+//
+//        //INCREMENTAR O VALOR DA FATURA ATUAL(TOTAL+ VALOR DA TRANSAÇÃO)
+//        Float newTotal = invoice.getTotal() + transaction.getPriceValue();
+//
+//        invoice.setTotal(newTotal);
+//        //SETAR A INVOICE DENTRO DA TRANSAÇÃO(transaction.set)
+//        transaction.setInvoice(invoice);
+//
+//        transactionRepository.save(transaction);
+//        cardHolder.getCard().setCardLimit(remainingLimit);
+//        cardHolderService.updateLimitCard(idCardHolder, cardHolder.getCard());
+//
+//        return transaction;
+//    }
 
     @Transactional
     public List<Transaction> getTransactionToIdCardHolder(Long idCardHolder) {

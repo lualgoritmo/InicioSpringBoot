@@ -13,17 +13,14 @@ import java.util.List;
 
 @Service
 public class InvoiceService {
-    InvoiceRepository invoiceRepository;
-    TransactionService transactionService;
-    CardHolderService cardHolderService;
+    private final InvoiceRepository invoiceRepository;
 
     @Autowired
     public InvoiceService(
-            InvoiceRepository invoiceRepository, TransactionService transactionService,
-            CardHolderService cardHolderService) {
+            InvoiceRepository invoiceRepository)
+    {
         this.invoiceRepository = invoiceRepository;
-        this.transactionService = transactionService;
-        this.cardHolderService = cardHolderService;
+
     }
 
     public List<Invoice> getInvoicesByCardId(Long cardId) {
