@@ -23,7 +23,7 @@ import static com.lucianobass.cardactivity.util.ModelMapper.convertCardHolderTOD
 @RestController
 @RequestMapping(value = "/transaction")
 public class TransactionController {
-    TransactionService transactionService;
+    private final TransactionService transactionService;
 
     @Autowired
     public TransactionController(TransactionService transactionService) {

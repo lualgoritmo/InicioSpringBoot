@@ -4,6 +4,7 @@ import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
 import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.repositories.CardHolderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +22,7 @@ public class CardHolderService {
 
     //@Autowired //Se utilizar o @Autowired aqui, não é necessário a função de baixo.
     private CardHolderRepository cardHolderRepository;
-
+    @Autowired
     public CardHolderService(CardHolderRepository cardHolderRepository) {
         this.cardHolderRepository = cardHolderRepository;
     }

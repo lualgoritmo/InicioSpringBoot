@@ -20,9 +20,12 @@ import static com.lucianobass.cardactivity.util.ModelMapper.convertDTOToCardHold
 @RestController
 @RequestMapping(value = "/cards")
 public class CardHolderController {
-    @Autowired
-    private CardHolderService cardHolderService;
+    private final CardHolderService cardHolderService;
 
+    @Autowired
+    public CardHolderController(CardHolderService cardHolderService) {
+        this.cardHolderService = cardHolderService;
+    }
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public CardHolderDTO createCardHolder(@RequestBody CardHolderDTO cardHolderDTO) {

@@ -6,23 +6,23 @@ import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.models.Invoice;
 import com.lucianobass.cardactivity.models.Transaction;
 import com.lucianobass.cardactivity.repositories.TransactionRepository;
-import com.lucianobass.cardactivity.services.CardHolderService;
 import com.lucianobass.cardactivity.util.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
 @Service
 public class TransactionService {
 
-    private TransactionRepository transactionRepository;
-    private CardHolderService cardHolderService;
-    private InvoiceService invoiceService;
+    private final TransactionRepository transactionRepository;
+    private final CardHolderService cardHolderService;
+    private final InvoiceService invoiceService;
 
+    @Autowired
     public TransactionService(TransactionRepository transactionRepository, CardHolderService cardHolderService,
                               InvoiceService invoiceService) {
         this.transactionRepository = transactionRepository;
