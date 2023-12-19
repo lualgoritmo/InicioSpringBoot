@@ -1,10 +1,6 @@
 package com.lucianobass.cardactivity.controllerresources.controller;
 
 import com.lucianobass.cardactivity.controllerresources.invoiceDTO.InvoiceDTO;
-import com.lucianobass.cardactivity.controllerresources.invoiceDTO.ListInvoiceDTO;
-import com.lucianobass.cardactivity.controllerresources.transactionDTO.CardHolderTransactionDTO;
-import com.lucianobass.cardactivity.controllerresources.transactionDTO.CardTransactionDTO;
-import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.models.Invoice;
 import com.lucianobass.cardactivity.services.CardHolderService;
 import com.lucianobass.cardactivity.services.InvoiceService;
@@ -14,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
@@ -36,42 +31,56 @@ public class InvoiceController {
         this.transactionService = transactionService;
     }
 
-    @PostMapping("/{id}/invoices")
-    @ResponseStatus(HttpStatus.CREATED)
-    public InvoiceDTO createInvoice(@PathVariable Long id) {
-        Long invoiceId = invoiceService.createInvoice(id);
-
-        if (invoiceId == null) {
-            System.out.println("nulo!");
-        }
-
-        Invoice createdInvoice = invoiceService.getInvoiceById(invoiceId);
-        return ModelMapper.convertInvoiceTODTO(createdInvoice);
-    }
-
-    @GetMapping("/{invoiceId}/invoices")
+    @GetMapping("/{cardId}/invoices")
     @ResponseStatus(HttpStatus.OK)
-    public ListInvoiceDTO getInvoiceDetails(
-            @PathVariable Long invoiceId) {
-        CardHolder cardHolder = new CardHolder();
-        CardHolderTransactionDTO cardHolderInvoiceDTO = new CardHolderTransactionDTO(
-                cardHolder.getName(),
-                cardHolder.getDocumentNumber(),
-                cardHolder.getBirthDate()
-        );
-        CardTransactionDTO cardInvoiceDTO = new CardTransactionDTO(
-                cardHolder.getCard().getNumberCard(),
-                cardHolder.getCard().getCardExpiration()
-        );
-        Invoice invoice = invoiceService.getInvoiceById(invoiceId);
-        List<ListInvoiceDTO> listInvoiceDTOList = new ArrayList<>();
+    public List<InvoiceDTO> getInvoicesWithDetailsByCardId(@PathVariable Long cardId) {
+        try {
+            List<Invoice> invoices = invoiceService.getInvoicesWithDetailsByCardId(cardId);
 
-        ListInvoiceDTO listResponseInvoiceDTO = new ListInvoiceDTO(
-                cardHolderInvoiceDTO,
-                cardInvoiceDTO,
-                Collections.singletonList(ModelMapper.convertInvoiceTODTO(invoice))
-        );
-        System.out.println("Erro aqui");
-        return listResponseInvoiceDTO;
+            List<InvoiceDTO> invoiceDTOs = ModelMapper.convertInvoiceTODTO(invoices);
+
+            return invoiceDTOs;
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException("CardHolder não encontrado para o número de documento: " + cardId);
+        }
     }
+
+//
+//    @GetMapping("/{idCard}/invoices")
+//    @ResponseStatus(HttpStatus.OK)
+//    public ListInvoiceDTO getInvoices(@PathVariable Long idCard) {
+//        CardHolder cardHolder = cardHolderService.getByIdCardHolder(idCard);
+//        Card card = cardHolder.getCard();
+//        List<Invoice> invoices = invoiceService.getInvoicesByCardId(idCard);
+//
+//        if (invoices == null || invoices.isEmpty()) {
+//             new IllegalArgumentException("Não acho id, controller");
+//        }
+//
+//        // Aqui você pode escolher retornar a última fatura, ou uma lista delas, dependendo dos requisitos
+//        Invoice latestInvoice = invoices.get(invoices.size() - 1);
+//
+//        CardHolderTransactionDTO cardHolderDTO = new CardHolderTransactionDTO(
+//                cardHolder.getName(),
+//                cardHolder.getDocumentNumber(),
+//                cardHolder.getBirthDate()
+//        );
+//
+//        CardTransactionDTO cardDTO = new CardTransactionDTO(
+//                card.getNumberCard(),
+//                card.getCardExpiration()
+//        );
+//
+//        // Aqui você precisa converter a entidade Invoice para o formato desejado no JSON
+//        InvoiceDTO invoiceDTO = ModelMapper.convertInvoiceTODTO(latestInvoice);
+//
+//        // Monta a resposta final
+//        ListInvoiceDTO listInvoiceDTO = new ListInvoiceDTO(
+//                cardHolderDTO,
+//                cardDTO,
+//                Collections.singletonList(invoiceDTO)
+//        );
+//
+//        return listInvoiceDTO;
+//    }
 }

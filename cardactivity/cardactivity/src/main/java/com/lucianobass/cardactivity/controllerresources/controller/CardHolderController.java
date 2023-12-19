@@ -1,9 +1,9 @@
 package com.lucianobass.cardactivity.controllerresources.controller;
 
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
+import com.lucianobass.cardactivity.controllerresources.dto.UpdateCardStatusRequestDTO;
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
 import com.lucianobass.cardactivity.models.CardHolder;
-import com.lucianobass.cardactivity.controllerresources.dto.UpdateCardStatusRequestDTO;
 import com.lucianobass.cardactivity.services.CardHolderService;
 import com.lucianobass.cardactivity.util.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.lucianobass.cardactivity.util.ModelMapper.*;
+import static com.lucianobass.cardactivity.util.ModelMapper.convertCardHolderTODTO;
+import static com.lucianobass.cardactivity.util.ModelMapper.convertDTOToCardHolder;
 
 @RestController
 @RequestMapping(value = "/cards")
@@ -101,10 +102,9 @@ public class CardHolderController {
 //            return ModelMapper.convertToResponseDTO(cardHolder);
 //        }
 
-        @DeleteMapping(value = "/{id}/deletedcard")
-        @ResponseStatus(code = HttpStatus.NO_CONTENT)
-        public void deleteIdCardHolder (@PathVariable Long id){
-            cardHolderService.deleteIdCard(id);
-        }
+    @DeleteMapping(value = "/{id}/deletedcard")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void deleteIdCardHolder (@PathVariable Long id){
+        cardHolderService.deleteIdCard(id);
     }
-
+}

@@ -1,7 +1,6 @@
 package com.lucianobass.cardactivity.controllerresources.controller;
 
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
-import com.lucianobass.cardactivity.controllerresources.transactionDTO.TransactionDTO;
 import com.lucianobass.cardactivity.controllerresources.transactionDTO.*;
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
 import com.lucianobass.cardactivity.models.Card;
@@ -64,7 +63,7 @@ public class TransactionController {
     @ResponseStatus(value = HttpStatus.OK)
     public ListTransactionDTO getTransactionToIdCardHolder(@PathVariable Long idCardHolder) {
         if (idCardHolder == null) {
-            throw new CardNotFoundExceptions(idCardHolder);
+            throw new CardNotFoundExceptions(null);
         }
 
         try {
@@ -84,7 +83,7 @@ public class TransactionController {
             Card card = transactions.get(0).getCard();
 
 
-            CardTransactionDTO  cardDTO = new CardTransactionDTO(
+            CardTransactionDTO cardDTO = new CardTransactionDTO(
                     card.getNumberCard(),
                     card.getCardExpiration());
 

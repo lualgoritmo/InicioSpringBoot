@@ -6,6 +6,7 @@ import com.lucianobass.cardactivity.models.Transaction;
 import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

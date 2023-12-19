@@ -9,6 +9,9 @@ import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.models.Invoice;
 import com.lucianobass.cardactivity.models.Transaction;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ModelMapper {
 
     public static CardHolderDTO convertCardHolderTODTO(CardHolder cardHolder) {
@@ -19,7 +22,7 @@ public class ModelMapper {
         );
 
         if (cardHolder.getCard() != null) {
-            CardDTO cardDTO = new CardDTO(); //ao invés de usar os set`s do card .. você poderia usar o construtor
+            CardDTO cardDTO = new CardDTO();
             cardDTO.setNumberCard(cardHolder.getCard().getNumberCard());
             cardDTO.setCardExpiration(cardHolder.getCard().getCardExpiration());
             cardDTO.setCardLimit(cardHolder.getCard().getCardLimit());
@@ -58,21 +61,19 @@ public class ModelMapper {
         if (transactionDTO == null) {
             throw new IllegalArgumentException("DTO de transação não pode ser nulo");
         }
-        Transaction transaction = new Transaction(
+        return new Transaction(
                 transactionDTO.getDescription(),
                 transactionDTO.getPriceValue()
         );
-        return transaction;
     }
 
     public static TransactionDTO convertTransacationToDTO(Transaction transaction) {
-        TransactionDTO transactionDTO = new TransactionDTO(
+        //transactionDTO.setTransactionTime(transaction.getTransactionTime(LocalDateTime.now()));
+
+        return new TransactionDTO(
                 transaction.getDescription(),
                 transaction.getPriceValue()
         );
-        //transactionDTO.setTransactionTime(transaction.getTransactionTime(LocalDateTime.now()));
-
-        return transactionDTO;
     }
 
     public static CardDTO convertCardToDTO(Card card) {
@@ -86,18 +87,49 @@ public class ModelMapper {
         );
     }
 
-    public static InvoiceDTO convertInvoiceTODTO(Invoice invoice) {
-        return new InvoiceDTO(
-                invoice.getTotal(),
-                invoice.getStatus(),
-                invoice.getTransactions()
-        );
+    public static List<InvoiceDTO> convertInvoiceTODTO(List<Invoice> invoices) {
+        return invoices.stream()
+                .map(invoice -> new InvoiceDTO(
+                        invoice.getTotal(),
+                        invoice.getStatus(),
+                        invoice.getTransactions()
+                ))
+                .collect(Collectors.toList());
     }
 
-    public static Invoice convertDTOTOInvoice(InvoiceDTO invoiceDTO) {
-        return new Invoice(
-                invoiceDTO.getTotal(),
-                invoiceDTO.getStatus(),
-                invoiceDTO.getTransactions());
+    public static List<TransactionDTO> convertTransactionsToDTO(List<Transaction> transactions) {
+        return transactions.stream()
+                .map(transaction -> new TransactionDTO(
+                        transaction.getDescription(),
+                        transaction.getPriceValue()
+                ))
+                .collect(Collectors.toList());
     }
+
+
+//    public static InvoiceDTO convertInvoiceTODTO(Invoice invoice) {
+//        List<TransactionDTO> transactionDTOs = invoice.getTransactions().stream()
+//                .map(transaction -> new TransactionDTO(transaction.getDescription(), transaction.getPriceValue()))
+//                .collect(Collectors.toList());
+//
+//        return new InvoiceDTO(
+//                invoice.getTotal(),
+//                invoice.getStatus(),
+//                transactionDTOs
+//        );
+//    }
+
+
+//    public static Invoice convertDTOTOInvoice(InvoiceDTO invoiceDTO) {
+//        List<Transaction> transactions = invoiceDTO.getTransactions().stream()
+//                .map(transactionDTO -> new Transaction(transactionDTO.getDescription(), transactionDTO.getPriceValue()))
+//                .collect(Collectors.toList());
+//
+//        return new Invoice(
+//                invoiceDTO.getTotal(),
+//                invoiceDTO.getStatus(),
+//                transactions
+//        );
+//    }
+
 }

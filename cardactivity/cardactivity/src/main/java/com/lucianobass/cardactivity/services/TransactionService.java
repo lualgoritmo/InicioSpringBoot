@@ -3,13 +3,17 @@ package com.lucianobass.cardactivity.services;
 import com.lucianobass.cardactivity.controllerresources.transactionDTO.TransactionDTO;
 import com.lucianobass.cardactivity.exceptions.InsufficientLimitException;
 import com.lucianobass.cardactivity.models.CardHolder;
+import com.lucianobass.cardactivity.models.Invoice;
 import com.lucianobass.cardactivity.models.Transaction;
 import com.lucianobass.cardactivity.repositories.TransactionRepository;
+import com.lucianobass.cardactivity.services.CardHolderService;
 import com.lucianobass.cardactivity.util.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -17,10 +21,13 @@ public class TransactionService {
 
     private TransactionRepository transactionRepository;
     private CardHolderService cardHolderService;
+    private InvoiceService invoiceService;
 
-    public TransactionService(TransactionRepository transactionRepository, CardHolderService cardHolderService) {
+    public TransactionService(TransactionRepository transactionRepository, CardHolderService cardHolderService,
+                              InvoiceService invoiceService) {
         this.transactionRepository = transactionRepository;
         this.cardHolderService = cardHolderService;
+        this.invoiceService = invoiceService;
     }
 
     @Transactional
@@ -45,6 +52,21 @@ public class TransactionService {
                     + cardHolder.getCard().getCardLimit()
             );
         }
+        //BUSCOU A FATURA ATUAL
+        Invoice invoice = invoiceService.getCurrentInvoice();
+        //SENAÕEXISTE
+        //PRECISA CRIAR A FATURA
+        if (invoice == null) {
+            invoice = new Invoice();
+        }
+
+        //INCREMENTAR O VALOR DA FATURA ATUAL(TOTAL+ VALOR DA TRANSAÇÃO)
+        Float newTotal = invoice.getTotal() + transaction.getPriceValue();
+
+        invoice.setTotal(newTotal);
+        //SETAR A INVOICE DENTRO DA TRANSAÇÃO(transaction.set)
+        transaction.setInvoice(invoice);
+
         transactionRepository.save(transaction);
         cardHolder.getCard().setCardLimit(remainingLimit);
         cardHolderService.updateLimitCard(idCardHolder, cardHolder.getCard());
@@ -59,8 +81,11 @@ public class TransactionService {
         if (cardHolder == null) {
             throw new EntityNotFoundException("CardHolder não encontrado para o ID: " + idCardHolder);
         }
-
-        return transactionRepository.findByCardIdCard(cardHolder.getCard().getIdCard());
+        List<Transaction> transactions = transactionRepository.findByCardIdCard(cardHolder.getCard().getIdCard());
+        if (transactions.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return transactions;
     }
 
 }
