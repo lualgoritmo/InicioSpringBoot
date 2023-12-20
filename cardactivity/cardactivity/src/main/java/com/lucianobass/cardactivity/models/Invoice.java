@@ -20,14 +20,14 @@ public class Invoice {
     private List<Transaction> transactions;;
 
     public Invoice() {
-        if (this.total == null) {
-            this.total = 0.0f;
-        }
+//        if (this.total == null) {
+//            this.total = 0.0f;
+//        }
     }
 
     public Invoice(Float total, String status, List<Transaction> transactions,
                    LocalDate DueDate, LocalDate ClosingDate) {
-        this.total = total;
+        this.total =0.0f;
         this.status = status;
         this.transactions = transactions;
         if (transactions != null) {

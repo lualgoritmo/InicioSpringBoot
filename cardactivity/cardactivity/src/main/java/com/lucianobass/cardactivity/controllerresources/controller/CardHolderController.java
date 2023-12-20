@@ -30,7 +30,6 @@ public class CardHolderController {
     @ResponseStatus(code = HttpStatus.CREATED)
     public CardHolderDTO createCardHolder(@RequestBody CardHolderDTO cardHolderDTO) {
         CardHolder createCardHolder = cardHolderService.createCard(convertDTOToCardHolder(cardHolderDTO));
-        //Essa linha é redundante, então você poderia retornar direto o "convertToResponseDTO(createCardHolder) como no exemplo abaixo"
         return convertCardHolderTODTO(createCardHolder);
     }
 

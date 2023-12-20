@@ -17,18 +17,18 @@ import java.util.List;
 @RequestMapping(value = "/cards")
 public class InvoiceController {
 
-    private CardHolderService cardHolderService;
+    private CardHolderService cardHolderServiceInvoice;
     private InvoiceService invoiceService;
-    private TransactionService transactionService;
+    private TransactionService transactionServiceInvoice;
 
     @Autowired
     public InvoiceController(
-            CardHolderService cardHolderService,
+            CardHolderService cardHolderServiceInvoice,
             InvoiceService invoiceService,
-            TransactionService transactionService) {
-        this.cardHolderService = cardHolderService;
+            TransactionService transactionServiceInvoice) {
+        this.cardHolderServiceInvoice = cardHolderServiceInvoice;
         this.invoiceService = invoiceService;
-        this.transactionService = transactionService;
+        this.transactionServiceInvoice = transactionServiceInvoice;
     }
 
     @GetMapping("/{cardId}/invoices")

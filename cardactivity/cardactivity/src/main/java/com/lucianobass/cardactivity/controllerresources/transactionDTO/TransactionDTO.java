@@ -16,11 +16,12 @@ public class TransactionDTO implements Serializable {
         this.transactionTime = LocalDateTime.now();
     }
 
-    public TransactionDTO(String description, Float priceValue) {
+    public TransactionDTO(String description, Float priceValue, LocalDateTime transactionTime) {
         this.description = description;
         this.priceValue = priceValue;
-        this.transactionTime = LocalDateTime.now();
+        this.transactionTime = transactionTime;
     }
+
 
     public String getDescription() {
         return description;
