@@ -8,18 +8,15 @@ import java.util.List;
 public class ListInvoiceDTO {
     private CardHolderTransactionDTO cardHolderDTO;
     private CardTransactionDTO cardDTO;
-    private List<InvoiceDTO> listInvoiceDTO;
+    private List<InvoiceDTO> invoices;
 
     public ListInvoiceDTO() {
     }
 
-    public ListInvoiceDTO(
-            CardHolderTransactionDTO cardHolderDTO,
-            CardTransactionDTO cardTransactionDTO,
-            List<InvoiceDTO> listInvoiceDTO) {
+    public ListInvoiceDTO(CardHolderTransactionDTO cardHolderDTO, CardTransactionDTO cardDTO, List<InvoiceDTO> invoices) {
         this.cardHolderDTO = cardHolderDTO;
-        this.cardDTO = cardTransactionDTO;
-        this.listInvoiceDTO = listInvoiceDTO;
+        this.cardDTO = cardDTO;
+        this.invoices = invoices;
     }
 
     public CardHolderTransactionDTO getCardHolderDTO() {
@@ -34,15 +31,15 @@ public class ListInvoiceDTO {
         return cardDTO;
     }
 
-    public void setCardDTO(CardTransactionDTO cardTransactionDTO) {
-        this.cardDTO = cardTransactionDTO;
+    public void setCardDTO(CardTransactionDTO cardDTO) {
+        this.cardDTO = cardDTO;
     }
 
-    public List<InvoiceDTO> getListInvoiceDTO() {
-        return listInvoiceDTO;
+    public List<InvoiceDTO> getInvoices() {
+        return invoices;
     }
 
-    public void setListInvoiceDTO(List<InvoiceDTO> listInvoiceDTO) {
-        this.listInvoiceDTO = listInvoiceDTO;
+    public void setInvoices(List<InvoiceDTO> invoices) {
+        this.invoices = invoices;
     }
 }

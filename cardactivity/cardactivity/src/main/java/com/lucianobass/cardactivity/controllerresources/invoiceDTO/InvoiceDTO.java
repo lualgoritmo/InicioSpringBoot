@@ -1,7 +1,7 @@
 package com.lucianobass.cardactivity.controllerresources.invoiceDTO;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.lucianobass.cardactivity.models.Transaction;
+import com.lucianobass.cardactivity.controllerresources.transactionDTO.TransactionDTO;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,12 +11,12 @@ public class InvoiceDTO implements Serializable {
 
     private Float total;
     private String status;
-    private List<Transaction> transactions;
+    private List<TransactionDTO> transactions;
 
     public InvoiceDTO() {
     }
 
-    public InvoiceDTO(Float total, String status, List<Transaction> transactions) {
+    public InvoiceDTO(Float total, String status, List<TransactionDTO> transactions) {
         this.total = total;
         this.status = status;
         this.transactions = transactions;
@@ -38,11 +38,11 @@ public class InvoiceDTO implements Serializable {
         this.status = status;
     }
 
-    public List<Transaction> getTransactions() {
+    public List<TransactionDTO> getTransactions() {
         return transactions;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
+    public void setTransactions(List<TransactionDTO> transactions) {
         this.transactions = transactions;
     }
 }

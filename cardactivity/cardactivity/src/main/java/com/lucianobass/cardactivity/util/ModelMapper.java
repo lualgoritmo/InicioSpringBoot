@@ -70,7 +70,7 @@ public class ModelMapper {
         );
     }
 
-    public static List<Transaction> returnListTransactionDTO(List<Transaction> transactions) {
+    public static List<Transaction> returnListTransaction(List<Transaction> transactions) {
         if (transactions == null) {
             return Collections.emptyList();
         }
@@ -89,26 +89,24 @@ public class ModelMapper {
 
         return new TransactionDTO(
                 transaction.getDescription(),
-                transaction.getPriceValue(),
-                transaction.getTransactionTime()
+                transaction.getPriceValue()
         );
     }
 
-    public static List<InvoiceDTO> convertInvoiceTODTO(List<Invoice> invoices) {
-        return invoices.stream()
-                .map(invoice -> new InvoiceDTO(
-                   invoice.getTotal(),
-                   invoice.getStatus(),
-                   invoice.getTransactions()
-                ))
-                .collect(Collectors.toList());
-    }
+//    public static List<InvoiceDTO> convertInvoiceTODTO(List<Invoice> invoices) {
+//        return invoices.stream()
+//                .map(invoice -> new InvoiceDTO(
+//                   invoice.getTotal(),
+//                   invoice.getStatus(),
+//                   invoice.getTransactions()
+//                ))
+//                .collect(Collectors.toList());
+//    }
     public static List<TransactionDTO> convertListTransactionTODTO(List<Transaction> transactions) {
         return transactions.stream()
                 .map(transaction -> new TransactionDTO(
                         transaction.getDescription(),
-                        transaction.getPriceValue(),
-                        transaction.getTransactionTime()
+                        transaction.getPriceValue()
                 ))
                 .collect(Collectors.toList());
     }

@@ -1,7 +1,6 @@
 package com.lucianobass.cardactivity.models;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -18,15 +17,18 @@ public class Invoice {
     private LocalDate closingDate;
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transaction> transactions;;
-
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Card card;
     public Invoice() {
 //        if (this.total == null) {
 //            this.total = 0.0f;
 //        }
     }
-
+    public Invoice(Card card) {
+        this.card = card;
+    }
     public Invoice(Float total, String status, List<Transaction> transactions,
-                   LocalDate DueDate, LocalDate ClosingDate) {
+                   LocalDate DueDate, LocalDate ClosingDate, Card card) {
         this.total =0.0f;
         this.status = status;
         this.transactions = transactions;
@@ -35,6 +37,7 @@ public class Invoice {
         }
         this.dueDate = DueDate;
         this.closingDate = ClosingDate;
+        this.card = card;
     }
 
     public Long getIdInvoice() {
@@ -81,6 +84,13 @@ public class Invoice {
         this.closingDate = closingDate;
     }
 
+    public Card getCard() {
+        return card;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
+    }
 
     @PrePersist
     public void prePersist() {
@@ -97,7 +107,7 @@ public class Invoice {
         }
 
         if(this.total == null) {
-            this.total = 0f;
+            this.total = 0.0f;
         }
     }
 }

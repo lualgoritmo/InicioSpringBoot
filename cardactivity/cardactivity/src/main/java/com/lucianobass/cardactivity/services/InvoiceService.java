@@ -1,5 +1,6 @@
 package com.lucianobass.cardactivity.services;
 
+import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.models.Invoice;
 import com.lucianobass.cardactivity.models.Transaction;
 import com.lucianobass.cardactivity.repositories.InvoiceRepository;
@@ -24,7 +25,8 @@ public class InvoiceService {
     }
 
     public List<Invoice> getInvoicesByCardId(Long cardId) {
-        List<Invoice> invoices = invoiceRepository.findInvoicesWithDetailsByCardId(cardId);
+        List<Invoice> invoices =
+                invoiceRepository.findInvoicesWithDetailsByCardId(cardId);
         if (invoices.isEmpty()) {
             throw new EntityNotFoundException("Lista Vazia, SERVICE Invoice");
         }
@@ -44,8 +46,8 @@ public class InvoiceService {
     }
 
     @Transactional
-    public Invoice getCurrentInvoice() {
-        return invoiceRepository.findInvoiceClosingDate(LocalDate.now());
+    public Invoice getCurrentInvoice(Card card) {
+        return invoiceRepository.findInvoiceClosingDateAndCardId(LocalDate.now(), card.getIdCard());
     }
 
     @Transactional

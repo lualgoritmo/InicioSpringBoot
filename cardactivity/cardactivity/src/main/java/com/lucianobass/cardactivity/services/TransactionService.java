@@ -53,11 +53,11 @@ public class TransactionService {
         }
 
         // BUSCOU A FATURA ATUAL
-        Invoice invoice = invoiceService.getCurrentInvoice();
+        Invoice invoice = invoiceService.getCurrentInvoice(cardHolder.getCard());
 
         // SE NÃO EXISTE, PRECISA CRIAR A FATURA
         if (invoice == null) {
-            invoice = new Invoice();
+            invoice = new Invoice(cardHolder.getCard());
             invoiceService.createInvoice(invoice);  // Salve a instância de Invoice primeiro
         }
 
@@ -68,9 +68,6 @@ public class TransactionService {
 
         // SETAR A INVOICE DENTRO DA TRANSAÇÃO (transaction.set)
         transaction.setInvoice(invoice);
-
-        // Salve a instância de Invoice antes de salvar a Transaction
-        invoiceService.createInvoice(invoice);
 
         transactionRepository.save(transaction);
         cardHolder.getCard().setCardLimit(remainingLimit);

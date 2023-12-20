@@ -17,6 +17,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     @Query("SELECT DISTINCT i FROM Invoice i JOIN FETCH i.transactions t WHERE t.card.idCard = :cardId")
     List<Invoice> findInvoicesWithDetailsByCardId(@Param("cardId") Long cardId);
 
-    @Query("SELECT i FROM Invoice i WHERE YEAR(i.closingDate) = YEAR(:date) AND MONTH(i.closingDate) = MONTH(:date)")
-    Invoice findInvoiceClosingDate(LocalDate date);
+    @Query("SELECT i FROM Invoice i WHERE YEAR(i.closingDate) = YEAR(:date) AND MONTH(i.closingDate) = MONTH(:date) AND i.card.idCard = :idCard")
+    Invoice findInvoiceClosingDateAndCardId(LocalDate date, Long idCard);
 }
