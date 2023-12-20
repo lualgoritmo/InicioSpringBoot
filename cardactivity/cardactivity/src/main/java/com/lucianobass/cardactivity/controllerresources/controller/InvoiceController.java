@@ -28,7 +28,6 @@ public class InvoiceController {
     private CardHolderService serviceCardHolderInvoice;
     private
     InvoiceService invoiceService;
-    private TransactionService transactionServiceInvoice;
 
     @Autowired
     public InvoiceController(
@@ -37,10 +36,9 @@ public class InvoiceController {
             TransactionService transactionServiceInvoice) {
         this.serviceCardHolderInvoice = serviceCardHolder;
         this.invoiceService = invoiceService;
-        this.transactionServiceInvoice = transactionServiceInvoice;
     }
 
-//    @GetMapping("/{cardId}/invoices")
+    //    @GetMapping("/{cardId}/invoices")
 //    @ResponseStatus(HttpStatus.OK)
 //    public List<InvoiceDTO> getInvoicesWithDetailsByCardId(@PathVariable Long cardId) {
 //        try {
@@ -53,76 +51,73 @@ public class InvoiceController {
 //            throw new EntityNotFoundException("CardHolder não encontrado para o número de documento: " + cardId);
 //        }
 //    }
-@GetMapping("/{cardId}/invoices")
-@ResponseStatus(HttpStatus.OK)
-public ResponseEntity<ListInvoiceDTO> getInvoices(@PathVariable Long cardId) {
-    try {
-        List<Invoice> invoices = invoiceService.getInvoicesWithDetailsByCardId(cardId);
+    @GetMapping("/{cardId}/invoices")
+    @ResponseStatus(HttpStatus.OK)
+    public ListInvoiceDTO getInvoices(@PathVariable Long cardId) {
+        try {
+            List<Invoice> invoices = invoiceService.getInvoicesWithDetailsByCardId(cardId);
 
-        if (invoices.isEmpty()) {
-            throw new EntityNotFoundException("Não há faturas para o cartão com ID: " + cardId);
+            if (invoices.isEmpty()) {
+                throw new EntityNotFoundException("Não há faturas para o cartão com ID: " + cardId);
+            }
+
+            CardHolder cardHolder = serviceCardHolderInvoice.getByIdCardHolder(cardId);
+            Card card = cardHolder.getCard();
+
+            CardHolderTransactionDTO cardHolderDTO = new CardHolderTransactionDTO(
+                    cardHolder.getName(),
+                    cardHolder.getDocumentNumber(),
+                    cardHolder.getBirthDate()
+            );
+
+            CardTransactionDTO cardDTO = new CardTransactionDTO(
+                    card.getNumberCard(),
+                    card.getCardExpiration()
+            );
+
+            List<InvoiceDTO> invoiceDTOList = invoices.stream()
+                    .map(invoice -> {
+                        InvoiceDTO dto = new InvoiceDTO();
+                        dto.setStatus(invoice.getStatus());
+
+                        List<TransactionDTO> transactionDTOList = invoice.getTransactions().stream()
+                                .map(transaction -> new TransactionDTO(
+                                        transaction.getDescription(),
+                                        transaction.getPriceValue()))
+                                .collect(Collectors.toList());
+
+                        dto.setTransactions(transactionDTOList);
+
+                        Float total = transactionDTOList.stream()
+                                .map(TransactionDTO::getPriceValue)
+                                .reduce(0f, Float::sum);
+                        dto.setTotal(total);
+
+                        return dto;
+                    }).collect(Collectors.toList());
+
+            Float total = invoiceDTOList.stream()
+                    .map(InvoiceDTO::getTotal)
+                    .reduce(0f, Float::sum);
+
+            InvoiceDTO consolidatedInvoice = new InvoiceDTO();
+            consolidatedInvoice.setStatus("IN_PROGRESS");
+            consolidatedInvoice.setTotal(total);
+
+            List<TransactionDTO> consolidatedTransactions = invoiceDTOList.stream()
+                    .flatMap(invoiceDTO -> invoiceDTO.getTransactions().stream())
+                    .collect(Collectors.toList());
+
+            consolidatedInvoice.setTransactions(consolidatedTransactions);
+
+            ListInvoiceDTO listInvoiceDTO = new ListInvoiceDTO(cardHolderDTO, cardDTO,
+                    Collections.singletonList(consolidatedInvoice));
+
+            return listInvoiceDTO;
+        } catch (EntityNotFoundException e) {
+            return null;
         }
-
-        CardHolder cardHolder = serviceCardHolderInvoice.getByIdCardHolder(cardId);
-        Card card = cardHolder.getCard();
-
-        CardHolderTransactionDTO cardHolderDTO = new CardHolderTransactionDTO(
-                cardHolder.getName(),
-                cardHolder.getDocumentNumber(),
-                cardHolder.getBirthDate()
-        );
-
-        CardTransactionDTO cardDTO = new CardTransactionDTO(
-                card.getNumberCard(),
-                card.getCardExpiration()
-        );
-
-        List<InvoiceDTO> invoiceDTOList = invoices.stream()
-                .map(invoice -> {
-                    InvoiceDTO dto = new InvoiceDTO();
-                    dto.setStatus(invoice.getStatus());
-
-                    List<TransactionDTO> transactionDTOList = invoice.getTransactions().stream()
-                            .map(transaction -> new TransactionDTO(
-                                    transaction.getDescription(),
-                                    transaction.getPriceValue()))
-                            .collect(Collectors.toList());
-
-                    dto.setTransactions(transactionDTOList);
-
-                    // Calcular o valor total como Float
-                    Float total = transactionDTOList.stream()
-                            .map(TransactionDTO::getPriceValue)
-                            .reduce(0f, Float::sum);
-                    dto.setTotal(total);
-
-                    return dto;
-                }).collect(Collectors.toList());
-
-        // Calcular o valor total da soma de todas as transações
-        Float total = invoiceDTOList.stream()
-                .map(InvoiceDTO::getTotal)
-                .reduce(0f, Float::sum);
-
-        // Criar um único objeto InvoiceDTO que contém todas as transações
-        InvoiceDTO consolidatedInvoice = new InvoiceDTO();
-        consolidatedInvoice.setStatus("IN_PROGRESS");
-        consolidatedInvoice.setTotal(total);
-
-        List<TransactionDTO> consolidatedTransactions = invoiceDTOList.stream()
-                .flatMap(invoiceDTO -> invoiceDTO.getTransactions().stream())
-                .collect(Collectors.toList());
-
-        consolidatedInvoice.setTransactions(consolidatedTransactions);
-
-        // Criar a resposta ListInvoiceDTO
-        ListInvoiceDTO listInvoiceDTO = new ListInvoiceDTO(cardHolderDTO, cardDTO, Collections.singletonList(consolidatedInvoice));
-
-        return new ResponseEntity<>(listInvoiceDTO, HttpStatus.OK);
-    } catch (EntityNotFoundException e) {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-}
 
 
 //    @GetMapping("/{cardId}/invoices")
