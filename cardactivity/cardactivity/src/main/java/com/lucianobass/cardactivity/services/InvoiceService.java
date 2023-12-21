@@ -47,7 +47,7 @@ public class InvoiceService {
 
     @Transactional
     public Invoice getCurrentInvoice(Card card) {
-        return invoiceRepository.findInvoiceClosingDateAndCardId(LocalDate.now(), card.getIdCard());
+        return invoiceRepository.findFirstInvoiceByCardIdCardOrderByClosingDateDesc(card.getIdCard());
     }
 
     @Transactional

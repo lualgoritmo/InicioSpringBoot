@@ -1,160 +1,161 @@
 package com.lucianobass.cardactivity.services;
 
+import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
+import com.lucianobass.cardactivity.models.Card;
+import com.lucianobass.cardactivity.models.CardHolder;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+
+import static com.jayway.jsonpath.internal.path.PathCompiler.fail;
+import static com.lucianobass.cardactivity.models.CardHolder.generateNumberCard;
+import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class CardHolderServiceTest {
-//    @Autowired
-//    CardHolderService cardHolderService = new CardHolderService();
-//
-//    @Test
-//    void testCreateCard() {
-//        CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
-//        cardHolder.setCard(new Card(null,
-//                generateNumberCard(16),
-//                "30/02",
-//                "100.00",
-//                "100.00",
-//                "123",
-//                false,
-//                null));
-//        CardHolderDTO cardHolderDTO = cardHolderService.convertToResponseDTO(cardHolder);
-//        System.out.println("VER SE O ID NÃO É NULO: " + cardHolderDTO.getId());
-//        cardHolderService.createCard(cardHolderDTO);
-//        assertEquals(cardHolder.getName(), cardHolderDTO.getName());
-//        assertEquals(cardHolder.getDocumentNumber(), cardHolderDTO.getDocumentNumber());
-//        assertEquals(cardHolder.getBirthDate(), cardHolderDTO.getBirthDate());
-//        assertNotEquals(cardHolder.generateNumberCard(16).replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x"),
-//                cardHolderDTO.getCard().getNumberCard());
-//        assertEquals(cardHolder.getCard().getCardLimit(), cardHolderDTO.getCard().getCardLimit());
-//        assertEquals(cardHolder.generateNumberCard(3).replaceAll("(\\d)",
-//                "x"), cardHolderDTO.getCard().getCardCVV());
-//        assertEquals(cardHolder.getCard().getCardExpiration(), cardHolderDTO.getCard().getCardExpiration());
-//    }
-//
-//    @Test
-//    void testGetCardHolderById() {
-//        // Arrange
-//        CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
-//        CardHolderDTO savedCardHolder = cardHolderService.createCard(cardHolderService.convertToResponseDTO(cardHolder));
-//
-//        // Imprimir informações úteis
-//        System.out.println("ID salvo: " + savedCardHolder.getId());
-//
-//        // Act
-//        CardHolderDTO retrievedCardHolder = cardHolderService.getByIdCardHolder(savedCardHolder.getId());
-//
-//        // Imprimir informações úteis
-//        System.out.println("ID recuperado: " + retrievedCardHolder.getId());
-//
-//        // Assert
-//        assertNotNull(retrievedCardHolder.getId(), "O ID não deveria ser nulo ao buscar por ID");
-//        assertNotNull(savedCardHolder.getId(), "O ID não deveria ser nulo após a criação");
-//        assertEquals(savedCardHolder.getId(), retrievedCardHolder.getId(), "O ID retornado deve ser igual ao ID salvo");
-//
-//    }
-//
-//    @Test
-//    void testGetAllCardsHolders() {
-//        //Arrange
-//        CardHolder cardHolderOne = new CardHolder("Luciano", "123456789", "1983-10-10");
-//        CardHolder cardHolderTwo = new CardHolder("Maria", "123456789", "1963-02-12");
-//        CardHolderDTO cardHolderDTOOne = cardHolderService.convertToResponseDTO(cardHolderOne);
-//        CardHolderDTO cardHolderDTOTwo = cardHolderService.convertToResponseDTO(cardHolderTwo);
-//        //ACT
-//        cardHolderService.createCard(cardHolderDTOOne);
-//        cardHolderService.createCard(cardHolderDTOTwo);
-//        List<CardHolderDTO> listDTO = cardHolderService.getAllCardsHolders();
-//        CardHolderDTO firstDTO = listDTO.get(0);
-//        //ASSERT DTO
-//        assertFalse(listDTO.contains(cardHolderDTOOne));
-//        assertEquals("Luciano", firstDTO.getName());
-//        assertEquals(cardHolderOne.getDocumentNumber(), firstDTO.getDocumentNumber());
-//        assertEquals(cardHolderOne.getBirthDate(), firstDTO.getBirthDate());
-//        //ASSERT
-//        //assertNotNull(cardHolderDTOOne.getId(), "O ID não deveria ser nulo após a criação do cartão.");
-//        assertEquals(2, listDTO.size());
-//        assertFalse(listDTO.size() == 0, "É falso");
-//        assertTrue(listDTO.size() > 0, "É verdadeiro");
-//        assertFalse(listDTO.isEmpty());
-//        //assertTrue(listDTO.isEmpty());
-//    }
-//
-//    //    @Test
-////    void testGetByIdCardHolder() {
-////        //Arrange
-////        CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
-////        CardHolderDTO cardHolderDTO = cardHolderService.convertToResponseDTO(cardHolder);
-////        CardHolderDTO cardDTO = cardHolderService.createCard(cardHolderDTO);
-////        //ACT
-////        CardHolderDTO retrievedCardHolderDTO = cardHolderService.getByIdCardHolder(cardHolderDTO.getId());
-////        //ASSERT
-////        assertNotNull(retrievedCardHolderDTO, "O CardHolderDTO recuperado não deveria ser nulo");
-////        assertEquals(cardHolderDTO.getId(), retrievedCardHolderDTO.getId(), "Os IDs deveriam ser iguais");
-////    }
-//
-//    @Test
-//    void testUpdateCardHolder() {
-//        // Arrange
-//        CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
-//        CardHolderDTO savedCardHolder = cardHolderService.createCard(cardHolderService.convertToResponseDTO(cardHolder));
-//
-//        // Modifique alguns atributos para simular uma atualização
-//        String newName = "Luciano Updated";
-//        String newDocumentNumber = "987654321";
-//        String newBirthDate = "1990-01-01";
-//
-//        CardHolderDTO updatedCardHolderDTO = new CardHolderDTO();
-//        updatedCardHolderDTO.setName(newName);
-//        updatedCardHolderDTO.setDocumentNumber(newDocumentNumber);
-//        updatedCardHolderDTO.setBirthDate(newBirthDate);
-//
-//        // Act
-//        cardHolderService.updateCardHolder(savedCardHolder.getId(), updatedCardHolderDTO);
-//
-//        // Assert
-//        // Obtenha o CardHolder após a atualização
-//        CardHolderDTO retrievedCardHolder = cardHolderService.getByIdCardHolder(savedCardHolder.getId());
-//
-//        // Verifique se os atributos foram atualizados corretamente
-//        assertEquals(newName, retrievedCardHolder.getName(), "O nome não foi atualizado corretamente");
-//        assertEquals(newDocumentNumber, retrievedCardHolder.getDocumentNumber(), "O número do documento não foi atualizado corretamente");
-//        assertEquals(newBirthDate, retrievedCardHolder.getBirthDate(), "A data de nascimento não foi atualizada corretamente");
-//    }
-//
-//
-////    @Test
-////    void testDeleteIdCard() {
-////        // Arrange
-////        CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
-////        CardHolderDTO[] savedCardHolder = { cardHolderService.createCard(cardHolderService.convertToResponseDTO(cardHolder)) };
-////
-////        // Verifique se o ID não é nulo antes de chamar deleteIdCard
-////        assertNotNull(savedCardHolder[0].getId(), "O ID não deveria ser nulo após a criação");
-////
-////        // Imprima informações úteis para diagnóstico
-////        System.out.println("ID do CardHolder após a criação: " + savedCardHolder[0].getId());
-////
-////        // Agora, recupere novamente o CardHolder após a criação para garantir que o ID seja gerado
-////        savedCardHolder[0] = cardHolderService.getByIdCardHolder(savedCardHolder[0].getId());
-////
-////        // Act
-////        try {
-////            cardHolderService.deleteIdCard(savedCardHolder[0].getId());
-////        } catch (Exception e) {
-////            // Se for lançada uma exceção, falhe o teste
-////            fail("Não deveria lançar exceção ao excluir um CardHolder existente. Exceção: " + e.getMessage());
-////        }
-////
-////        // Assert
-////        assertThrows(CardNotFoundExceptions.class, () -> {
-////            cardHolderService.getByIdCardHolder(savedCardHolder[0].getId());
-////        }, "Deveria lançar exceção de CardNotFoundExceptions após excluir o CardHolder");
-////
-////        // Tente excluir novamente para garantir que não lance uma exceção diferente
-////        assertDoesNotThrow(() -> {
-////            cardHolderService.deleteIdCard(savedCardHolder[0].getId());
-////        }, "Não deveria lançar exceção após tentar excluir um CardHolder inexistente");
-////    }
+    @Autowired
+    CardHolderService cardHolderService;
 
+    @Test
+    void testCreateCard() {
+        CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
+        cardHolder.setCard(new Card(null,
+               generateNumberCard(16),
+                "30/02",
+                "100.00",
+                100.00,
+                "123",
+                false,
+                null,
+                null));
+        cardHolder = cardHolderService.getByIdCardHolder(cardHolder.getIdCardHolder());
+        System.out.println("VER SE O ID NÃO É NULO: " + cardHolder.getIdCardHolder());
+        cardHolderService.createCard(cardHolder);
+        assertEquals(cardHolder.getName(), cardHolder.getName());
+        assertEquals(cardHolder.getDocumentNumber(), cardHolder.getDocumentNumber());
+        assertEquals(cardHolder.getBirthDate(), cardHolder.getBirthDate());
+        assertNotEquals(generateNumberCard(16).replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x"),
+                cardHolder.getCard().getNumberCard());
+        assertEquals(cardHolder.getCard().getCardLimit(), cardHolder.getCard().getCardLimit());
+        assertEquals(generateNumberCard(3).replaceAll("(\\d)",
+                "x"), cardHolder.getCard().getCardCVV());
+        assertEquals(cardHolder.getCard().getCardExpiration(), cardHolder.getCard().getCardExpiration());
+    }
+
+    @Test
+    void testGetCardHolderById() {
+        // Arrange
+        CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
+        CardHolder savedCardHolder = cardHolderService.createCard(cardHolder);
+
+        // Imprimir informações úteis
+        System.out.println("ID salvo: " + savedCardHolder.getIdCardHolder());
+
+        // Act
+        CardHolder retrievedCardHolder = cardHolderService.getByIdCardHolder(savedCardHolder.getIdCardHolder());
+
+        // Imprimir informações úteis
+        System.out.println("ID recuperado: " + retrievedCardHolder.getIdCardHolder());
+
+        // Assert
+        assertNotNull(retrievedCardHolder.getIdCardHolder(), "O ID não deveria ser nulo ao buscar por ID");
+        assertNotNull(savedCardHolder.getIdCardHolder(), "O ID não deveria ser nulo após a criação");
+        assertEquals(savedCardHolder.getIdCardHolder(), retrievedCardHolder.getIdCardHolder(), "O ID retornado deve ser igual ao ID salvo");
+
+    }
+
+    @Test
+    void testGetAllCardsHolders() {
+        //Arrange
+        CardHolder cardHolderOne = new CardHolder("Luciano", "123456789", "1983-10-10");
+        CardHolder cardHolderTwo = new CardHolder("Maria", "123456789", "1963-02-12");
+        //ACT
+        cardHolderService.createCard(cardHolderOne);
+        cardHolderService.createCard(cardHolderTwo);
+        List<CardHolder> listCardHolder = cardHolderService.getAllCardsHolders();
+        CardHolder firstOne = listCardHolder.get(0);
+        //ASSERT DTO
+        assertFalse(listCardHolder.contains(cardHolderOne));
+        assertEquals("Luciano", firstOne.getName());
+        assertEquals(cardHolderOne.getDocumentNumber(), firstOne.getDocumentNumber());
+        assertEquals(cardHolderOne.getBirthDate(), firstOne.getBirthDate());
+        //ASSERT
+        //assertNotNull(cardHolderDTOOne.getId(), "O ID não deveria ser nulo após a criação do cartão.");
+        assertEquals(3, listCardHolder.size());
+        assertFalse(listCardHolder.isEmpty(), "É falso");
+        assertTrue(listCardHolder.size() > 0, "É verdadeiro");
+        assertFalse(listCardHolder.isEmpty());
+        //assertTrue(listDTO.isEmpty());
+    }
+
+    //    @Test
+//    void testGetByIdCardHolder() {
+//        //Arrange
+//        CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
+//        CardHolderDTO cardHolderDTO = cardHolderService.convertToResponseDTO(cardHolder);
+//        CardHolderDTO cardDTO = cardHolderService.createCard(cardHolderDTO);
+//        //ACT
+//        CardHolderDTO retrievedCardHolderDTO = cardHolderService.getByIdCardHolder(cardHolderDTO.getId());
+//        //ASSERT
+//        assertNotNull(retrievedCardHolderDTO, "O CardHolderDTO recuperado não deveria ser nulo");
+//        assertEquals(cardHolderDTO.getId(), retrievedCardHolderDTO.getId(), "Os IDs deveriam ser iguais");
+//    }
+
+    @Test
+    void testUpdateCardHolder() {
+        // Arrange
+        CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
+        CardHolder savedCardHolder = cardHolderService.createCard(cardHolder);
+
+        String newName = "Luciano UPDATE";
+        String newDocumentNumber = "00000000000";
+        String newBirthDate = "1983-10-10";
+
+        CardHolder cardHolderUpdate = new CardHolder();
+        cardHolderUpdate.setName(newName);
+        cardHolderUpdate.setDocumentNumber(newDocumentNumber);
+        cardHolderUpdate.setBirthDate(newBirthDate);
+
+        // Act
+        cardHolderService.updateCardHolder(savedCardHolder.getIdCardHolder(), cardHolderUpdate);
+
+        // Assert
+        CardHolder retrievedCardHolder = cardHolderService.getByIdCardHolder(savedCardHolder.getIdCardHolder());
+
+        assertEquals(newName, retrievedCardHolder.getName(), "O nome não foi atualizado corretamente");
+        assertEquals(newDocumentNumber, retrievedCardHolder.getDocumentNumber(), "O número do documento não foi atualizado corretamente");
+        assertEquals(newBirthDate, retrievedCardHolder.getBirthDate(), "A data de nascimento não foi atualizada corretamente");
+    }
+
+
+    @Test
+    void testDeleteIdCard() {
+       // Arrange
+        CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
+        CardHolder savedCardHolder = cardHolderService.createCard(cardHolder);
+
+        assertNotNull(savedCardHolder.getIdCardHolder(), "O ID não deveria ser nulo após a criação");
+
+        savedCardHolder= cardHolderService.getByIdCardHolder(savedCardHolder.getIdCardHolder());
+        System.out.println(savedCardHolder.getIdCardHolder() + "IDCARDHOLDER");
+        // Act
+        try {
+            cardHolderService.deleteIdCard(savedCardHolder.getIdCardHolder());
+        } catch (Exception e) {
+            fail("Não deveria lançar exceção ao excluir um CardHolder existente. Exceção: " + e.getMessage());
+        }
+
+       // Assert
+        CardHolder finalSavedCardHolder = savedCardHolder;
+        assertThrows(CardNotFoundExceptions.class, () -> {
+            cardHolderService.getByIdCardHolder(finalSavedCardHolder.getIdCardHolder()); },
+                "Deveria lançar exceção de CardNotFoundExceptions após excluir o CardHolder");
+
+       assertDoesNotThrow(() -> {
+           cardHolderService.deleteIdCard(finalSavedCardHolder.getIdCardHolder());
+       }, "Não deveria lançar exceção após tentar excluir um CardHolder inexistente");
+   }
 }

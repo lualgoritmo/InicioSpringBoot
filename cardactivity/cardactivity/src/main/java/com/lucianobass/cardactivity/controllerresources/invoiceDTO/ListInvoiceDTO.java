@@ -10,16 +10,14 @@ public class ListInvoiceDTO {
     private CardHolderTransactionDTO cardHolderDTO;
     private CardTransactionDTO cardDTO;
     private List<InvoiceDTO> invoiceDTOS;
-    private CardHolderTransactionDTO cardHolder;
 
     public ListInvoiceDTO() {
     }
 
-    public ListInvoiceDTO(CardHolderTransactionDTO cardHolderDTO, CardTransactionDTO cardDTO, List<InvoiceDTO> invoices, CardHolderTransactionDTO cardHolder) {
+    public ListInvoiceDTO(CardHolderTransactionDTO cardHolderDTO, CardTransactionDTO cardDTO, List<InvoiceDTO> invoices) {
         this.cardHolderDTO = cardHolderDTO;
         this.cardDTO = cardDTO;
         this.invoiceDTOS = invoices;
-        this.cardHolder = cardHolder;
     }
 
     public CardHolderTransactionDTO getCardHolderDTO() {
@@ -46,11 +44,4 @@ public class ListInvoiceDTO {
         this.invoiceDTOS = invoiceDTOS;
     }
 
-    public CardHolderTransactionDTO getCardHolder() {
-        return cardHolder;
-    }
-
-    public void setCardHolder(CardHolderTransactionDTO cardHolder) {
-        this.cardHolder = cardHolder;
-    }
 }

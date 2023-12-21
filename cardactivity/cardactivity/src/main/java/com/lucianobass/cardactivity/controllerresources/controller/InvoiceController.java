@@ -1,5 +1,6 @@
 package com.lucianobass.cardactivity.controllerresources.controller;
 
+import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
 import com.lucianobass.cardactivity.controllerresources.invoiceDTO.InvoiceDTO;
 import com.lucianobass.cardactivity.controllerresources.invoiceDTO.ListInvoiceDTO;
 import com.lucianobass.cardactivity.controllerresources.transactionDTO.CardHolderTransactionDTO;
@@ -70,13 +71,7 @@ public class InvoiceController {
                     cardHolder.getBirthDate()
             );
 
-            CardHolderTransactionDTO newCardHolder = new  CardHolderTransactionDTO(
-                    cardHolder.getName(),
-                    cardHolder.getDocumentNumber(),
-                    cardHolder.getBirthDate()
-            );
-
-            CardTransactionDTO cardDTO =  ModelMapper.convertCardToCardTransactionDTO(card);
+            CardTransactionDTO cardDTO = ModelMapper.convertCardToCardTransactionDTO(card);
 
             List<InvoiceDTO> invoiceDTOList = invoices.stream()
                     .map(invoice -> {
@@ -115,7 +110,7 @@ public class InvoiceController {
             consolidatedInvoice.setTransactions(consolidatedTransactions);
 
             return new ListInvoiceDTO(cardHolderDTO, cardDTO,
-                    Collections.singletonList(consolidatedInvoice), newCardHolder);
+                    Collections.singletonList(consolidatedInvoice));
         } catch (EntityNotFoundException e) {
             return null;
         }

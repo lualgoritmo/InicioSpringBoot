@@ -21,7 +21,7 @@ public class Transaction {
     @JoinColumn(name = "card_id")
     @JsonBackReference
     private Card card;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "invoice_id")
     @JsonBackReference
     private Invoice invoice;

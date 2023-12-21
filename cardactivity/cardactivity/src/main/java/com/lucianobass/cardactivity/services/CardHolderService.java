@@ -61,7 +61,7 @@ public class CardHolderService {
     }
 
     @Transactional()
-    public void deleteIdCard(@PathVariable Long id) {  //Aqui não vai o "@PathVariable", pois essa é uma anotação para o controller
+    public void deleteIdCard(Long id) {  //Aqui não vai o "@PathVariable", pois essa é uma anotação para o controller
         try {
             cardHolderRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
