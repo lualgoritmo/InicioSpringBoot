@@ -9,7 +9,7 @@ import java.util.List;
 @Table(name = "tb_invoice")
 public class Invoice {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idInvoice;
     private Float total;
     private String status;

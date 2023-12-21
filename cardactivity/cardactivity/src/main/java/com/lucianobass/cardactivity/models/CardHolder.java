@@ -8,7 +8,7 @@ import java.util.Random;
 public class CardHolder {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCardHolder;
 
     //@NotBlank(message = "Escreva o seu nome")

@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idTransaction;
     private String description;
     private Float priceValue;

@@ -11,9 +11,9 @@ import com.lucianobass.cardactivity.models.Invoice;
 import com.lucianobass.cardactivity.services.CardHolderService;
 import com.lucianobass.cardactivity.services.InvoiceService;
 import com.lucianobass.cardactivity.services.TransactionService;
+import com.lucianobass.cardactivity.util.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -70,10 +70,13 @@ public class InvoiceController {
                     cardHolder.getBirthDate()
             );
 
-            CardTransactionDTO cardDTO = new CardTransactionDTO(
-                    card.getNumberCard(),
-                    card.getCardExpiration()
+            CardHolderTransactionDTO newCardHolder = new  CardHolderTransactionDTO(
+                    cardHolder.getName(),
+                    cardHolder.getDocumentNumber(),
+                    cardHolder.getBirthDate()
             );
+
+            CardTransactionDTO cardDTO =  ModelMapper.convertCardToCardTransactionDTO(card);
 
             List<InvoiceDTO> invoiceDTOList = invoices.stream()
                     .map(invoice -> {
@@ -104,16 +107,15 @@ public class InvoiceController {
             consolidatedInvoice.setStatus("IN_PROGRESS");
             consolidatedInvoice.setTotal(total);
 
+
             List<TransactionDTO> consolidatedTransactions = invoiceDTOList.stream()
                     .flatMap(invoiceDTO -> invoiceDTO.getTransactions().stream())
                     .collect(Collectors.toList());
 
             consolidatedInvoice.setTransactions(consolidatedTransactions);
 
-            ListInvoiceDTO listInvoiceDTO = new ListInvoiceDTO(cardHolderDTO, cardDTO,
-                    Collections.singletonList(consolidatedInvoice));
-
-            return listInvoiceDTO;
+            return new ListInvoiceDTO(cardHolderDTO, cardDTO,
+                    Collections.singletonList(consolidatedInvoice), newCardHolder);
         } catch (EntityNotFoundException e) {
             return null;
         }
