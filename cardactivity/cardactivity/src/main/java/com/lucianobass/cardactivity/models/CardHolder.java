@@ -79,12 +79,12 @@ public class CardHolder {
             System.out.println("Card no prePersist: " + this.card);
             if (this.card == null && this.idCardHolder == null) {
                 this.card = new Card();
-                this.card.setNumberCard(generateNumberCard(16)
+                this.card.setNumberCard(genereateNumberAleatory(16)
                         .replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x"));
                 this.card.setAvailableLimit("100.00");
                 this.card.setCardExpiration("30/02");
                 this.card.setCardLimit(100.0);
-                this.card.setCardCVV(generateNumberCard(3).replaceAll("(\\d)", "x"));
+                this.card.setCardCVV(genereateNumberAleatory(3).replaceAll("(\\d)", "x"));
                 this.card.setCardActive(false);
                 this.card.setCardHolder(this);
             }
@@ -95,7 +95,7 @@ public class CardHolder {
         }
     }
 
-    public static String generateNumberCard(int number) {
+    public static String genereateNumberAleatory(int number) {
         StringBuilder stringBuilder = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < number; i++) {
