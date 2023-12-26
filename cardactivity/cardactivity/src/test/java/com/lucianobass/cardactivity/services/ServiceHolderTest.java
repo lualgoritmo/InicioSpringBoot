@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static com.lucianobass.cardactivity.models.CardHolder.genereateNumberAleatory;
+import static com.lucianobass.cardactivity.models.CardHolder.generateNumberAleatory;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,7 +22,7 @@ class ServiceHolderTest {
     void testCreateCard() {
         CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
         cardHolder.setCard(new Card(null,
-               genereateNumberAleatory(16),
+               generateNumberAleatory(16),
                 "30/02",
                 "100.00",
                 100.00,
@@ -32,11 +32,11 @@ class ServiceHolderTest {
                 null));
         //cardHolder = cardHolderService.getByIdCardHolder(cardHolder.getIdCardHolder());
         System.out.println("VER SE O ID NÃO É NULO: " + cardHolder.getIdCardHolder());
-        CardHolder result = cardHolderService.createCard(cardHolder);
+        CardHolder result = cardHolderService.createCardHolder(cardHolder);
         assertEquals(result.getName(), cardHolder.getName());
         assertEquals(result.getDocumentNumber(), cardHolder.getDocumentNumber());
         assertEquals(result.getBirthDate(), cardHolder.getBirthDate());
-        assertNotEquals(genereateNumberAleatory(16).replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x"),
+        assertNotEquals(generateNumberAleatory(16).replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x"),
                 cardHolder.getCard().getNumberCard());
         assertEquals(result.getCard().getCardLimit(), cardHolder.getCard().getCardLimit());
 //        assertEquals(genereateNumberAleatory(3).replaceAll("(\\d)", "x"), cardHolder.getCard().getCardCVV());
@@ -49,7 +49,7 @@ class ServiceHolderTest {
     void testGetCardHolderById() {
         // Arrange
         CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
-        CardHolder savedCardHolder = cardHolderService.createCard(cardHolder);
+        CardHolder savedCardHolder = cardHolderService.createCardHolder(cardHolder);
 
         // Imprimir informações úteis
         System.out.println("ID salvo: " + savedCardHolder.getIdCardHolder());
@@ -73,8 +73,9 @@ class ServiceHolderTest {
         CardHolder cardHolderOne = new CardHolder("Luciano", "123456789", "1983-10-10");
         CardHolder cardHolderTwo = new CardHolder("Maria", "123456789", "1963-02-12");
         //ACT
-        cardHolderService.createCard(cardHolderOne);
-        cardHolderService.createCard(cardHolderTwo);
+        cardHolderService.createCardHolder(cardHolderOne);
+        cardHolderService.createCardHolder(cardHolderTwo);
+
         List<CardHolder> listCardHolder = cardHolderService.getAllCardsHolders();
         CardHolder firstOne = listCardHolder.get(0);
         //ASSERT DTO
@@ -108,7 +109,7 @@ class ServiceHolderTest {
     void testUpdateCardHolder() {
         // Arrange
         CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
-        CardHolder savedCardHolder = cardHolderService.createCard(cardHolder);
+        CardHolder savedCardHolder = cardHolderService.createCardHolder(cardHolder);
 
         String newName = "Luciano";
         String newDocumentNumber = "123456789";
@@ -134,13 +135,13 @@ class ServiceHolderTest {
     void testDeleteIdCard() {
         // Arrange
         CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
-        CardHolder savedCardHolder = cardHolderService.createCard(cardHolder);
+        CardHolder savedCardHolder = cardHolderService.createCardHolder(cardHolder);
 
         assertNotNull(savedCardHolder.getIdCardHolder(), "O ID não deveria ser nulo após a criação");
 
         // Act - Primeira Exclusão
         try {
-            cardHolderService.deleteIdCard(savedCardHolder.getIdCardHolder());
+            cardHolderService.deleteCardHolder(savedCardHolder.getIdCardHolder());
             System.out.println("ID DELETADO: " + savedCardHolder.getIdCardHolder());
         } catch (Exception e) {
             System.out.println("Não deveria lançar exceção ao excluir um CardHolder existente. Exceção: " + e.getMessage());
@@ -155,7 +156,7 @@ class ServiceHolderTest {
         assertDoesNotThrow(() -> {
             // Tentei melhorar essa parte
             assertThrows(CardNotFoundExceptions.class, () -> {
-                cardHolderService.deleteIdCard(savedCardHolder.getIdCardHolder());
+                cardHolderService.deleteCardHolder(savedCardHolder.getIdCardHolder());
             }, "Deveria lançar exceção de CardNotFoundExceptions após tentar excluir um CardHolder inexistente");
         }, "Não deveria lançar exceção após tentar excluir um CardHolder inexistente");
     }

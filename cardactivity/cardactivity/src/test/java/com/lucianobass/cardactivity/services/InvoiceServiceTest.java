@@ -25,7 +25,7 @@ class InvoiceServiceTest {
     private InvoiceRepository invoiceRepository;
 
     @Test
-    void testGetInvoicesWithDetailsByCardIdTest() {
+    void GetInvoicesWithDetailsByCardIdTest() {
         //List<Invoice> simuletedInvoice = new Arra
         List<Invoice> simuletedInvoices = new ArrayList<>();
         simuletedInvoices.add(new Invoice());

@@ -21,12 +21,28 @@ public class CardHolder {
     private String birthDate;
 
     @OneToOne(mappedBy = "cardHolder", cascade = CascadeType.ALL)
+    //@OneToOne(mappedBy = "cardHolder")
     //@JsonManagedReference
     private Card card;
     public CardHolder(String name, String documentNumber, String birthDate) {
         this.name = name;
         this.documentNumber = documentNumber;
         this.birthDate = birthDate;
+        this.createCard();
+
+    }
+
+    private void createCard() {
+        this.card = new Card();
+        System.out.println("Creating card for CardHolder: " + this.name);
+        this.card.setNumberCard(generateNumberAleatory(16)
+                .replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x"));
+        this.card.setAvailableLimit("100.00");
+        this.card.setCardExpiration("30/02");
+        this.card.setCardLimit(100.0);
+        this.card.setCardCVV(generateNumberAleatory(3).replaceAll("(\\d)", "x"));
+        this.card.setCardActive(false);
+        this.card.setCardHolder(this);
     }
 
     public CardHolder() {
@@ -72,30 +88,30 @@ public class CardHolder {
         this.birthDate = birthDate;
     }
 
-    @PrePersist
-    public void prePersist() {
-        try {
-            System.out.println("ID no prePersist: " + this.idCardHolder);
-            System.out.println("Card no prePersist: " + this.card);
-            if (this.card == null && this.idCardHolder == null) {
-                this.card = new Card();
-                this.card.setNumberCard(genereateNumberAleatory(16)
-                        .replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x"));
-                this.card.setAvailableLimit("100.00");
-                this.card.setCardExpiration("30/02");
-                this.card.setCardLimit(100.0);
-                this.card.setCardCVV(genereateNumberAleatory(3).replaceAll("(\\d)", "x"));
-                this.card.setCardActive(false);
-                this.card.setCardHolder(this);
-            }
-            System.out.println("ID no prePersist: " + this.idCardHolder);
-            System.out.println("Card no prePersist: " + this.card);
-        } catch (Exception ex) {
-            System.out.println(" Erro no PREPERSIST" + ex.getMessage());
-        }
-    }
+//    @PrePersist
+//    public void prePersist() {
+//        try {
+//            System.out.println("ID no prePersist: " + this.idCardHolder);
+//            System.out.println("Card no prePersist: " + this.card);
+//            if (this.card == null && this.idCardHolder == null) {
+//                this.card = new Card();
+//                this.card.setNumberCard(generateNumberAleatory(16)
+//                        .replaceAll("(?<=\\d{4})\\d(?=\\d{4})", "x"));
+//                this.card.setAvailableLimit("100.00");
+//                this.card.setCardExpiration("30/02");
+//                this.card.setCardLimit(100.0);
+//                this.card.setCardCVV(generateNumberAleatory(3).replaceAll("(\\d)", "x"));
+//                this.card.setCardActive(false);
+//                this.card.setCardHolder(this);
+//            }
+//            System.out.println("ID no prePersist: " + this.idCardHolder);
+//            System.out.println("Card no prePersist: " + this.card);
+//        } catch (Exception ex) {
+//            System.out.println(" Erro no PREPERSIST" + ex.getMessage());
+//        }
+//    }
 
-    public static String genereateNumberAleatory(int number) {
+    public static String generateNumberAleatory(int number) {
         StringBuilder stringBuilder = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < number; i++) {

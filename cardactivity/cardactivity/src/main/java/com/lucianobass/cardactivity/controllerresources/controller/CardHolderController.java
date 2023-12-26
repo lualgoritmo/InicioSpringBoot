@@ -29,7 +29,7 @@ public class CardHolderController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public CardHolderDTO createCardHolder(@RequestBody CardHolderDTO cardHolderDTO) {
-        CardHolder createCardHolder = cardHolderService.createCard(convertDTOToCardHolder(cardHolderDTO));
+        CardHolder createCardHolder = cardHolderService.createCardHolder(convertDTOToCardHolder(cardHolderDTO));
         return convertCardHolderTODTO(createCardHolder);
     }
 
@@ -107,6 +107,6 @@ public class CardHolderController {
     @DeleteMapping(value = "/{id}/deletedcard")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteIdCardHolder (@PathVariable Long id){
-        cardHolderService.deleteIdCard(id);
+        cardHolderService.deleteCardHolder(id);
     }
 }
