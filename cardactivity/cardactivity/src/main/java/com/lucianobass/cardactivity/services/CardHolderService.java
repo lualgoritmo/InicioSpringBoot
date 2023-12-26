@@ -73,15 +73,15 @@ public class CardHolderService {
     }
 
     @Transactional
-    public CardHolder updateCardHolder(Long id, @RequestBody CardHolder cardHolder) {  //Aqui não vai o "@RequestBody", pois essa é uma anotação para o controller
-        if (id == null) {
+    public CardHolder updateCardHolder(Long idCardHolder, CardHolder cardHolder) {  //Aqui não vai o "@RequestBody", pois essa é uma anotação para o controller
+        if (idCardHolder == null) {
             throw new IllegalArgumentException("O ID não pode ser nulo para a atualização");
         }
 
-        CardHolder existingCardHolder = cardHolderRepository.findById(id)
-                .orElseThrow(() -> new CardNotFoundExceptions(id));
+        CardHolder existingCardHolder = cardHolderRepository.findById(idCardHolder)
+                .orElseThrow(() -> new CardNotFoundExceptions(idCardHolder));
 
-        // BeanUtils.copyProperties(cardHolder, existingCardHolder, "id");
+
         existingCardHolder.setName(cardHolder.getName());
         return cardHolderRepository.save(existingCardHolder);
     }

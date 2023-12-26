@@ -4,19 +4,21 @@ import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.repositories.CardHolderRepository;
 import com.lucianobass.cardactivity.util.ModelMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static com.lucianobass.cardactivity.models.CardHolder.generateNumberAleatory;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 //@ExtendWith(MockitoExtension.class)
@@ -28,10 +30,10 @@ class CardHolderServiceTest {
     @InjectMocks
     private CardHolderService cardHolderService;
 
-//    @BeforeEach
-//    void setUp() {
-//        MockitoAnnotations.openMocks(this);
-//    }
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     void createCard() {
@@ -141,62 +143,34 @@ class CardHolderServiceTest {
         verify(cardHolderRepository, times(1)).deleteById(1L);
     }
 
-//    @Test
-//    void updateCardHolder() {
-//    }
-//
-//    @Test
-//    void updateCardStatusByDocumentNumber() {
-//    }
+    @Test
+    void updateCardHolderTest() {
+        CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
+        cardHolder.setIdCardHolder(1L);
+        CardHolder savedCardHolder = cardHolderService.createCardHolder(cardHolder);
+        savedCardHolder.setName("Novo Nome Atualizado");
 
-//    @Test
-//    void updateLimitCardTest() {
-//        // Criar um CardHolder sem definir o id explicitamente
-//        CardHolder cardHolder = new CardHolder("Luciano", "12345678910", "1983-10-10");
-//        cardHolder.getCard().setCardActive(true);
-//
-//        // Salvar o CardHolder e obter o id atribuído
-//        cardHolder = cardHolderService.createCardHolder(cardHolder);
-//
-//        // Chamar o método updateLimitCard
-//        cardHolderService.updateLimitCard(anyLong(), cardHolder.getCard());
-//
-//        // Verificar interação com o repositório
-//        verify(cardHolderRepository, times(1)).save(any(CardHolder.class));
-//    }
+        when(cardHolderRepository.findById(cardHolder.getIdCardHolder())).thenReturn(any());
+
+        cardHolderService.updateCardHolder(cardHolder.getIdCardHolder(), savedCardHolder);
+        cardHolderRepository.save(savedCardHolder);
+        assertThat(savedCardHolder).isNotNull();
+        verify(cardHolderRepository, times(1)).save(cardHolder);
+    }
 
 
-//    @Test
-//    void updateLimitCard() {
-//        // Criar um CardHolder sem definir o id explicitamente
-//        CardHolder cardHolder = new CardHolder("Luciano", "12345678910", "1983-10-10");
-//        cardHolder.setCard(new Card(null,
-//                "1234123412341234", // Use o mesmo padrão para o número do cartão
-//                "30/02",
-//                "100.00",
-//                200.00,
-//                "123",
-//                true, // Certifique-se de que o cartão está ativo para evitar a exceção
-//                null,
-//                null));
-//
-//        // Salvar o CardHolder e obter o id atribuído
-//        cardHolder = cardHolderService.createCardHolder(cardHolder);
-//
-//        // Adicione logs para verificar o status do cardHolder antes de chamar o método
-//        System.out.println("ID do CardHolder antes da chamada de updateLimitCard: " + cardHolder.getIdCardHolder());
-//        System.out.println("CardHolder antes da chamada de updateLimitCard: " + cardHolder);
-//
-//        // Chamar o método updateLimitCard
-//        cardHolderService.updateLimitCard(cardHolder.getIdCardHolder(), cardHolder.getCard());
-//
-//        // Adicione logs para verificar o status do cardHolder após a chamada do método
-//        System.out.println("ID do CardHolder após a chamada de updateLimitCard: " + cardHolder.getIdCardHolder());
-//        System.out.println("CardHolder após a chamada de updateLimitCard: " + cardHolder);
-//
-//        // Verificar interação com o repositório
-//        verify(cardHolderRepository, times(1)).save(any(CardHolder.class));
-//    }
+    @Test
+    void updateLimitCardTest() {
 
+        CardHolder cardHolder = new CardHolder("Luciano", "12345678910", "1983-10-10");
+        cardHolder.getCard().setCardActive(true);
+
+
+        cardHolder = cardHolderService.createCardHolder(cardHolder);
+
+        cardHolderService.updateLimitCard(anyLong(), cardHolder.getCard());
+
+        verify(cardHolderRepository, times(1)).save(any(CardHolder.class));
+    }
 
 }

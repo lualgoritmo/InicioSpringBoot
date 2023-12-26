@@ -4,19 +4,24 @@ import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.models.Invoice;
 import com.lucianobass.cardactivity.repositories.InvoiceRepository;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.Extension;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
-
+@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 class InvoiceServiceTest {
     @InjectMocks
@@ -46,7 +51,6 @@ class InvoiceServiceTest {
         Invoice invoice = new Invoice();
 
         invoiceService.createInvoice(invoice);
-
         verify(invoiceRepository, times(1)).save(invoice);
     }
 
@@ -65,4 +69,41 @@ class InvoiceServiceTest {
         verify(invoiceRepository, times(1))
                 .findFirstInvoiceByCardIdCardOrderByClosingDateDesc(invoice.getCard().getIdCard());
     }
+
+    @Test
+    void getInvoicesWithDetailsByCardId_ThrowsEntityNotFoundExceptionWhenEmptyList() {
+        // Configuração do mock
+        Card card = new Card();
+        card.setIdCard(1L); // Defina um ID válido para o Card
+
+        Invoice invoice = new Invoice();
+        invoice.setCard(card);
+
+        when(invoiceRepository.findInvoicesWithDetailsByCardId(anyLong())).thenReturn(Collections.singletonList(invoice));
+
+        // Execução do método sob teste
+        assertThrows(EntityNotFoundException.class, () -> invoiceService.getInvoicesWithDetailsByCardId(1L));
+
+        // Verificação se o método do repository foi chamado
+        verify(invoiceRepository, times(1)).findInvoicesWithDetailsByCardId(1L);
+
+        // Verificação se não houve outras interações com o mock
+        verifyNoMoreInteractions(invoiceRepository);
+    }
+
+
+//    @Test
+//    void getInvoicesWithDetailsByCardId_ThrowsEntityNotFoundExceptionWhenEmptyList() {
+//        // Configuração do mock
+//        when(invoiceRepository.findInvoicesWithDetailsByCardId(1L)).thenReturn(Collections.emptyList());
+//
+//        // Execução do método sob teste
+//        assertThrows(EntityNotFoundException.class, () -> invoiceService.getInvoicesWithDetailsByCardId(1L));
+//
+//        // Verificação se o método do repository foi chamado
+//        verify(invoiceRepository, times(1)).findInvoicesWithDetailsByCardId(1L);
+//    }
+
+
+
 }

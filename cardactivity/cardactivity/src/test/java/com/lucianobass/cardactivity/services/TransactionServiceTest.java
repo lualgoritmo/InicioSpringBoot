@@ -32,7 +32,6 @@ class TransactionServiceTest {
 
     @Test
     void createTransactionWithPurchaseTest() {
-        // Crie um CardHolder com um Card ativo
         CardHolder cardHolder = new CardHolder("Luciano", "12345678910", "1942-10-01");
         cardHolder.getCard().setCardActive(true);
         cardHolder.setIdCardHolder(1L);
