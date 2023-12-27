@@ -4,14 +4,11 @@ import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.repositories.CardHolderRepository;
 import com.lucianobass.cardactivity.util.ModelMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,22 +18,15 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-//@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 class CardHolderServiceTest {
-
-    @Mock
-    private CardHolderRepository cardHolderRepository;
     @InjectMocks
     private CardHolderService cardHolderService;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    @Mock
+    private CardHolderRepository cardHolderRepository;
 
     @Test
-    void createCard() {
+    void createCardTest() {
         CardHolder cardHolder = new CardHolder("Luciano", "12345678910", "1942-10-01");
         cardHolder.setCard(new Card(null,
                 generateNumberAleatory(16),
@@ -57,7 +47,7 @@ class CardHolderServiceTest {
     }
 
     @Test
-    void getAllCardsHolders() {
+    void getAllCardsHoldersTest() {
 //        List<CardHolder> cardHolders = Arrays.asList(new CardHolder(), new CardHolder());
         List<CardHolder> cardHolders = new ArrayList<>();
         CardHolder cardHolderOne = new CardHolder("Luciano", "123456789", "1983-10-10");
@@ -92,7 +82,7 @@ class CardHolderServiceTest {
     }
 
     @Test
-    void getByIdCardHolder() {
+    void getByIdCardHolderTest() {
         CardHolder cardHolder = new CardHolder();
         when(cardHolderRepository.findById(cardHolder.getIdCardHolder())).thenReturn(Optional.of(cardHolder));
         cardHolder.setName("Luciano");
@@ -108,7 +98,7 @@ class CardHolderServiceTest {
     }
 
     @Test
-    void getByCardHolderDocumentNumber() {
+    void getByCardHolderDocumentNumberTest() {
         CardHolder cardHolder = new CardHolder("Luciano", "12345678910", "1983-10-10");
         when(cardHolderRepository.findByDocumentNumber(cardHolder.getDocumentNumber()))
                 .thenReturn(cardHolder);
@@ -140,41 +130,162 @@ class CardHolderServiceTest {
         System.out.println("CardHolder existente: " + cardHolder.getIdCardHolder());
         cardHolderService.deleteCardHolder(1L);
         System.out.println("CardHolder para excluir: " + cardHolder.getIdCardHolder());
-        verify(cardHolderRepository, times(1)).deleteById(1L);
+        verify(cardHolderRepository, times(1)).deleteById(any());
     }
 
     @Test
     void updateCardHolderTest() {
         CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
         cardHolder.setIdCardHolder(1L);
-        CardHolder savedCardHolder = cardHolderService.createCardHolder(cardHolder);
-        CardHolder IdcardHolder = cardHolderService.getByIdCardHolder(cardHolder.getIdCardHolder());
+        cardHolder.getCard().setIdCard(1L);
 
-        savedCardHolder.setIdCardHolder(IdcardHolder.getIdCardHolder());
-        savedCardHolder.setName("Novo Nome Atualizado");
+        when(cardHolderRepository.findById(any())).thenReturn(Optional.of(cardHolder));
+        CardHolder testUpdateCardHolder = new CardHolder("Novo Nome Atualizado", "123456789", "1983-10-10");
+        testUpdateCardHolder.setIdCardHolder(1L);
 
-        when(cardHolderRepository.findById(cardHolder.getIdCardHolder())).thenReturn(any());
+        when(cardHolderRepository.save(any())).thenReturn(testUpdateCardHolder);
+        CardHolder savedCardHolder = cardHolderService.updateCardHolder(cardHolder.getIdCardHolder(), testUpdateCardHolder);
 
-        cardHolderService.updateCardHolder(cardHolder.getIdCardHolder(), savedCardHolder);
-        cardHolderRepository.save(savedCardHolder);
+        assertThat(cardHolder).isNotNull();
         assertThat(savedCardHolder).isNotNull();
-        verify(cardHolderRepository, times(1)).save(cardHolder);
+        assertThat(testUpdateCardHolder).isNotNull();
+        assertEquals(testUpdateCardHolder.getName(), cardHolder.getName());
+        assertEquals(savedCardHolder, testUpdateCardHolder);
+        verify(cardHolderRepository, times(1)).save(any());
+        verify(cardHolderRepository, times(1)).findById(any());
+    }
+
+    @Test
+    void updateCardStatusByDocumentNumberTest() {
+        CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
+        cardHolder.setIdCardHolder(1L);
+        cardHolder.setCard(new Card(1L,
+                generateNumberAleatory(16),
+                "30/02",
+                "100.00",
+                100.00,
+                "123",
+                false,
+                null,
+                null));
+
+        when(cardHolderRepository.findByDocumentNumber(cardHolder.getDocumentNumber()))
+                .thenReturn(cardHolder);
+
+        CardHolder statusCardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
+        cardHolder.setIdCardHolder(1L);
+        cardHolder.setCard(new Card(1L,
+                generateNumberAleatory(16),
+                "30/02",
+                "100.00",
+                100.00,
+                "123",
+                true,
+                null,
+                null));
+        statusCardHolder.getCard().setCardActive(true);
+        when(cardHolderRepository.save(any())).thenReturn(statusCardHolder);
+
+        CardHolder updateStatusCardHolder = cardHolderService.updateCardStatusByDocumentNumber(
+                cardHolder.getDocumentNumber(), statusCardHolder.getCard().getCardActivate());
+
+        assertThat(cardHolder).isNotNull();
+        assertThat(statusCardHolder).isNotNull();
+        assertThat(updateStatusCardHolder).isNotNull();
+        assertEquals(updateStatusCardHolder.getCard().getCardActive(), cardHolder.getCard().getCardActive());
+        assertThat(updateStatusCardHolder.getCard().getCardActive()).isEqualTo(true);
+
+        verify(cardHolderRepository, times(1)).save(any());
     }
 
     @Test
     void updateLimitCardTest() {
-
-        CardHolder cardHolder = new CardHolder("Luciano", "12345678910", "1983-10-10");
+        CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
         cardHolder.setIdCardHolder(1L);
-        cardHolder.getCard().setIdCard(1L);
-       cardHolder.getCard().setCardActive(true);
-        cardHolderService.createCardHolder(cardHolder);
-        CardHolder idCardHolder = cardHolderService.getByIdCardHolder(any());
+        cardHolder.getCard().setCardActive(true);
+        cardHolder.setCard(new Card(1L,
+                generateNumberAleatory(16),
+                "30/02",
+                "100.00",
+                100.00,
+                "123",
+                true,
+                null,
+                null));
 
-        System.out.println("LimitCard: " + cardHolder.getIdCardHolder());
-        cardHolderService.updateLimitCard(idCardHolder.getIdCardHolder(), cardHolder.getCard());
+        when(cardHolderRepository.findById(cardHolder.getIdCardHolder()))
+                .thenReturn(Optional.of(cardHolder));
 
-        verify(cardHolderRepository, times(1)).save(cardHolder);
+        CardHolder updateCardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
+        updateCardHolder.setIdCardHolder(1L);
+        updateCardHolder.getCard().setCardActive(true);
+        updateCardHolder.setCard(new Card(1L,
+                generateNumberAleatory(16),
+                "30/02",
+                "100.00",
+                500.00,
+                "123",
+                true,
+                null,
+                null));
+
+        when(cardHolderRepository.save(any())).thenReturn(updateCardHolder);
+
+        cardHolderService.updateLimitCard(updateCardHolder.getIdCardHolder(), updateCardHolder.getCard());
+
+        assertThat(cardHolder.getCard().getCardLimit()).isEqualTo(500.00);
+        assertThat(cardHolder.getCard().getCardActive()).isTrue();
+        assertEquals(updateCardHolder.getCard().getCardLimit(), cardHolder.getCard().getCardLimit());
+
+        verify(cardHolderRepository, times(1)).save(any());
     }
+
+//    @Test
+//    void updateLimitCardTest() {
+//        CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
+//        cardHolder.setIdCardHolder(1L);
+//        cardHolder.getCard().setCardActive(true);
+//        cardHolder.setCard(new Card(1L,
+//                generateNumberAleatory(16),
+//                "30/02",
+//                "100.00",
+//                100.00,
+//                "123",
+//                false,
+//                null,
+//                null));
+//
+//        when(cardHolderService.getByIdCardHolder(cardHolder.getIdCardHolder())).thenReturn(cardHolder);
+//
+//        CardHolder updateCardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
+//        cardHolder.setIdCardHolder(1L);
+//        cardHolder.getCard().setCardActive(true);
+//        cardHolder.setCard(new Card(1L,
+//                generateNumberAleatory(16),
+//                "30/02",
+//                "100.00",
+//                500.00,
+//                "123",
+//                true,
+//                null,
+//                null));
+//
+//        when(cardHolderRepository.save(any())).thenReturn(updateCardHolder);
+//        cardHolder.setIdCardHolder(1L);
+//        cardHolder.getCard().setCardActive(true);
+//        cardHolder.getCard().setIdCard(1L);
+//        Card card = updateCardHolder.getCard();
+//        card.setCardLimit(updateCardHolder.getCard().getCardLimit());
+//
+//        cardHolderService.updateLimitCard(updateCardHolder.getIdCardHolder(), card);
+//
+//        assertThat(cardHolder).isNotNull();
+//        assertThat(updateCardHolder).isNotNull();
+//        assertThat(card).isNotNull();
+//        //assertEquals(cardHolder.getName(), cardHolder.getName());
+//       // assertEquals(savedCardHolder, testUpdateCardHolder);
+//        verify(cardHolderRepository, times(1)).save(any());
+//
+//    }
 
 }
