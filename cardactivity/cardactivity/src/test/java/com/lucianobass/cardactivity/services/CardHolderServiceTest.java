@@ -148,6 +148,9 @@ class CardHolderServiceTest {
         CardHolder cardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
         cardHolder.setIdCardHolder(1L);
         CardHolder savedCardHolder = cardHolderService.createCardHolder(cardHolder);
+        CardHolder IdcardHolder = cardHolderService.getByIdCardHolder(cardHolder.getIdCardHolder());
+
+        savedCardHolder.setIdCardHolder(IdcardHolder.getIdCardHolder());
         savedCardHolder.setName("Novo Nome Atualizado");
 
         when(cardHolderRepository.findById(cardHolder.getIdCardHolder())).thenReturn(any());
@@ -158,19 +161,20 @@ class CardHolderServiceTest {
         verify(cardHolderRepository, times(1)).save(cardHolder);
     }
 
-
     @Test
     void updateLimitCardTest() {
 
         CardHolder cardHolder = new CardHolder("Luciano", "12345678910", "1983-10-10");
-        cardHolder.getCard().setCardActive(true);
+        cardHolder.setIdCardHolder(1L);
+        cardHolder.getCard().setIdCard(1L);
+       cardHolder.getCard().setCardActive(true);
+        cardHolderService.createCardHolder(cardHolder);
+        CardHolder idCardHolder = cardHolderService.getByIdCardHolder(any());
 
+        System.out.println("LimitCard: " + cardHolder.getIdCardHolder());
+        cardHolderService.updateLimitCard(idCardHolder.getIdCardHolder(), cardHolder.getCard());
 
-        cardHolder = cardHolderService.createCardHolder(cardHolder);
-
-        cardHolderService.updateLimitCard(anyLong(), cardHolder.getCard());
-
-        verify(cardHolderRepository, times(1)).save(any(CardHolder.class));
+        verify(cardHolderRepository, times(1)).save(cardHolder);
     }
 
 }
