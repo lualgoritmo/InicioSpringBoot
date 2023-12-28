@@ -140,17 +140,19 @@ class CardHolderServiceTest {
         cardHolder.getCard().setIdCard(1L);
 
         when(cardHolderRepository.findById(any())).thenReturn(Optional.of(cardHolder));
-        CardHolder testUpdateCardHolder = new CardHolder("Novo Nome Atualizado", "123456789", "1983-10-10");
-        testUpdateCardHolder.setIdCardHolder(1L);
 
-        when(cardHolderRepository.save(any())).thenReturn(testUpdateCardHolder);
-        CardHolder savedCardHolder = cardHolderService.updateCardHolder(cardHolder.getIdCardHolder(), testUpdateCardHolder);
+        CardHolder newUpdateCardHolder = new CardHolder("Novo Nome Atualizado",
+                "123456789", "1983-10-10");
+        newUpdateCardHolder.setIdCardHolder(1L);
+
+        when(cardHolderRepository.save(any())).thenReturn(newUpdateCardHolder);
+        CardHolder savedCardHolder = cardHolderService.updateCardHolder(cardHolder.getIdCardHolder(), newUpdateCardHolder);
 
         assertThat(cardHolder).isNotNull();
         assertThat(savedCardHolder).isNotNull();
-        assertThat(testUpdateCardHolder).isNotNull();
-        assertEquals(testUpdateCardHolder.getName(), cardHolder.getName());
-        assertEquals(savedCardHolder, testUpdateCardHolder);
+        assertThat(newUpdateCardHolder).isNotNull();
+        assertEquals(newUpdateCardHolder.getName(), cardHolder.getName());
+        assertEquals(savedCardHolder, newUpdateCardHolder);
         verify(cardHolderRepository, times(1)).save(any());
         verify(cardHolderRepository, times(1)).findById(any());
     }
@@ -173,8 +175,8 @@ class CardHolderServiceTest {
                 .thenReturn(cardHolder);
 
         CardHolder statusCardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
-        cardHolder.setIdCardHolder(1L);
-        cardHolder.setCard(new Card(1L,
+        statusCardHolder.setIdCardHolder(1L);
+        statusCardHolder.setCard(new Card(1L,
                 generateNumberAleatory(16),
                 "30/02",
                 "100.00",
@@ -183,7 +185,7 @@ class CardHolderServiceTest {
                 true,
                 null,
                 null));
-        statusCardHolder.getCard().setCardActive(true);
+        //statusCardHolder.getCard().setCardActive(true);
         when(cardHolderRepository.save(any())).thenReturn(statusCardHolder);
 
         CardHolder updateStatusCardHolder = cardHolderService.updateCardStatusByDocumentNumber(
@@ -192,7 +194,7 @@ class CardHolderServiceTest {
         assertThat(cardHolder).isNotNull();
         assertThat(statusCardHolder).isNotNull();
         assertThat(updateStatusCardHolder).isNotNull();
-        assertEquals(updateStatusCardHolder.getCard().getCardActive(), cardHolder.getCard().getCardActive());
+        assertEquals(updateStatusCardHolder.getCard().getCardActive(), statusCardHolder.getCard().getCardActive());
         assertThat(updateStatusCardHolder.getCard().getCardActive()).isEqualTo(true);
 
         verify(cardHolderRepository, times(1)).save(any());
@@ -218,12 +220,12 @@ class CardHolderServiceTest {
 
         CardHolder updateCardHolder = new CardHolder("Luciano", "123456789", "1983-10-10");
         updateCardHolder.setIdCardHolder(1L);
-        updateCardHolder.getCard().setCardActive(true);
+        //updateCardHolder.getCard().setCardActive(true);
         updateCardHolder.setCard(new Card(1L,
                 generateNumberAleatory(16),
                 "30/02",
                 "100.00",
-                500.00,
+                90.00,
                 "123",
                 true,
                 null,
@@ -233,7 +235,7 @@ class CardHolderServiceTest {
 
         cardHolderService.updateLimitCard(updateCardHolder.getIdCardHolder(), updateCardHolder.getCard());
 
-        assertThat(cardHolder.getCard().getCardLimit()).isEqualTo(500.00);
+        assertThat(cardHolder.getCard().getCardLimit()).isEqualTo(90.00);
         assertThat(cardHolder.getCard().getCardActive()).isTrue();
         assertEquals(updateCardHolder.getCard().getCardLimit(), cardHolder.getCard().getCardLimit());
 
