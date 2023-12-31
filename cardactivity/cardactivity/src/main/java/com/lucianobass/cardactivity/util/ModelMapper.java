@@ -46,16 +46,14 @@ public class ModelMapper {
                 cardHolderDTO.getDocumentNumber(),
                 cardHolderDTO.getBirthDate());
 
-        if (cardHolderDTO == null) {
-            System.out.println("DTO nulo");
-        }
         return cardHolder;
     }
 
     public static void validateCardHolder(CardHolder cardHolder) {
-        if (cardHolder.getName().isEmpty() || cardHolder.getDocumentNumber().isEmpty() ||
+
+        if (cardHolder == null || cardHolder.getName().isEmpty() || cardHolder.getDocumentNumber().isEmpty() ||
                 cardHolder.getBirthDate().isEmpty()) {
-            throw new IllegalArgumentException(" O usuário não existe! ");
+            throw new IllegalArgumentException("O usuário não existe!");
         }
     }
 
@@ -81,8 +79,6 @@ public class ModelMapper {
                         transaction.getPriceValue()))
                 .collect(Collectors.toList());
     }
-
-
 
     public static TransactionDTO convertTransacationToDTO(Transaction transaction) {
         //transactionDTO.setTransactionTime(transaction.getTransactionTime(LocalDateTime.now()));

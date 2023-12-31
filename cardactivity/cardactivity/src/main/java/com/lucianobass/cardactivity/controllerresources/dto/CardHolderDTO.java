@@ -1,11 +1,15 @@
 package com.lucianobass.cardactivity.controllerresources.dto;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 public class CardHolderDTO implements Serializable {
    // não é utilizando em lugar nenhum
     //Como é seu DTO e vc ta ignorando esse campo, ele não precisa ficar aqui .. pode ser removido
+
 
     private String name;
     private String documentNumber;
@@ -22,6 +26,7 @@ public class CardHolderDTO implements Serializable {
     public CardHolderDTO() {
 
     }
+
 
     public String getName() {
         return name;

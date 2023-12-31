@@ -49,9 +49,7 @@ class TransactionServiceTest {
 
         TransactionDTO transactionDTO = ModelMapper.convertTransacationToDTO(transaction);
 
-
         when(cardHolderService.getByIdCardHolder(cardHolder.getIdCardHolder())).thenReturn(cardHolder);
-
 
         when(invoiceService.getCurrentInvoice(cardHolder.getCard())).thenReturn(invoice);
 
@@ -69,7 +67,6 @@ class TransactionServiceTest {
 
         verifyNoMoreInteractions(transactionRepository, cardHolderService, invoiceService);
     }
-
 
 //    @Test
 //    void createTransactionWithPurchaseTest() {

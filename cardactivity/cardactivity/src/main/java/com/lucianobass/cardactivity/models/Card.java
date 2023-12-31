@@ -1,7 +1,6 @@
 package com.lucianobass.cardactivity.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -29,6 +28,7 @@ public class Card implements Serializable {
     private Double cardLimit;
     @Column(name = "cardcvv", length = 3, nullable = false)
     private String cardCVV;
+    @Column(name = "cardActive")
     private Boolean cardActive = false;
     @OneToOne()
     @JoinColumn(name = "card_holder_id")

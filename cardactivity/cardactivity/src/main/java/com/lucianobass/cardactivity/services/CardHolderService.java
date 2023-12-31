@@ -24,18 +24,32 @@ public class CardHolderService {
     public CardHolderService(CardHolderRepository cardHolderRepository) {
         this.cardHolderRepository = cardHolderRepository;
     }
-
     @Transactional
     public CardHolder createCardHolder(CardHolder cardHolder) {
-        //validateCardHolder(cardHolder);
+        System.out.println("CARD HOLDER NÃO NULO: " + cardHolder.getIdCardHolder() + " " + cardHolder.getName());
         try {
+            validateCardHolder(cardHolder);
             System.out.println("Card holder criado: " + cardHolder);
-            return cardHolderRepository.save(cardHolder);
+            cardHolderRepository.save(cardHolder);
+            System.out.println("CARDHOLDER SALVO");
+            return cardHolder;
         } catch (Exception ex) {
             System.out.println("ERRO AO CRIAR");
             throw ex;
         }
     }
+
+//    @Transactional
+//    public CardHolder createCardHolder(CardHolder cardHolder) {
+//        try {
+//            validateCardHolder(cardHolder);
+//            System.out.println("Card holder criado: " + cardHolder);
+//            return cardHolderRepository.save(cardHolder);
+//        } catch (Exception ex) {
+//            System.out.println("ERRO AO CRIAR");
+//            throw ex;
+//        }
+//    }
 
     @Transactional()
     public List<CardHolder> getAllCardsHolders() {
