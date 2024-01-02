@@ -46,15 +46,23 @@ class InvoiceControllerTest {
 
     @Autowired
     private TransactionRepository transactionRepository;
+// NÃO PRECISA DESSAS CLASSES, POIS NÃO USA NO TESTE
+//    @Autowired
+//    private ObjectMapper objectMapper;
+//
+//    @Autowired
+//    private CardHolderService cardHolderService;
+//
+//    @Autowired
+//    private InvoiceService invoiceService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private CardHolderService cardHolderService;
-
-    @Autowired
-    private InvoiceService invoiceService;
+    @BeforeEach
+    void setup() {
+        //Limpa o banco de dados para um teste não interferir em outro
+        cardHolderRepository.deleteAll();
+        transactionRepository.deleteAll();
+        invoiceRepository.deleteAll();
+    }
 
     //    @BeforeEach
 //    void SetUpe() {
@@ -79,7 +87,7 @@ class InvoiceControllerTest {
 //                LocalDate.now(),
 //                cardHolder.getCard()));
 //    }
-    @BeforeEach
+    /*@BeforeEach
     void setUp() {
         CardHolder cardHolder = new CardHolder("José", "11122233344", "1980-07-01");
         cardHolder.setIdCardHolder(1L);
@@ -112,6 +120,8 @@ class InvoiceControllerTest {
         invoice.setIdInvoice(1L);
         cardHolder.setCard(card);
 
+        --NÃO USA MOCK DENTRO DE BEFORE EACH
+
         when(cardHolderRepository.save(any(CardHolder.class))).thenReturn(cardHolder);
 
         when(cardHolderService.getByIdCardHolder(any(Long.class))).thenReturn(cardHolder);
@@ -129,12 +139,57 @@ class InvoiceControllerTest {
         System.out.println("invoice: " + invoice);
         System.out.println("transactions: " + transactions);
 
-    }
+    }*/
 
 
     @Test
     @DisplayName("Return an invoice list")
     void getInvoices() throws Exception {
+        //GIVEN:
+        //CRIO O CARD HOLDER POIS ELE É A BASE DE TUDO E ENTÃO JÁ SALVA NO BANCO
+        CardHolder cardHolder = cardHolderRepository.save(new CardHolder(
+          "José",
+          "11122233344",
+          "1980-07-01")
+        );
+
+        //Com cardHolder criado tbm, da pra criar a invoice:
+        Invoice invoice = invoiceRepository.save(
+          new Invoice(
+            30.0f, //Esse valor não está sendo passado para a classe invoice, pois lá dentro existe um valor fixo de zero, pode ser corrigido
+            "IN_PROGRESS",
+            null, //transactions, aqui estava sendo passada transactions, mas se vc olhar seu modelo, ela fica na tabela transactions e não o contrário
+            LocalDate.now(),
+            LocalDate.now(),
+            cardHolder.getCard()
+          )
+        );
+
+        //Crio minha lista de transações, note que antes estava faltando informações nas suas transaçÕes, qual era o card dela?
+        Transaction transaction1 = new Transaction("Pêra",10.0f);
+        Transaction transaction2 = new Transaction("Maça",10.0f);
+        Transaction transaction3 = new Transaction("Uva",10.0f);
+        //Faz o set dos card para dentro da transaction (isso é uma melhoria, essa construção poderia ficar dentro do construtor)
+        transaction1.setCard(cardHolder.getCard());
+        transaction2.setCard(cardHolder.getCard());
+        transaction3.setCard(cardHolder.getCard());
+        //Seta qual é a invoice dessa transaction, também poderia ficar dentro do construtor ... o ideal é evitar o uso do set
+        transaction1.setInvoice(invoice);
+        transaction1.setInvoice(invoice);
+        transaction1.setInvoice(invoice);
+
+        //Como no invoice o valor que vc passou (30) não cria a fatura com aquele valor, aqui vc seta o valor certo da invoice
+        invoice.setTotal(30.0F); //Essa info é salva oeki transaction.save devido ao cascade = ALL
+
+        //Cria a lista de transações
+        List<Transaction> transactions = List.of(
+          transaction1,
+          transaction2,
+          transaction3
+        );
+
+        //Após criar, salva tudo no banco
+        transactionRepository.saveAll(transactions);
 
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/cards/{cardId}/invoices", 1L)
                 .contentType(MediaType.APPLICATION_JSON));
