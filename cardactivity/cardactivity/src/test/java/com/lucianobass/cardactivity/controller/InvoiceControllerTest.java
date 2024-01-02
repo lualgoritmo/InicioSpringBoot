@@ -135,11 +135,10 @@ class InvoiceControllerTest {
     @Test
     @DisplayName("Return an invoice list")
     void getInvoices() throws Exception {
-        // Realizar a requisição
+
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/cards/{cardId}/invoices", 1L)
                 .contentType(MediaType.APPLICATION_JSON));
 
-        // Verificar a resposta
         result.andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.cardHolder.name").value("José"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.cardHolder.documentNumber").value("11122233344"))
