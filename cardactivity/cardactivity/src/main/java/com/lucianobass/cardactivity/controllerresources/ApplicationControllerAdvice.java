@@ -2,7 +2,6 @@ package com.lucianobass.cardactivity.controllerresources;
 
 import com.lucianobass.cardactivity.exceptions.CardNotFoundExceptions;
 import com.lucianobass.cardactivity.exceptions.TransactionNotFoundException;
-import com.lucianobass.cardactivity.models.Transaction;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;

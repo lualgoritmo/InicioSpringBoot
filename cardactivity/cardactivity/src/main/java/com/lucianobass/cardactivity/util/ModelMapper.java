@@ -3,6 +3,7 @@ package com.lucianobass.cardactivity.util;
 import com.lucianobass.cardactivity.controllerresources.dto.CardDTO;
 import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
 import com.lucianobass.cardactivity.controllerresources.invoiceDTO.InvoiceDTO;
+import com.lucianobass.cardactivity.controllerresources.invoiceDTO.ListInvoiceDTO;
 import com.lucianobass.cardactivity.controllerresources.transactionDTO.CardTransactionDTO;
 import com.lucianobass.cardactivity.controllerresources.transactionDTO.TransactionDTO;
 import com.lucianobass.cardactivity.models.Card;
@@ -10,6 +11,8 @@ import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.models.Invoice;
 import com.lucianobass.cardactivity.models.Transaction;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,7 +70,25 @@ public class ModelMapper {
                 transactionDTO.getPriceValue()
         );
     }
+    public static Invoice convertInvoiceTODTO(InvoiceDTO invoiceDTO) {
+        List<Transaction> transaction = new ArrayList<>();
+        Card card = new Card();
 
+        return new Invoice(
+                invoiceDTO.getTotal(),
+                invoiceDTO.getStatus(),
+                returnListTransaction(transaction),
+                LocalDate.now(),
+                LocalDate.now(),
+                card
+        );
+    }
+
+    public static List<Invoice> convertToInvoiceList(ListInvoiceDTO listInvoiceDTO) {
+        return listInvoiceDTO.getInvoices().stream()
+                .map(ModelMapper::convertInvoiceTODTO)
+                .collect(Collectors.toList());
+    }
     public static List<Transaction> returnListTransaction(List<Transaction> transactions) {
         if (transactions == null) {
             return Collections.emptyList();

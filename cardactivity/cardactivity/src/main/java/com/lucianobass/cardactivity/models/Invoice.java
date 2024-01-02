@@ -43,7 +43,9 @@ public class Invoice {
     public Long getIdInvoice() {
         return idInvoice;
     }
-
+    public void setIdInvoice(Long idInvoice) {
+        this.idInvoice = idInvoice;
+    }
     public Float getTotal() {
         return total;
     }

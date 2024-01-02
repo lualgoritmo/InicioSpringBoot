@@ -1,6 +1,5 @@
 package com.lucianobass.cardactivity.controllerresources.controller;
 
-import com.lucianobass.cardactivity.controllerresources.dto.CardHolderDTO;
 import com.lucianobass.cardactivity.controllerresources.invoiceDTO.InvoiceDTO;
 import com.lucianobass.cardactivity.controllerresources.invoiceDTO.ListInvoiceDTO;
 import com.lucianobass.cardactivity.controllerresources.transactionDTO.CardHolderTransactionDTO;
@@ -26,16 +25,16 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/cards")
 public class InvoiceController {
 
-    private CardHolderService serviceCardHolderInvoice;
-    private
+    private final CardHolderService cardHolderService;
+    private final
     InvoiceService invoiceService;
 
     @Autowired
     public InvoiceController(
-            CardHolderService serviceCardHolder,
+            CardHolderService cardHolderService,
             InvoiceService invoiceService,
             TransactionService transactionServiceInvoice) {
-        this.serviceCardHolderInvoice = serviceCardHolder;
+        this.cardHolderService = cardHolderService;
         this.invoiceService = invoiceService;
     }
 
@@ -58,11 +57,7 @@ public class InvoiceController {
         try {
             List<Invoice> invoices = invoiceService.getInvoicesWithDetailsByCardId(cardId);
 
-            if (invoices.isEmpty()) {
-                throw new EntityNotFoundException("Não há faturas para o cartão com ID: " + cardId);
-            }
-
-            CardHolder cardHolder = serviceCardHolderInvoice.getByIdCardHolder(cardId);
+            CardHolder cardHolder = cardHolderService.getByIdCardHolder(cardId);
             Card card = cardHolder.getCard();
 
             CardHolderTransactionDTO cardHolderDTO = new CardHolderTransactionDTO(

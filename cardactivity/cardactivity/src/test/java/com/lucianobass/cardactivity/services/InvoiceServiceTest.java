@@ -4,10 +4,8 @@ import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.models.Invoice;
 import com.lucianobass.cardactivity.repositories.InvoiceRepository;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityNotFoundException;
@@ -101,7 +99,5 @@ class InvoiceServiceTest {
 //        // Verificação se o método do repository foi chamado
 //        verify(invoiceRepository, times(1)).findInvoicesWithDetailsByCardId(1L);
 //    }
-
-
 
 }

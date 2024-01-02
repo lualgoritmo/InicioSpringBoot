@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -13,12 +12,11 @@ import java.util.Objects;
 @Table(name = "tb_card")
 public class Card implements Serializable {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
+//    @Serial
+//    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private Long idCard;
     @Column(length = 16, nullable = false)
     private String numberCard;
@@ -101,10 +99,6 @@ public class Card implements Serializable {
         return cardCVV;
     }
 
-    //    public void setCardCVV(String cardCVV) {
-//        this.cardCVV = Card.generateNumberCard(3).replaceAll("(\\d)", "x");
-//    }
-
     public void setCardCVV(String cardCVV) {
         this.cardCVV = cardCVV;
     }
@@ -128,6 +122,9 @@ public class Card implements Serializable {
     public Boolean getCardActivate() {
         return cardActive;
     }
+    public void setCardActive(Boolean cardActive) {
+        this.cardActive = cardActive;
+    }
 
     public List<Transaction> getTransactions() {
         return transactions;
@@ -136,6 +133,7 @@ public class Card implements Serializable {
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
     }
+
 
     @Override
     public int hashCode() {
