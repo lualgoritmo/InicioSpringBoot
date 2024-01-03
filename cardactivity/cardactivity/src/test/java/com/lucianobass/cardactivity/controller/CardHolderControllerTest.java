@@ -46,10 +46,10 @@ class CardHolderControllerTest {
     @Test
     @DisplayName("shoud create a cardholder")
     void createCardHolderTest() throws Exception {
-        CardHolder cardHolder = new CardHolder();
-        cardHolder.setName("Luciano");
-        cardHolder.setDocumentNumber("12345678910");
-        cardHolder.setBirthDate("1942-10-01");
+        CardHolder cardHolder = new CardHolder("Luciano","12345678910","1942-10-01");
+//        cardHolder.setName("Luciano");
+//        cardHolder.setDocumentNumber("12345678910");
+//        cardHolder.setBirthDate("1942-10-01");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/cards")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -61,14 +61,16 @@ class CardHolderControllerTest {
 
     }
 
-
     @Test
     void getAllCardHolderTest() throws Exception {
         List<CardHolder> cardHolders = Arrays.asList(
                 new CardHolder("Luciano", "123456789", "1983-10-10"),
                 new CardHolder("Maria", "123456789", "1963-02-12")
         );
-        cardHolders.get(0).setCard(new Card(null,
+        cardHolders.get(0).getCard().setIdCard(1L);
+        cardHolders.get(0).getCard().setIdCard(2L);
+
+        cardHolders.get(0).setCard(new Card(1L,
                 generateNumberAleatory(16),
                 "30/02",
                 "100.00",

@@ -17,7 +17,7 @@ public class Invoice {
     private LocalDate closingDate;
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transaction> transactions;;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Card card;
     public Invoice() {
 //        if (this.total == null) {
@@ -29,7 +29,7 @@ public class Invoice {
     }
     public Invoice(Float total, String status, List<Transaction> transactions,
                    LocalDate DueDate, LocalDate ClosingDate, Card card) {
-        this.total =0.0f;
+        this.total = 0.0f;
         this.status = status;
         this.transactions = transactions;
         if (transactions != null) {

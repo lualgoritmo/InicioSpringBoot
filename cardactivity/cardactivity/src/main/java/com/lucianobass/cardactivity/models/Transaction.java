@@ -36,12 +36,12 @@ public class Transaction {
 
     }
 
-    public void setIdTransaction(Long idTransaction) {
-        this.idTransaction = idTransaction;
-    }
-
     public Long getIdTransaction() {
         return idTransaction;
+    }
+
+    public void setIdTransaction(Long idTransaction) {
+        this.idTransaction = idTransaction;
     }
 
     public String getDescription() {
