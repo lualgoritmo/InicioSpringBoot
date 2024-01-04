@@ -1,6 +1,7 @@
 package com.lucianobass.cardactivity.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lucianobass.cardactivity.models.Card;
 import com.lucianobass.cardactivity.models.CardHolder;
 import com.lucianobass.cardactivity.repositories.CardHolderRepository;
 import com.lucianobass.cardactivity.services.CardHolderService;
@@ -9,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,9 +20,12 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 
+import static com.lucianobass.cardactivity.models.CardHolder.generateNumberAleatory;
 import static com.lucianobass.cardactivity.util.ModelMapper.convertCardHolderTODTO;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,10 +42,16 @@ class CardHolderControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    CardHolderService cardHolderService;
+
     @BeforeEach
     void setup() {
         cardHolderRepository.deleteAll();
     }
+    @Autowired
+    EntityManager entityManager;
     @Test
     @DisplayName("shoud create a cardholder")
     void createCardHolderTest() throws Exception {
@@ -57,8 +66,10 @@ class CardHolderControllerTest {
                 .andExpect(jsonPath("$.birthDate", Matchers.equalTo(cardHolder.getBirthDate())));
 
     }
+
     @Test
     @Transactional
+    @DisplayName("search all card holders\n")
     void getAllCardHolderTest() throws Exception {
 
         List<CardHolder> cardHolders = List.of(
@@ -73,100 +84,69 @@ class CardHolderControllerTest {
                 .contentType(MediaType.APPLICATION_JSON));
 
         result.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("José"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].documentNumber").value("00000000000"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].birthDate").value("1980-07-01"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Maria"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[2].name").value("Solange"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.equalTo(cardHolders.get(0).getName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].documentNumber", Matchers.equalTo(cardHolders.get(0).getDocumentNumber())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].birthDate", Matchers.equalTo(cardHolders.get(0).getBirthDate())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name", Matchers.equalTo(cardHolders.get(1).getName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].documentNumber", Matchers.equalTo(cardHolders.get(1).getDocumentNumber())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].birthDate", Matchers.equalTo(cardHolders.get(1).getBirthDate())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].name", Matchers.equalTo(cardHolders.get(2).getName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].documentNumber", Matchers.equalTo(cardHolders.get(2).getDocumentNumber())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].birthDate", Matchers.equalTo(cardHolders.get(2).getBirthDate())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.size()", Matchers.equalTo(3)));
     }
 
-//    @Test
-//    void getAllCardHolderTest() throws Exception {
-//        List<CardHolder> cardHolders = Arrays.asList(
-//                new CardHolder("Luciano", "123456789", "1983-10-10"),
-//                new CardHolder("Maria", "123456789", "1963-02-12")
-//        );
-//        cardHolders.get(0).getCard().setIdCard(1L);
-//        cardHolders.get(0).getCard().setIdCard(2L);
-//
-//        cardHolders.get(0).setCard(new Card(1L,
-//                generateNumberAleatory(16),
-//                "30/02",
-//                "100.00",
-//                100.00,
-//                "123",
-//                false,
-//                null,
-//                null));
-//
-//        when(cardHolderService.getAllCardsHolders()).thenReturn(cardHolders);
-//
-//        mockMvc.perform(MockMvcRequestBuilders.get("/cards")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk());
-//
-//        List<CardHolder> returnCardHolder = cardHolderService.getAllCardsHolders();
-//
-//        assertFalse(cardHolders.isEmpty());
-//        assertEquals(cardHolders.size(), 2);
-//        assertEquals(cardHolders.get(0).getName(), returnCardHolder.get(0).getName());
-//        System.out.println("RESPOSTA: " + cardHolders.get(0).getName());
-//        System.out.println("RETORNO:" + returnCardHolder.get(0).getName());
-//        assertEquals(cardHolders.get(0).getDocumentNumber(), returnCardHolder.get(0).getDocumentNumber());
-//        assertEquals(cardHolders.get(0).getBirthDate(), returnCardHolder.get(0).getBirthDate());
-//        assertEquals(cardHolders.get(0).getCard().getCardCVV(), returnCardHolder.get(0).getCard().getCardCVV());
-//        assertEquals(cardHolders.get(0).getCard().getCardActive(), returnCardHolder.get(0).getCard().getCardActivate());
-//        assertEquals(cardHolders.get(0).getCard().getCardLimit(), returnCardHolder.get(0).getCard().getCardLimit());
-//        assertEquals(cardHolders.get(0).getCard().getCardExpiration(), returnCardHolder.get(0).getCard().getCardExpiration());
-//        assertEquals(cardHolders.get(0).getCard().getAvailableLimit(), returnCardHolder.get(0).getCard().getAvailableLimit());
-//        assertEquals(cardHolders.get(0).getCard().getTransactions(), returnCardHolder.get(0).getCard().getTransactions());
-//        assertEquals(cardHolders.get(0).getCard().getNumberCard(), returnCardHolder.get(0).getCard().getNumberCard());
+    @Test
+    @Transactional
+    @DisplayName("search card holder with document number")
+    void getByCardHolderDocumentNumberTest() throws Exception {
+        CardHolder cardHolder = new CardHolder("José", "00000000000", "1980-07-01");
+        cardHolderRepository.save(cardHolder);
 
-//                .andExpect(jsonPath("$.name", Matchers.equalTo(test.get(0).getName())))
-//                .andExpect(jsonPath("$[0].documentNumber", Matchers.equalTo(test.get(0).getDocumentNumber())))
-//                .andExpect(jsonPath("$[0].birthDate", Matchers.equalTo("1980-07")))
-//                .andExpect(jsonPath("$[0].card.numberCard", Matchers.equalTo("2745xxxxxxxx7111")))
-//                .andExpect(jsonPath("$[0].card.cardExpiration", Matchers.equalTo("30/02")))
-//                .andExpect(jsonPath("$[0].card.availableLimit", Matchers.equalTo("100.00")))
-//                .andExpect(jsonPath("$[0].card.cardLimit", Matchers.equalTo(100.0)))
-//                .andExpect(jsonPath("$[0].card.cardCVV", Matchers.equalTo("xxx")))
-//                .andExpect(jsonPath("$[0].card.cardActive", Matchers.equalTo(false)))
-//                .andExpect(jsonPath("$", Matchers.hasSize(1)));
+        //cardHolderService.getByCardHolderDocumentNumber(cardHolder.getDocumentNumber());
 
-//        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/cards")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andReturn();
-//
-//        System.out.println(result.getResponse().getContentAsString());
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders
+                .get("/cards/cardholder/{documentNumber}", cardHolder.getDocumentNumber())
+                .contentType(MediaType.APPLICATION_JSON));
 
-    //}
+        result.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("José"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.documentNumber").value("00000000000"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.birthDate").value("1980-07-01"));
+    }
 
-//    @Test
-//    void createCardHolderTest() throws Exception {
-//        CardHolder cardHolder = new CardHolder("Luciano", "12345678910", "1942-10-01");
-//        cardHolder.setIdCardHolder(1L);r
-//        Card card = new Card(1L,
-//                generateNumberAleatory(16),
-//                "30/02",
-//                "100.00",
-//                100.00,
-//                "123",
-//                false,
-//                null,
-//                null
-//        );
-//        card.setCardHolder(cardHolder);
-//        cardHolder.setCard(card);
-//
-//        when(cardHolderService.createCardHolder(any())).thenReturn(cardHolder);
-//        when(cardHolderRepository.save(any())).thenReturn(cardHolder);
-//        CardHolderDTO cardHolderDTO = ModelMapper.convertCardHolderTODTO(cardHolder);
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/cards")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(cardHolderDTO)))
-//                .andExpect(status().isCreated());
-//        verify(cardHolderRepository, times(1)).save(any());
-//        verify(cardHolderService, times(1)).createCardHolder(any());
-//    }
+    @Test
+    @Transactional
+    @DisplayName("Atualiza CardHolder")
+    void updateCardHolderTest() throws Exception {
+        CardHolder cardHolder = new CardHolder("José", "00000000000", "1980-07-01");
+        cardHolderRepository.save(cardHolder);
+
+        Card card = new Card(1L,
+                generateNumberAleatory(16),
+                "30/02",
+                "100.00",
+                100.00,
+                "123",
+                false,
+                null,
+                null);
+
+        card.setCardHolder(cardHolder);
+        cardHolder.setCard(card);
+
+        cardHolder.getCard().setCardActive(true);
+        cardHolder.setName("Mariola");
+
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.put(
+                        "/cards/{id}/update", cardHolder.getIdCardHolder())
+                .contentType(MediaType.APPLICATION_JSON_VALUE));
+
+        result.andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name",
+                        Matchers.equalTo(cardHolder.getName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.documentNumber", Matchers.equalTo(cardHolder.getDocumentNumber())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.birthDate", Matchers.equalTo(cardHolder.getBirthDate())));
+    }
+
 }

@@ -43,6 +43,7 @@ class InvoiceControllerTest {
 
     @Autowired
     private EntityManager entityManager;
+
     @BeforeEach
     void setup() {
         //Limpa o banco de dados para um teste não interferir em outro
@@ -82,32 +83,41 @@ class InvoiceControllerTest {
         );
         entityManager.persist(invoice);
         // Crio minha lista de transações, note que antes estava faltando informações nas suas transações, qual era o card dela?
-        Transaction transaction1 = new Transaction("Pêra", 10.0f);
-        Transaction transaction2 = new Transaction("Maça", 10.0f);
-        Transaction transaction3 = new Transaction("Uva", 10.0f);
+//        Transaction transaction1 = new Transaction("Pêra", 10.0f);
+//        Transaction transaction2 = new Transaction("Maça", 10.0f);
+//        Transaction transaction3 = new Transaction("Uva", 10.0f);
+        List<Transaction> transaction = List.of(
+                new Transaction("Pêra", 10.0f),
+                new Transaction("Maça", 10.0f),
+                new Transaction("Uva", 10.0f)
+        );
 
         // Faz o set dos card para dentro da transaction (isso é uma melhoria, essa construção poderia ficar dentro do construtor)
-        transaction1.setCard(cardHolder.getCard());
-        transaction2.setCard(cardHolder.getCard());
-        transaction3.setCard(cardHolder.getCard());
+//        transaction1.setCard(cardHolder.getCard());
+//        transaction2.setCard(cardHolder.getCard());
+//        transaction3.setCard(cardHolder.getCard());
+
+        transaction.forEach(transactionNew -> transactionNew.setCard(cardHolder.getCard()));
 
         // Seta qual é a invoice dessa transaction, também poderia ficar dentro do construtor ... o ideal é evitar o uso do set
-        transaction1.setInvoice(invoice);
-        transaction2.setInvoice(invoice);
-        transaction3.setInvoice(invoice);
+//        transaction1.setInvoice(invoice);
+//        transaction2.setInvoice(invoice);
+//        transaction3.setInvoice(invoice);
+
+        transaction.forEach(transactionNew -> transactionNew.setInvoice(invoice));
 
         // Como no invoice o valor que você passou (30) não cria a fatura com aquele valor, aqui você seta o valor certo da invoice
         invoice.setTotal(30.0f); // Essa info é salva pelo transaction.save devido ao cascade = ALL
 
         // Cria a lista de transações
-        List<Transaction> transactionList = List.of(
-                transaction1,
-                transaction2,
-                transaction3
-        );
+//        List<Transaction> transactionList = List.of(
+//                transaction1,
+//                transaction2,
+//                transaction3
+//        );
 
         // Após criar, salva tudo no banco
-        transactionRepository.saveAll(transactionList);
+        transactionRepository.saveAll(transaction);
 
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/cards/{cardId}/invoices", cardHolder.getCard().getIdCard())
                 .contentType(MediaType.APPLICATION_JSON));
